@@ -1,4 +1,5 @@
 const app = require('express')();
+const cors = require('cors');
 const server = require('http').Server(app);
 const PORT = process.env.PORT || 3000;
 
@@ -15,6 +16,9 @@ io.set('origins', '*');
 
 nextApp.prepare()
 	.then(() => {
+
+		app.use(cors())
+
 		app.get('*', (req, res) => {
 			return nextHandler(req, res)
 		})
