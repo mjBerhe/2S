@@ -3,7 +3,8 @@ import Head from 'next/head';
 import io from 'socket.io-client';
 
 let socket;
-const ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
+const ENDPOINT = "https://tooslow.herokuapp.com";
+// const ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
 // const ENDPOINT = "http://localhost:3000/";
 
 export default function chatroom() {
