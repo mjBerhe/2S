@@ -3,7 +3,7 @@ import Head from 'next/head';
 import io from 'socket.io-client';
 
 let socket;
-const ENDPOINT = "https://cors-anywhere.herokuapp.com/http://2slow.vercel.app/" || "http://localhost:3000/";
+const ENDPOINT = "https://cors-anywhere.herokuapp.com/https://2slow.vercel.app/" || "http://localhost:3000/";
 
 export default function chatroom() {
 
