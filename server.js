@@ -11,8 +11,8 @@ const nextHandler = nextApp.getRequestHandler();
 const socket = require('socket.io');
 const io = socket(server);
 
-io.set('origins', '*:*');
-io.set('origins', '*');
+// io.set('origins', '*:*');
+// io.set('origins', '*');
 
 nextApp.prepare()
 	.then(() => {
@@ -37,3 +37,7 @@ nextApp.prepare()
 
 		server.listen(PORT, () => console.log(`Server started on port ${PORT}`))
 	})
+
+
+
+//dev: "next dev"

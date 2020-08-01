@@ -3,7 +3,7 @@
  "version": "0.1.0",
  "private": true,
  "scripts": {
-  "dev": "next dev",
+  "dev": "node server.js",
   "build": "next build",
   "start": "next start",
   "server": "node server.js"
@@ -17,3 +17,4 @@
   "socket.io": "^2.3.0"
  }
 }
+
