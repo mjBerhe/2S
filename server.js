@@ -11,13 +11,8 @@ const nextHandler = nextApp.getRequestHandler();
 const socket = require('socket.io');
 const io = socket(server);
 
-// io.set('origins', '*:*');
-// io.set('origins', '*');
-
 nextApp.prepare()
 	.then(() => {
-
-		// app.use(cors())
 
 		app.get('*', (req, res) => {
 			return nextHandler(req, res)

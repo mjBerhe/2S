@@ -3,9 +3,9 @@ import Head from 'next/head';
 import io from 'socket.io-client';
 
 let socket;
-const ENDPOINT = "https://tooslow.herokuapp.com";
+// const ENDPOINT = "https://tooslow.herokuapp.com";
 // const ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
-// const ENDPOINT = "http://localhost:3000/";
+const ENDPOINT = "http://localhost:3000/";
 
 export default function chatroom() {
 
@@ -37,11 +37,10 @@ export default function chatroom() {
 			tempName: tempName,
 			message: message,
 		})
-	}
 
-	// 2 PROBLEMS
-	// 1: WENT SENT, NAME MUST ONLY CHANGE WHEN NEW MESSAGES ARE SENT
-	// 2: MUST SEND THROUGH SOCKET THE NAME THAT WAS CHOSEN
+		// clears after each message is sent
+		setMessage('');
+	}
 
 	useEffect(() => {
 		socket = io(ENDPOINT);
@@ -75,7 +74,10 @@ export default function chatroom() {
 			</div>
 
 			<div className="column1">
-				<h1>this is column 1</h1>
+				<h1>this is h1 text</h1>
+				<h2>this is h2 text</h2>
+				<h3>this is h3 text</h3>
+				<h4>this is h4 text</h4>
 			</div>
 
 			<div className="column2">
