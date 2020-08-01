@@ -7,6 +7,29 @@ const ENDPOINT = "https://2slow-git-master.berhe.vercel.app/" || "http://localho
 
 export default function chatroom() {
 
+	useEffect(() => {
+		fetch('api/socketio').finally(() => {
+			const socket = io();
+		})
+
+		socket.on('connect', () => {
+			console.log('connected');
+			socket.emit('hello');
+		})
+
+		socket.on('hello', data => {
+			console.log('hello', data)
+		})
+
+		socket.on('a user connnected' () => {
+			console.log('a user connected')
+		})
+
+		socket.on('disconnect', () => {
+			console.log('disconnected')
+		})
+	})
+
 	const [message, setMessage] = useState('');
 	const [tempName, setTempName] = useState('');
 	const [chatBox, setChatBox] = useState([]);
