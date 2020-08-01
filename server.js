@@ -17,7 +17,7 @@ io.set('origins', '*');
 nextApp.prepare()
 	.then(() => {
 
-		app.use(cors())
+		// app.use(cors())
 
 		app.get('*', (req, res) => {
 			return nextHandler(req, res)
