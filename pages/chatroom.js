@@ -78,7 +78,7 @@ export default function chatroom() {
 
 			<div className="column2">
 				<div>
-					<h1 className='chat-title'>CHATROOM</h1>
+					<h1 className='chat-title'>CHATROOM HERE</h1>
 				</div>
 				<div className='chatbox'>
 					{chatBox.map((message, index) => <h3 key={index}>{message.tempName}: {message.message}</h3> )}
