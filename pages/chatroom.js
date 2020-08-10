@@ -4,9 +4,9 @@ import io from 'socket.io-client';
 import ChatBox from '../components/chatbox.js'
 
 let chatroom;
-// const ENDPOINT = "https://tooslow.herokuapp.com";
+const ENDPOINT = "https://tooslow.herokuapp.com";
 // const ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
-const chatroom_ENDPOINT = "http://localhost:3000/chatroom";
+// const chatroom_ENDPOINT = "http://localhost:3000/chatroom";
 
 export default function ChatRoom() {
 
