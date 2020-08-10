@@ -1,67 +1,56 @@
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import io from 'socket.io-client';
+import ChatBox from '../components/chatbox.js'
 
-let socket;
-const ENDPOINT = "https://tooslow.herokuapp.com";
+let chatroom;
+// const ENDPOINT = "https://tooslow.herokuapp.com";
 // const ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
-// const ENDPOINT = "http://localhost:3000/";
+const chatroom_ENDPOINT = "http://localhost:3000/chatroom";
 
-export default function chatroom() {
+export default function ChatRoom() {
 
-	const [message, setMessage] = useState('');
-	const [tempName, setTempName] = useState('');
-	const [chatBox, setChatBox] = useState([]);
+	//const [users, setUsers] = useState([]);
+	const [roomSelected, setRoomSelected] = useState(false);
+	const [currentRoom, setCurrentRoom] = useState('');
 
-	// for scrolling to the bottom of the chatbox
-	const divRef = useRef(null);
-
+	// testing rooms
 	useEffect(() => {
-		divRef.current.scrollIntoView({ behaviour: 'smooth' });
-	})
+		chatroom = io(chatroom_ENDPOINT);
 
-	// constantly fire whenever someone is typing a message
-	const handleChange = (e) => {
-		setMessage(e.target.value);
-	}
-	// constantly fire whenever someone is changing their name
-	const handleNameChange = (e) => {
-		setTempName(e.target.value);
-	}
-
-	// when message sent, emits the message through socket
-	const handleMessageSubmit = (e) => {
-		e.preventDefault();
-
-		socket.emit('chat', {
-			tempName: tempName,
-			message: message,
-		})
-
-		// clears after each message is sent
-		setMessage('');
-	}
-
-	useEffect(() => {
-		socket = io(ENDPOINT);
-
-		socket.on('connect', () => {
-			console.log('connected');
+		chatroom.on('connect', () => {
+			//console.log('connected to /chatroom');
 		});
 
-		socket.on('chat', data => {
-			setChatBox(prevChatBox => ([
-				...prevChatBox,
-				{
-					tempName: data.tempName,
-					message: data.message,
-				}
-			]))
+		chatroom.on('welcome', msg => {
+			console.log(msg)
+		});
+
+		chatroom.on('success', msg => {
+			console.log(msg);
+		});
+
+		chatroom.on('err', msg => {
+			console.log(msg);
+		});
+
+		chatroom.on('userConnected', msg => {
+			console.log(msg)
 		})
 
-		// console.log(socket);
+	}, [chatroom_ENDPOINT])
 
-	}, [ENDPOINT])
+	const handleJoinRoom = (e) => {
+		chatroom.emit('joinRoom', e.target.value);
+		setRoomSelected(true);
+		setCurrentRoom(e.target.value);
+	}
+
+	const handleLeaveRoom = () => {
+		chatroom.emit('disconnectUser');
+		setRoomSelected(false);
+	}
+
 
 	return (
 		<div className="chatroom-container">
@@ -81,26 +70,28 @@ export default function chatroom() {
 			</div>
 
 			<div className="column2">
-				<div>
-					<h1 className='chat-title'>CHATROOM HERE</h1>
-				</div>
-				<div className='chatbox'>
-					{chatBox.map((message, index) => <h3 key={index}>{message.tempName}: {message.message}</h3> )}
-					<div ref={divRef}></div>
-				</div>
-
-				<label>
-					Name: <input type="text" value={tempName} onChange={handleNameChange} placeholder="Enter Name"/>
-				</label>
-
-				<form onSubmit={handleMessageSubmit}>
-					<input type="text" value={message} onChange={handleChange}/>
-					<input type="submit" value="Submit"/>
-				</form>
+				{roomSelected &&
+					<div className="room-container">
+						<ChatBox socket={chatroom} room={currentRoom}/>
+						<br/>
+						<button className='join-button' onClick={handleLeaveRoom}>
+							Leave Room
+						</button>
+					</div> 
+				}
+				{!roomSelected && 
+					<div className="room-container">
+						<button className='join-button' onClick={handleJoinRoom} value={'room 1'}>
+							Join Room 1
+						</button>
+						<button className='join-button' onClick={handleJoinRoom} value={'room 2'}>
+							Join Room 2
+						</button>
+					</div>
+				}
 			</div>
 
 			<div className="column3">
-				<h1>this is column 3</h1>
 			</div>
 
 			<div className='footer'>
