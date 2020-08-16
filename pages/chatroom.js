@@ -9,7 +9,8 @@ const chatroom_ENDPOINT = "https://tooslow.herokuapp.com/chatroom";
 // const chatroom_ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
 // const chatroom_ENDPOINT = "http://localhost:3000/chatroom";
 
-
+// NEED TO KICK USER OUT OF ROOM IF THEY REFRESH THEIR BROWSER
+// ITS ONLY KICKING WHEN THEY CLICK LEAVE ROOM
 
 export default function ChatRoom() {
 
