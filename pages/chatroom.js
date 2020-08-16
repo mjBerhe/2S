@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import io from 'socket.io-client';
+import { useUsers } from '../state/users.js';
 import ChatBox from '../components/chatbox.js'
 
 let chatroom;
@@ -8,47 +9,81 @@ const chatroom_ENDPOINT = "https://tooslow.herokuapp.com/chatroom";
 // const chatroom_ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
 // const chatroom_ENDPOINT = "http://localhost:3000/chatroom";
 
+
+
 export default function ChatRoom() {
 
-	//const [users, setUsers] = useState([]);
-	const [roomSelected, setRoomSelected] = useState(false);
+	const { users, addUser, removeUser, updateUsersList } = useUsers();
+
+	const [username, setUsername] = useState({
+		name: '',
+		id: null
+	});
+
 	const [currentRoom, setCurrentRoom] = useState('');
 
 	// testing rooms
 	useEffect(() => {
 		chatroom = io(chatroom_ENDPOINT);
 
-		chatroom.on('connect', () => {
-			//console.log('connected to /chatroom');
-		});
-
+		// welcome message on connection to socket
 		chatroom.on('welcome', msg => {
 			console.log(msg)
 		});
 
-		chatroom.on('success', msg => {
-			console.log(msg);
-		});
-
+		// error message
 		chatroom.on('err', msg => {
 			console.log(msg);
 		});
 
-		chatroom.on('userConnected', msg => {
-			console.log(msg)
-		})
+		// when someone joins a room
+		chatroom.on('userConnected', data => {
+			// add logic to check if that user isnt already connected to the room using ids
+			addUser(data.room, data.username);
+		});
 
-	}, [chatroom_ENDPOINT])
+		// when someone leaves a room
+		chatroom.on('removeUser', data => {
+			removeUser(data.room, data.username);
+		});
+
+		// to update all users whenever someone joins/leaves a room
+		chatroom.on('connectedUsers', userList => {
+			updateUsersList(userList);
+		});
+
+	}, [])
+
+	useEffect(() => {
+		console.log(users);
+	}, [users])
+
+
+	const handleUsername = (e) => {
+		e.preventDefault();
+		setUsername({
+			name: e.target.value,
+			id: chatroom.id,
+		});
+	}
 
 	const handleJoinRoom = (e) => {
-		chatroom.emit('joinRoom', e.target.value);
-		setRoomSelected(true);
+		e.preventDefault();
+		chatroom.emit('joinRoom', {
+			room: e.target.value,
+			username: username,
+		});
 		setCurrentRoom(e.target.value);
 	}
 
-	const handleLeaveRoom = () => {
-		chatroom.emit('disconnectUser');
-		setRoomSelected(false);
+	const handleLeaveRoom = (e) => {
+		e.preventDefault();
+		chatroom.emit('disconnectUser', {
+			room: currentRoom,
+			username: username,
+		});
+		// setUsers(resetUsers);
+		setCurrentRoom('');
 	}
 
 
@@ -70,28 +105,38 @@ export default function ChatRoom() {
 			</div>
 
 			<div className="column2">
-				{roomSelected &&
+				{currentRoom &&
 					<div className="room-container">
-						<ChatBox socket={chatroom} room={currentRoom}/>
+						<ChatBox socket={chatroom} room={currentRoom} username={username.name}/>
 						<br/>
 						<button className='join-button' onClick={handleLeaveRoom}>
 							Leave Room
 						</button>
 					</div> 
 				}
-				{!roomSelected && 
+				{!currentRoom && 
 					<div className="room-container">
+						<input type="text" onChange={handleUsername} value={username.name} placeholder='Enter name'/>
 						<button className='join-button' onClick={handleJoinRoom} value={'room 1'}>
 							Join Room 1
 						</button>
 						<button className='join-button' onClick={handleJoinRoom} value={'room 2'}>
 							Join Room 2
 						</button>
+						<button className='join-button' onClick={handleJoinRoom} value={'room 3'}>
+							Join Room 3
+						</button>
 					</div>
 				}
 			</div>
 
 			<div className="column3">
+				<h2>Current users in room:</h2>
+				{currentRoom && 
+					<div>
+						{users[currentRoom].map((user) => <h3 key={user.id}>{user.name}</h3>)}
+					</div>
+				}
 			</div>
 
 			<div className='footer'>

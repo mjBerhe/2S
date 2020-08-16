@@ -1,19 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 
-export default function ChatBox({ socket, room }) {
+export default function ChatBox({ socket, room, username }) {
 
 	const [message, setMessage] = useState('');
 	const [chatBox, setChatBox] = useState([]);
-	const [tempName, setTempName] = useState('');
 
 	// constantly fire whenever someone is typing a message
 	const handleMessageChange = (e) => {
 		setMessage(e.target.value);
-	}
-
-	// constantly fire whenever someone is changing their name
-	const handleNameChange = (e) => {
-		setTempName(e.target.value);
 	}
 
 	// when message sent, emits the message through socket
@@ -21,7 +15,7 @@ export default function ChatBox({ socket, room }) {
 		e.preventDefault();
 
 		socket.emit('msgSent', {
-			tempName: tempName,
+			username: username,
 			message: message,
 			room: room,
 		})
@@ -31,15 +25,17 @@ export default function ChatBox({ socket, room }) {
 	}
 
 	useEffect(() => {
+		// for recieving messages from the server
 		socket.on('msgSent', data => {
 			setChatBox(prevChatBox => ([
 				...prevChatBox,
 				{
-					tempName: data.tempName,
+					username: data.username,
 					message: data.message,
 				}
 			]))
 		})
+
 	}, [])
 
 
@@ -54,13 +50,9 @@ export default function ChatBox({ socket, room }) {
 		<div className='chat-container'>
 			<h1 className='chat-title'>{room}</h1>
 			<div className='chatbox'>
-				{chatBox.map((message, index) => <h3 key={index}>{message.tempName}: {message.message}</h3> )}
+				{chatBox.map((message, index) => <h3 key={index}>{message.username}: {message.message}</h3> )}
 				<div ref={divRef}></div>
 			</div>
-
-			<label>
-				Name: <input type="text" value={tempName} onChange={handleNameChange} placeholder="Enter Name"/>
-			</label>
 
 			<form onSubmit={handleMessageSubmit}>
 				<input type="text" value={message} onChange={handleMessageChange} placeholder='Type a message...'/>
