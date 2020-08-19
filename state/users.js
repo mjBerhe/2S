@@ -4,7 +4,8 @@ export const [useUsers] = create((set, get) => ({
 	users: {
 		'room 1': [],
 		'room 2': [],
-		'room 3': []
+		'room 3': [],
+		'game 1': [],
 	},
 	addUser: (room, username) => {
 		set(prevState => ({

@@ -3,6 +3,7 @@ import Head from 'next/head';
 import io from 'socket.io-client';
 import { useUsers } from '../state/users.js';
 import ChatBox from '../components/chatbox.js'
+import GameRoom from '../components/gameroom.js';
 
 let chatroom;
 const chatroom_ENDPOINT = "https://tooslow.herokuapp.com/chatroom";
@@ -20,8 +21,8 @@ export default function ChatRoom() {
 		name: '',
 		id: null
 	});
-
 	const [currentRoom, setCurrentRoom] = useState('');
+	const [gameRoom, setGameRoom] = useState(false);
 
 	// testing rooms
 	useEffect(() => {
@@ -77,16 +78,34 @@ export default function ChatRoom() {
 		setCurrentRoom(e.target.value);
 	}
 
+	const handleJoinGameRoom = (e) => {
+		e.preventDefault();
+		chatroom.emit('joinRoom', {
+			room: e.target.value,
+			username: username,
+		});
+		setCurrentRoom(e.target.value);
+		setGameRoom(true);
+	}
+
 	const handleLeaveRoom = (e) => {
 		e.preventDefault();
 		chatroom.emit('disconnectUser', {
 			room: currentRoom,
 			username: username,
 		});
-		// setUsers(resetUsers);
 		setCurrentRoom('');
 	}
 
+	const handleLeaveGameRoom = (e) => {
+		e.preventDefault();
+		chatroom.emit('disconnectUser', {
+			room: currentRoom,
+			username: username,
+		});
+		setCurrentRoom('');
+		setGameRoom(false);
+	}
 
 	return (
 		<div className="chatroom-container">
@@ -106,15 +125,6 @@ export default function ChatRoom() {
 			</div>
 
 			<div className="column2">
-				{currentRoom &&
-					<div className="room-container">
-						<ChatBox socket={chatroom} room={currentRoom} username={username.name}/>
-						<br/>
-						<button className='join-button' onClick={handleLeaveRoom}>
-							Leave Room
-						</button>
-					</div> 
-				}
 				{!currentRoom && 
 					<div className="room-container">
 						<input type="text" onChange={handleUsername} value={username.name} placeholder='Enter name'/>
@@ -126,6 +136,26 @@ export default function ChatRoom() {
 						</button>
 						<button className='join-button' onClick={handleJoinRoom} value={'room 3'}>
 							Join Room 3
+						</button>
+						<button className='join-button' onClick={handleJoinGameRoom} value={'game 1'}>
+							Join Game 1
+						</button>
+					</div>
+				}
+				{currentRoom && !gameRoom &&
+					<div className="room-container">
+						<ChatBox socket={chatroom} room={currentRoom} username={username.name}/>
+						<br/>
+						<button className='join-button' onClick={handleLeaveRoom}>
+							Leave Room
+						</button>
+					</div> 
+				}
+				{currentRoom && gameRoom &&
+					<div className='game-container'>
+						<GameRoom/>
+						<button className='join-button' onClick={handleLeaveGameRoom}>
+							Leave Room
 						</button>
 					</div>
 				}

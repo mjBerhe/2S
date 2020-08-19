@@ -11,12 +11,15 @@ const nextHandler = nextApp.getRequestHandler();
 const socket = require('socket.io');
 const io = socket(server);
 
-const availableRooms = ['room 1', 'room 2', 'room 3']
+const availableRooms = ['room 1', 'room 2', 'room 3', 'game 1']
 const users = {
 	'room 1': [],
 	'room 2': [],
-	'room 3': []
+	'room 3': [],
+	'game 1': [],
 };
+
+let currentUser;
 
 nextApp.prepare()
 	.then(() => {
@@ -54,6 +57,14 @@ nextApp.prepare()
 					socket.emit('connectedUsers', users);
 					console.log(users);
 
+					currentUser = {
+						username: {
+							name: data.username.name,
+							id: data.username.id,
+						},
+						room: data.room,
+					}
+
 				} else {
 					socket.emit('err', `Error, no room named ${data.room}`);
 				}
@@ -83,10 +94,28 @@ nextApp.prepare()
 				socket.emit('connectedUsers', users);
 			})
 
-		})
+			// need to kick out user from rooms if they disconnect from socket
+			socket.on('disconnect', () => {
+				if (currentUser) {
+					socket.leave(currentUser.room);
 
-		// 	socket.on('disconnect', () => console.log('disconnected from socket'));
-		// });
+					const index = users[currentUser.room].findIndex(user => user.id === currentUser.username.id);
+
+					if (index > -1) {
+						users[currentUser.room].splice(index, 1);
+						console.log(users);
+					}
+
+					chatroom.to(currentUser.room).emit('removeUser', {
+						username: currentUser.username,
+						room: currentUser.room,
+					})
+
+					console.log(`${currentUser.username.name} has disconnected from the socket`)
+				}
+			});
+
+		})
 
 		server.listen(PORT, () => console.log(`Server started on port ${PORT}`))
 	})
