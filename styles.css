@@ -28,12 +28,12 @@ a:hover, a:focus, a:active {
 	text-decoration: underline;
 }
 
-.chatroom-container {
+.chatroom-page-container {
 	display: grid;
 	grid-template-columns: minmax(150px, 20%) 1fr minmax(150px, 20%);
-	grid-template-rows: auto 1fr auto;
+	grid-template-rows: minmax(5vh, auto) minmax(90vh, 1fr) minmax(5vh, auto);
 	/*place-items: center;*/
-	background: ;
+	/* background: ; */
 }
 
 .header {
@@ -43,6 +43,11 @@ a:hover, a:focus, a:active {
 	justify-content: center;
 	align-items: center;
 	background: teal;
+}
+
+.header img {
+	width: 40px;
+	margin: 5px;
 }
 
 .footer {
@@ -56,6 +61,7 @@ a:hover, a:focus, a:active {
 
 .column1 {
 	grid-column: 1/2;
+	padding: 5px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -75,6 +81,7 @@ a:hover, a:focus, a:active {
 
 .column3 {
 	grid-column: 3/4;
+	padding: 5px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -82,23 +89,17 @@ a:hover, a:focus, a:active {
 	background: green;
 }
 
-.chat-title {
+.centered-flex-column {
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	align-items: center;
 }
 
 .room-container {
-	/*background: yellow;*/
 	border: 1px solid red;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center;
-}
-
-.chat-container {
-	display: flex;
-	flex-direction: column;
 	align-items: center;
 }
 
@@ -109,12 +110,34 @@ a:hover, a:focus, a:active {
 	/*align-items: center;*/
 	padding-left: 5px;
 	border: solid black 2px;
-	width: 30vw;
+	width: 40vw;
 	height: 50vh;
 	overflow: scroll;
 	background: white;
 }
 
-.join-button {
+.button-1 {
 	margin: 5px;
+	width: 130px;
+}
+
+.answer-input {
+	height: 60px;
+	width: 120px;
+	font-size: 30px;
+}
+
+.gameroom-container {
+	height: 75vh;
+	width: 50vw;
+	display: grid;
+	grid-template-rows: 0.2fr 1fr;
+	justify-content: center;
+	align-items: center;
+	border: solid yellow 2px;
+}
+.gameroom-container h1 {
+	grid-row: 1/2;
+	text-align: center;
+	/* border: black solid 1px; */
 }

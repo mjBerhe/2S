@@ -6,9 +6,9 @@ import ChatBox from '../components/chatbox.js'
 import GameRoom from '../components/gameroom.js';
 
 let chatroom;
-const chatroom_ENDPOINT = "https://tooslow.herokuapp.com/chatroom";
+// const chatroom_ENDPOINT = "https://tooslow.herokuapp.com/chatroom";
 // const chatroom_ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
-// const chatroom_ENDPOINT = "http://localhost:3000/chatroom";
+const chatroom_ENDPOINT = "http://localhost:3000/chatroom";
 
 // NEED TO KICK USER OUT OF ROOM IF THEY REFRESH THEIR BROWSER
 // ITS ONLY KICKING WHEN THEY CLICK LEAVE ROOM
@@ -42,6 +42,7 @@ export default function ChatRoom() {
 		chatroom.on('userConnected', data => {
 			// add logic to check if that user isnt already connected to the room using ids
 			addUser(data.room, data.username);
+			console.log(data.message);
 		});
 
 		// when someone leaves a room
@@ -55,11 +56,7 @@ export default function ChatRoom() {
 		});
 
 	}, [])
-
-	useEffect(() => {
-		console.log(users);
-	}, [users])
-
+	
 
 	const handleUsername = (e) => {
 		e.preventDefault();
@@ -108,37 +105,38 @@ export default function ChatRoom() {
 	}
 
 	return (
-		<div className="chatroom-container">
+		<div className="chatroom-page-container">
 			<Head>
 				<title>ze chatroom</title>
+				<link rel="icon" type="image/png" href="/omega.png" />
 			</Head>
 
 			<div className='header'>
-				<h1>HEADER GOES HERE</h1>
+				<img src="/omega.png" alt=""/>
 			</div>
 
 			<div className="column1">
-				<h1>this is h1 text</h1>
-				<h2>this is h2 text</h2>
-				<h3>this is h3 text</h3>
-				<h4>this is h4 text</h4>
 			</div>
 
 			<div className="column2">
 				{!currentRoom && 
 					<div className="room-container">
 						<input type="text" onChange={handleUsername} value={username.name} placeholder='Enter name'/>
-						<button className='join-button' onClick={handleJoinRoom} value={'room 1'}>
-							Join Room 1
+						<br/>
+						<button className='button-1' onClick={handleJoinRoom} value={'Chatroom 1'}>
+							Join Chatroom 1
 						</button>
-						<button className='join-button' onClick={handleJoinRoom} value={'room 2'}>
-							Join Room 2
+						<button className='button-1' onClick={handleJoinRoom} value={'Chatroom 2'}>
+							Join Chatroom 2
 						</button>
-						<button className='join-button' onClick={handleJoinRoom} value={'room 3'}>
-							Join Room 3
+						<button className='button-1' onClick={handleJoinRoom} value={'Chatroom 3'}>
+							Join Chatroom 3
 						</button>
-						<button className='join-button' onClick={handleJoinGameRoom} value={'game 1'}>
-							Join Game 1
+						<button className='button-1' onClick={handleJoinGameRoom} value={'Gameroom 1'}>
+							Join Gameroom 1
+						</button>
+						<button className='button-1' onClick={handleJoinGameRoom} value={'Gameroom 2'}>
+							Join Gameroom 2
 						</button>
 					</div>
 				}
@@ -146,15 +144,16 @@ export default function ChatRoom() {
 					<div className="room-container">
 						<ChatBox socket={chatroom} room={currentRoom} username={username.name}/>
 						<br/>
-						<button className='join-button' onClick={handleLeaveRoom}>
+						<button className='button-1' onClick={handleLeaveRoom}>
 							Leave Room
 						</button>
 					</div> 
 				}
 				{currentRoom && gameRoom &&
-					<div className='game-container'>
-						<GameRoom/>
-						<button className='join-button' onClick={handleLeaveGameRoom}>
+					<div className='room-container'>
+						<GameRoom socket={chatroom} room={currentRoom} username={username}/>
+						<br/>
+						<button className='button-1' onClick={handleLeaveGameRoom}>
 							Leave Room
 						</button>
 					</div>

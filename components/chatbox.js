@@ -47,8 +47,8 @@ export default function ChatBox({ socket, room, username }) {
 	})
 
 	return (
-		<div className='chat-container'>
-			<h1 className='chat-title'>{room}</h1>
+		<div className='centered-flex-column'>
+			<h1>{room}</h1>
 			<div className='chatbox'>
 				{chatBox.map((message, index) => <h3 key={index}>{message.username}: {message.message}</h3> )}
 				<div ref={divRef}></div>

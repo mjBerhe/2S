@@ -7,7 +7,7 @@ export default function MyApp() {
         <div className="container">
             <Head>
                 <title>hehe xD</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" type="image/png" href="/omega.png" />
             </Head>
 
             <div>

@@ -2,14 +2,14 @@ import create from 'zustand';
 
 export const [useUsers] = create((set, get) => ({
 	users: {
-		'room 1': [],
-		'room 2': [],
-		'room 3': [],
-		'game 1': [],
+		'Chatroom 1': [],
+		'Chatroom 2': [],
+		'Chatroom 3': [],
+		'Gameroom 1': [],
+		'Gameroom 2': [],
 	},
 	addUser: (room, username) => {
 		set(prevState => ({
-			// if (!prevState.users[data.room].includes(data.username)) {
 			users: {
 				...prevState.users,
 				[room]: [...prevState.users[room], username],
