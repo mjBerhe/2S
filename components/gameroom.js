@@ -1,16 +1,13 @@
 import { useState, useEffect } from 'react';
+import Match from './match.js';
+import { useMatch } from '../state/match.js';
 
 export default function GameRoom({ socket, room, username }) {
 
-	const [match, setMatch] = useState({
-		queue: false,
-		start: false,
-		players: [],
-		questions: [],
-		answers: [],
-		currentAnswer: undefined,
-		responseTime: [],
-	});
+	const { joinQueue, leaveQueue, prepMatch, startMatch } = useMatch();
+
+	const queueStatus = useMatch(state => state.queue);
+	const startStatus = useMatch(state => state.start);
 
 	const [countdown, setCountdown] = useState({
 		initialTime: 3,
@@ -18,64 +15,49 @@ export default function GameRoom({ socket, room, username }) {
 		start: false,
 	});
 
-	const handleFindGame = (e) => {
+	const handleFindGame = () => {
 		socket.emit('joinQueue', {
 			username: username,
 			room: room,
 		});
 	}
 
-	const handleLeaveQueue = (e) => {
-		setMatch(prevMatch => ({
-			...prevMatch,
-			queue: false,
-		}));
+	const handleLeaveQueue = () => {
+		leaveQueue();
 		socket.emit('leaveQueue', {
 			username: username,
 			room: room,
 		});
 	}
 
-	const handleAnswerChange = (e) => {
-		setMatch(prevMatch => ({
-			...prevMatch,
-			currentAnswer: e.target.value,
-		}))
-	}
-
-	const submitAnswer = (e) => {
-		e.preventDefault();
-		setMatch(prevMatch => ({
-			...prevMatch,
-			answers: [...prevMatch.answers, prevMatch.currentAnswer],
-		}));
-		console.log(match.answers);
-	}
-
 	useEffect(() => {
+		// current queue is full
 		socket.on('queueFull', data => {
 			if (data.id === username.id) {
 				console.log(data.msg);
 			}
 		});
 
+		// successfully joined the queue
 		socket.on('joinedQueue', data => {
 			if (data.id === username.id) {
-				setMatch(prevMatch => ({
-					...prevMatch,
-					queue: true,
-				}));
+				joinQueue();
 				console.log(data.msg);
 			}
 		});
 
+		// game is starting
 		socket.on('startGame', data => {
-			setMatch(prevMatch => ({
-				...prevMatch,
-				queue: false,
-				players: data.players,
-				questions: data.questions,
-			}));
+			const questions = [];
+			const answers = [];
+
+			data.questions.forEach(item => {
+				questions.push(item.question);
+				answers.push(item.answer);
+			});
+
+			prepMatch(data.players, questions, answers);
+
 			setCountdown(prevCountdown => ({
 				...prevCountdown,
 				start: true,
@@ -101,26 +83,22 @@ export default function GameRoom({ socket, room, username }) {
 					currentTime: prevCountdown.initialTime,
 					start: false,
 				}));
-				setMatch(prevMatch => ({
-					...prevMatch,
-					start: true,
-				}));
+				startMatch();
 			}
 		}
 	}, [countdown])
 
-
 	return (
 		<div className='gameroom-container'>
 			<h1>{room}</h1>
-			{!match.queue && !match.start && !countdown.start &&
+			{!queueStatus && !startStatus && !countdown.start &&
 				<div className='centered-flex-column'>
 					<button className="button-1" onClick={handleFindGame}>
 						Look for Game
 					</button>
 				</div>
 			}
-			{match.queue && !match.start &&
+			{queueStatus && !startStatus &&
 				<div className='centered-flex-column'>
 					<h1>SEARCHING FOR GAME...</h1>
 					<button className='button-1' onClick={handleLeaveQueue}>
@@ -136,13 +114,9 @@ export default function GameRoom({ socket, room, username }) {
 					}
 				</div>
 			}
-			{!match.queue && match.start && !countdown.start &&
+			{!queueStatus && startStatus && !countdown.start &&
 				<div className='centered-flex-column'>
-					<h2>{match.questions}</h2>
-					<form onSubmit={submitAnswer}>
-						<input className="answer-input" type="number" value={match.currentAnswer} onChange={handleAnswerChange} autoFocus/>
-						<input type="submit"/>
-					</form>
+					<Match socket={socket}/>
 				</div>
 			}
 		</div>

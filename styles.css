@@ -31,7 +31,7 @@ a:hover, a:focus, a:active {
 .chatroom-page-container {
 	display: grid;
 	grid-template-columns: minmax(150px, 20%) 1fr minmax(150px, 20%);
-	grid-template-rows: minmax(5vh, auto) minmax(90vh, 1fr) minmax(5vh, auto);
+	grid-template-rows: minmax(5vh, auto) minmax(85vh, 1fr) minmax(5vh, auto);
 	/*place-items: center;*/
 	/* background: ; */
 }

@@ -14,7 +14,7 @@ export const [useUsers] = create((set, get) => ({
 				...prevState.users,
 				[room]: [...prevState.users[room], username],
 			}
-		}))
+		}));
 	},
 	removeUser: (room, username) => {
 		const users = get().users;
@@ -24,11 +24,11 @@ export const [useUsers] = create((set, get) => ({
 				...prevState.users,
 				[room]: prevState.users[room].filter((_, i) => i !== index),
 			}
-		}))
+		}));
 	},
 	updateUsersList: (userList) => {
 		set(prevState => ({
 			users: userList,
-		}))
+		}));
 	}
-}))
+}));

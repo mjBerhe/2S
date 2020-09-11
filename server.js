@@ -27,7 +27,14 @@ const rooms = {
 		maxCapacity: 2,
 		users: [],
 		queue: [],
-		questions: ['5 x 4'],
+		questions: [{
+			question: '5 x 4',
+			answer: 20,
+		},
+		{
+			question: '7 x 12',
+			answer: 84,
+		}],
 	},
 	'Gameroom 2': {
 		start: false,
