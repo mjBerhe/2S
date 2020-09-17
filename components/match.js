@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useMatch } from '../state/match.js';
 
-export default function Match ({ socket }) {
+export default function Match() {
 
-   const { userTypingAnswer, userSubmitAnswer } = useMatch();
+   const { userTypingAnswer, userSubmitAnswer, loadQuestion } = useMatch();
 
-   const questions = useMatch(state => state.questions);
-   const userAnswers = useMatch(state => state.userAnswers);
+   const currentQuestion = useMatch(state => state.currentQuestion);
    const currentAnswer = useMatch(state => state.currentAnswer);
+
 
    const handleUserAnswer = (e) => {
       e.persist();
@@ -17,15 +17,13 @@ export default function Match ({ socket }) {
 	const handleSubmitAnswer = (e) => {
       e.preventDefault();
       userSubmitAnswer();
+
+      loadQuestion();
    }
-   
-   useEffect(() => {
-      console.log(userAnswers);
-   }, [userAnswers])
 
    return (
-      <div>
-         <h2>{questions[userAnswers.length]}</h2>
+      <div className='centered-flex-column'>
+         <h2>{currentQuestion}</h2>
          <form onSubmit={handleSubmitAnswer}>
             <input className="answer-input" type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
             <input type="submit" value="Submit"/>

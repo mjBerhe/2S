@@ -1,5 +1,6 @@
 const app = require('express')();
 const cors = require('cors');
+const e = require('express');
 const server = require('http').Server(app);
 const PORT = process.env.PORT || 3000;
 
@@ -12,6 +13,12 @@ const socket = require('socket.io');
 const io = socket(server);
 
 const availableRooms = ['Chatroom 1', 'Chatroom 2', 'Chatroom 3', 'Gameroom 1', 'Gameroom 2'];
+
+const makeQuestions = require('./testing.js');
+
+// NEED TO MAKE FUNCTION TO CLEAN GAMEROOM (START => FALSE) AND CLEAR RESULTS
+// WHENEVER EVERYONE LEAVES?
+// BUT THEN PEOPLE CANT START A NEW GAME IF THERE IS STILL ATLEAST 1 USER IN THE ROOM
 
 const users = {
 	'Chatroom 1': [],
@@ -27,14 +34,16 @@ const rooms = {
 		maxCapacity: 2,
 		users: [],
 		queue: [],
-		questions: [{
-			question: '5 x 4',
-			answer: 20,
-		},
-		{
-			question: '7 x 12',
-			answer: 84,
-		}],
+		questions: makeQuestions(),
+		results: [],
+		// questions: [{
+		// 	question: '5 x 4',
+		// 	answer: 20,
+		// },
+		// {
+		// 	question: '7 x 12',
+		// 	answer: 84,
+		// }],
 	},
 	'Gameroom 2': {
 		start: false,
@@ -63,7 +72,8 @@ nextApp.prepare()
 				// if room and new user is valid, join room
 				if (availableRooms.includes(data.room) && data.username.id) {
 					socket.join(data.room);
-					addUser(users, data.room, data.username);
+					users[data.room] = addUser(users[data.room], data.room, data.username);
+					console.log(users[data.room]);
 
 					chatroom.to(data.room).emit('userConnected', {
 						message: `${data.username.name} has joined ${data.room}`,
@@ -92,8 +102,16 @@ nextApp.prepare()
 			});
 
 			socket.on('joinQueue', data => {
-				// join queue if queue is not full
-				if (rooms[data.room].queue.length < rooms[data.room].maxCapacity) {
+				// send a message if there is a current game ongoing in room
+				if (rooms[data.room].users[0]) {
+					chatroom.to(data.room).emit('gameOngoing', {
+						id: data.username.id,
+						msg: 'Ongoing game in current room, try again later',
+					});
+					console.log(`${data.username.name} tried to join the queue, GAME ONGOING`);
+
+				// join queue if queue is not full & no current game running
+				} else if (rooms[data.room].queue.length < rooms[data.room].maxCapacity) {
 					joinQueue(rooms, data.room, data.username);
 
 					chatroom.to(data.room).emit('joinedQueue', {
@@ -110,11 +128,11 @@ nextApp.prepare()
 							chatroom.to(data.room).emit('startGame', {
 								players: rooms[data.room].users,
 								questions: rooms[data.room].questions,
-							})
+							});
 						}
 					}
+				// send a message saying queue is currently full
 				} else {
-					// send a message saying queue is currently full
 					chatroom.to(data.room).emit('queueFull', {
 						id: data.username.id,
 						msg: 'Queue is currently full, try again later',
@@ -127,18 +145,42 @@ nextApp.prepare()
 				if (rooms[data.room]) {
 					rooms[data.room].queue.forEach(user => {
 						if (user.id === data.username.id) {
-							leaveQueue(rooms, data.room, data.username);
+							rooms[data.room].queue = removeUser(rooms[data.room].queue, data.username, 'queue');
+							console.log(rooms[data.room].queue);
 						}
 					});
 				}
 			});
 
+			socket.on('sendQuestions', data => {
+				const answerResults = [];
+				for (let i = 0; i < rooms[data.room].questions.length; i++) {
+					if (data.userAnswers[i] === rooms[data.room].questions[i].answer) {
+						answerResults.push(1);
+					} else {
+						answerResults.push(2);
+					}
+				}
+				rooms[data.room].results.push({
+					id: data.username.id,
+					name: data.username.name,
+					results: answerResults,
+					responseTimes: data.userResponseTimes,
+				});
+				// wait for all the results to come in
+				if (rooms[data.room].users.length === rooms[data.room].results.length) {
+					chatroom.to(data.room).emit('finalResults', rooms[data.room].results);
+					// reset the room
+					rooms[data.room] = resetRoom(rooms[data.room]);
+				}
+			});
 
 
 			// kick out user from room when they leave a room via button
 			socket.on('disconnectUser', data => {
 				socket.leave(data.room);
-				removeUser(users, data.room, data.username);
+				users[data.room] = removeUser(users[data.room], data.username, 'room');
+				console.log(users[data.room]);
 
 				chatroom.to(data.room).emit('removeUser', {
 					username: data.username,
@@ -147,21 +189,31 @@ nextApp.prepare()
 
 				socket.emit('connectedUsers', users);
 
-				// checking if disconnecting user was in a queue, and to remove them if true
 				if (rooms[data.room]) {
+					// checking if disconnecting user was in a queue, and to remove them if true
 					rooms[data.room].queue.forEach(user => {
 						if (user.id === data.username.id) {
-							leaveQueue(rooms, data.room, data.username);
+							rooms[data.room].queue = removeUser(rooms[data.room].queue, data.username, 'queue');
+							console.log(rooms[data.room].queue);
+						}
+					});
+					// checking if disconnecting user was in a room, and to remove them if true
+					rooms[data.room].users.forEach(user => {
+						if (user.id === data.username.id) {
+							rooms[data.room].users = removeUser(rooms[data.room].users, data.username, 'game');
+							console.log(rooms[data.room].users);
 						}
 					});
 				}
-			})
+				
+			});
 
 			// need to kick out user from rooms if they disconnect from socket in anyway possible
 			socket.on('disconnect', () => {
 				if (currentUser) {
 					socket.leave(currentUser.room);
-					removeUser(users, currentUser.room, currentUser.username);
+					users[currentUser.room] = removeUser(users[currentUser.room], currentUser.username, 'room');
+					console.log(users[currentUser.room]);
 
 					chatroom.to(currentUser.room).emit('removeUser', {
 						username: currentUser.username,
@@ -169,53 +221,64 @@ nextApp.prepare()
 					});
 
 					socket.emit('connectedUsers', users);
-
 				}
 			});
-
 		});
 
 		server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 	})
 
-const addUser = (usersObject, room, username) => {
-	// need to fix this validation if the user already exists
-	if (!usersObject[room].includes(username)) {
-		usersObject[room].push(username);
+
+// returns the new userArray after adding the user
+const addUser = (userArray, room, username) => {
+	// need to fix validation for checking is user already exits in the room
+	if (!userArray.includes(username)) {
+		userArray.push(username);
 		console.log(`${username.name} has joined ${room}`);
-		console.log(usersObject);
+		return userArray;
+	} else {
+		console.log(`${username.name} could not join ${room}`);
+		return userArray;
 	}
 }
 
-const removeUser = (usersObject, room, username) => {
-	const index = usersObject[room].findIndex(user => user.id === username.id);
+// returns the new userArray after removing the user
+const removeUser = (usersArray, username, location) => {
+	const index = usersArray.findIndex(user => user.id === username.id);
 
 	if (index > -1) {
-		usersObject[room].splice(index, 1);
-		console.log(`${username.name} disconnected from ${room}`);
-		console.log(usersObject);
+		usersArray.splice(index, 1);
+		console.log(`${username.name} disconnected from the ${location}`);
+		return usersArray;
+	} else {
+		console.log(`Error removing ${username.name} from the ${location}`);
+		return usersArray;
 	}
 }
 
+// covert this to addUser
 const joinQueue = (roomsObject, room, username) => {
 	roomsObject[room].queue.push(username);
 	console.log(`${username.name} has joined the queue in ${room}`);
 	console.log(roomsObject);
 }
 
-const leaveQueue = (roomsObject, room, username) => {
-	const index = roomsObject[room].queue.findIndex(user => user.id === username.id);
-
-	if (index > -1) {
-		roomsObject[room].queue.splice(index, 1);
-		console.log(`${username.name} has left the queue in ${room}`);
-		console.log(roomsObject);
-	}
-}
-
+// move all people in queue to users
 const startGame = (roomsObject, room) => {
 	for (let i = 0; i < roomsObject[room].maxCapacity; i++) {
 		roomsObject[room].users.push(roomsObject[room].queue.shift());
 	}
 	console.log(roomsObject);
+}
+
+const resetRoom = (currentRoom) => {
+	const cleanRoom = {
+		start: false,
+		maxCapacity: currentRoom.maxCapacity,
+		users: [],
+		queue: [],
+		questions: makeQuestions(),
+		results: [],
+	}
+	return cleanRoom;
 }

@@ -2,20 +2,20 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import io from 'socket.io-client';
 import { useUsers } from '../state/users.js';
+import { useMatch } from '../state/match.js';
 import ChatBox from '../components/chatbox.js'
 import GameRoom from '../components/gameroom.js';
 
 let chatroom;
-const chatroom_ENDPOINT = "https://tooslow.herokuapp.com/chatroom";
+// const chatroom_ENDPOINT = "https://tooslow.herokuapp.com/chatroom";
 // const chatroom_ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
-// const chatroom_ENDPOINT = "http://localhost:3000/chatroom";
+const chatroom_ENDPOINT = "http://localhost:3000/chatroom";
 
-// NEED TO KICK USER OUT OF ROOM IF THEY REFRESH THEIR BROWSER
-// ITS ONLY KICKING WHEN THEY CLICK LEAVE ROOM
 
 export default function ChatRoom() {
 
 	const { users, addUser, removeUser, updateUsersList } = useUsers();
+	const { resetMatch } = useMatch();
 
 	const [username, setUsername] = useState({
 		name: '',
@@ -92,6 +92,7 @@ export default function ChatRoom() {
 			username: username,
 		});
 		setCurrentRoom('');
+	 resetMatch();
 	}
 
 	const handleLeaveGameRoom = (e) => {
@@ -102,6 +103,7 @@ export default function ChatRoom() {
 		});
 		setCurrentRoom('');
 		setGameRoom(false);
+	 resetMatch();
 	}
 
 	return (
