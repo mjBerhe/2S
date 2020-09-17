@@ -1,4 +1,4 @@
-function addition(questions, max, min, terms, decimals) {
+module.exports = function addition (questions, max, min, terms, decimals) {
 
     // questions > 0
     // max and min are boundless
@@ -65,8 +65,21 @@ function addition(questions, max, min, terms, decimals) {
 
     }
 
-    console.log(string_v, solution_add);
+    // console.log(string_v, solution_add);
+    // string_v = questionsArray
+    // solution_add = solutionsArray
+
+    const finalQuestions = [];
+
+    for (let i = 0; i < questions; i++) {
+        finalQuestions.push({
+            question: string_v[i],
+            answer: solution_add[i],
+        });
+    }
+
+    return finalQuestions;
 
 }
 
-addition(5,100,-100,3,2)
+// addition(5,100,-100,3,0)
