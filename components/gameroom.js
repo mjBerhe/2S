@@ -155,7 +155,7 @@ export default function GameRoom({ socket, room, username }) {
 								<div key={i}>Question {i}: {player.results[i]} - {player.responseTimes[i]}ms</div>
 							)}</h3> 
 						)}
-						<h3>Average: {avgTime}ms</h3>
+						<h3>Average: {avgTime}ms :)</h3>
 					</div>
 				</div>
 			}
