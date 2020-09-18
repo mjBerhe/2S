@@ -135,6 +135,7 @@ a:hover, a:focus, a:active {
 	justify-content: center;
 	align-items: center;
 	border: solid yellow 2px;
+	overflow: auto;
 }
 .gameroom-container h1 {
 	grid-row: 1/2;

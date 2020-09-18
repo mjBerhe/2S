@@ -15,6 +15,7 @@ const io = socket(server);
 const availableRooms = ['Chatroom 1', 'Chatroom 2', 'Chatroom 3', 'Gameroom 1', 'Gameroom 2'];
 
 const makeQuestions = require('./testing.js');
+const addition = require('./question_addition.js');
 
 // NEED TO MAKE FUNCTION TO CLEAN GAMEROOM (START => FALSE) AND CLEAR RESULTS
 // WHENEVER EVERYONE LEAVES?
@@ -34,7 +35,7 @@ const rooms = {
 		maxCapacity: 2,
 		users: [],
 		queue: [],
-		questions: makeQuestions(),
+		questions: addition(10, 30, 0, 2, 0),
 		results: [],
 		// questions: [{
 		// 	question: '5 x 4',
@@ -277,7 +278,7 @@ const resetRoom = (currentRoom) => {
 		maxCapacity: currentRoom.maxCapacity,
 		users: [],
 		queue: [],
-		questions: makeQuestions(),
+		questions: addition(10, 30, 0, 2, 0),
 		results: [],
 	}
 	return cleanRoom;
