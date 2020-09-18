@@ -14,10 +14,11 @@ const io = socket(server);
 
 const availableRooms = ['Chatroom 1', 'Chatroom 2', 'Chatroom 3', 'Gameroom 1', 'Gameroom 2'];
 
-const makeQuestions = require('./testing.js');
-const addition = require('./question_addition.js');
+// const makeQuestions = require('./testing.js');
+const addition = require('./mikes_functions/question_addition.js');
+const question_multiplication = require('./mikes_functions/question_multiplication.js');
+const multiplicaiton = require('./mikes_functions/question_multiplication.js');
 
-const hello = '';
 
 // NEED TO MAKE FUNCTION TO CLEAN GAMEROOM (START => FALSE) AND CLEAR RESULTS
 // WHENEVER EVERYONE LEAVES?
@@ -39,20 +40,14 @@ const rooms = {
 		queue: [],
 		questions: addition(10, 30, 0, 2, 0),
 		results: [],
-		// questions: [{
-		// 	question: '5 x 4',
-		// 	answer: 20,
-		// },
-		// {
-		// 	question: '7 x 12',
-		// 	answer: 84,
-		// }],
 	},
 	'Gameroom 2': {
 		start: false,
-		maxCapacity: 3,
+		maxCapacity: 2,
 		users: [],
 		queue: [],
+		questions: multiplicaiton(10, 12, 2, 2, 0),
+		results: [],
 	}
 }
 
@@ -280,7 +275,7 @@ const resetRoom = (currentRoom) => {
 		maxCapacity: currentRoom.maxCapacity,
 		users: [],
 		queue: [],
-		questions: addition(10, 30, 0, 2, 0),
+		questions: multiplicaiton(10, 12, 2, 2, 0),
 		results: [],
 	}
 	return cleanRoom;
