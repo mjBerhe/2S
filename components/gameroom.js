@@ -4,7 +4,7 @@ import { useMatch } from '../state/match.js';
 
 export default function GameRoom({ socket, room, username }) {
 
-	const { joinQueue, leaveQueue, prepMatch, startMatch, completeMatch, loadQuestion, setResults } = useMatch();
+	const { joinQueue, leaveQueue, prepMatch, startMatch, completeMatch, loadQuestion, setResults, setAverageTime } = useMatch();
 
 	const queueStatus = useMatch(state => state.queue);
 	const startStatus = useMatch(state => state.start);
@@ -13,6 +13,7 @@ export default function GameRoom({ socket, room, username }) {
 	const userAnswers = useMatch(state => state.userAnswers);
 	const userResponseTimes = useMatch(state => state.userResponseTimes);
 	const results = useMatch(state => state.results);
+	const avgTime = useMatch(state => state.userAverageTime);
 
 	const [countdown, setCountdown] = useState({
 		initialTime: 3,
@@ -70,6 +71,7 @@ export default function GameRoom({ socket, room, username }) {
 
 		socket.on('finalResults', data => {
 			setResults(data);
+			setAverageTime();
 		});
 
 	}, [])
@@ -153,6 +155,7 @@ export default function GameRoom({ socket, room, username }) {
 								<div key={i}>Question {i}: {player.results[i]} - {player.responseTimes[i]}ms</div>
 							)}</h3> 
 						)}
+						<h3>Average: {avgTime}ms</h3>
 					</div>
 				</div>
 			}

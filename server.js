@@ -17,6 +17,8 @@ const availableRooms = ['Chatroom 1', 'Chatroom 2', 'Chatroom 3', 'Gameroom 1', 
 const makeQuestions = require('./testing.js');
 const addition = require('./question_addition.js');
 
+const hello = '';
+
 // NEED TO MAKE FUNCTION TO CLEAN GAMEROOM (START => FALSE) AND CLEAR RESULTS
 // WHENEVER EVERYONE LEAVES?
 // BUT THEN PEOPLE CANT START A NEW GAME IF THERE IS STILL ATLEAST 1 USER IN THE ROOM
