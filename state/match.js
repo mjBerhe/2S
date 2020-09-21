@@ -60,13 +60,13 @@ export const [useMatch] = create((set, get) => ({
    },
    userTypingAnswer: (answer) => {
       set(() => ({
-         currentAnswer: parseInt(answer, 10),
+         currentAnswer: answer,
       }));
    },
    userSubmitAnswer: () => {
       const initialTime = get().initialResponseTimer;
       set(prevState => ({
-         userAnswers: [...prevState.userAnswers, prevState.currentAnswer],
+         userAnswers: [...prevState.userAnswers, parseFloat(prevState.currentAnswer)],
          currentAnswer: '',
          userResponseTimes: [...prevState.userResponseTimes, Date.now() - initialTime],
       }));

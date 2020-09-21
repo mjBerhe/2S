@@ -4,7 +4,7 @@ const e = require('express');
 const server = require('http').Server(app);
 const PORT = process.env.PORT || 3000;
 
-const next = require ('next');
+const next = require('next');
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
@@ -12,17 +12,16 @@ const nextHandler = nextApp.getRequestHandler();
 const socket = require('socket.io');
 const io = socket(server);
 
-const availableRooms = ['Chatroom 1', 'Chatroom 2', 'Chatroom 3', 'Gameroom 1', 'Gameroom 2'];
-
-// const makeQuestions = require('./testing.js');
 const addition = require('./mikes_functions/question_addition.js');
-const question_multiplication = require('./mikes_functions/question_multiplication.js');
 const multiplicaiton = require('./mikes_functions/question_multiplication.js');
 
-
-// NEED TO MAKE FUNCTION TO CLEAN GAMEROOM (START => FALSE) AND CLEAR RESULTS
-// WHENEVER EVERYONE LEAVES?
-// BUT THEN PEOPLE CANT START A NEW GAME IF THERE IS STILL ATLEAST 1 USER IN THE ROOM
+const availableRooms = [
+	'Chatroom 1',
+	'Chatroom 2',
+	'Chatroom 3',
+	'Gameroom 1',
+	'Gameroom 2',
+];
 
 const users = {
 	'Chatroom 1': [],
@@ -36,6 +35,7 @@ const rooms = {
 	'Gameroom 1': {
 		start: false,
 		maxCapacity: 2,
+		roomType: 'addition',
 		users: [],
 		queue: [],
 		questions: addition(10, 30, 0, 2, 0),
@@ -44,6 +44,7 @@ const rooms = {
 	'Gameroom 2': {
 		start: false,
 		maxCapacity: 2,
+		roomType: "multiplication",
 		users: [],
 		queue: [],
 		questions: multiplicaiton(10, 12, 2, 2, 0),
@@ -152,6 +153,7 @@ nextApp.prepare()
 
 			socket.on('sendQuestions', data => {
 				const answerResults = [];
+				console.log(data.userAnswers);
 				for (let i = 0; i < rooms[data.room].questions.length; i++) {
 					if (data.userAnswers[i] === rooms[data.room].questions[i].answer) {
 						answerResults.push(1);
@@ -219,6 +221,23 @@ nextApp.prepare()
 					});
 
 					socket.emit('connectedUsers', users);
+
+					if (rooms[currentUser.room]) {
+						// checking if disconnecting user was in a queue, and to remove them if true
+						rooms[currentUser.room].queue.forEach(user => {
+							if (user.id === currentUser.username.id) {
+								rooms[currentUser.room].queue = removeUser(rooms[currentUser.room].queue, currentUser.username, 'queue');
+								console.log(rooms[currentUser.room].queue);
+							}
+						});
+						// checking if disconnecting user was in a room, and to remove them if true
+						rooms[currentUser.room].users.forEach(user => {
+							if (user.id === currentUser.username.id) {
+								rooms[currentUser.room].users = removeUser(rooms[currentUser.room].users, currentUser.username, 'game');
+								console.log(rooms[currentUser.room].users);
+							}
+						});
+					}
 				}
 			});
 		});
@@ -270,13 +289,27 @@ const startGame = (roomsObject, room) => {
 }
 
 const resetRoom = (currentRoom) => {
-	const cleanRoom = {
-		start: false,
-		maxCapacity: currentRoom.maxCapacity,
-		users: [],
-		queue: [],
-		questions: multiplicaiton(10, 12, 2, 2, 0),
-		results: [],
+	if (currentRoom.roomType === 'addition') {
+		const cleanRoom = {
+			start: false,
+			maxCapacity: currentRoom.maxCapacity,
+			roomType: currentRoom.roomType,
+			users: [],
+			queue: [],
+			questions: addition(10, 30, 0, 2, 0),
+			results: [],
+		}
+		return cleanRoom;
+	} else if (currentRoom.roomType === 'mulitplication') {
+		const cleanRoom = {
+			start: false,
+			maxCapacity: currentRoom.maxCapacity,
+			roomType: currentRoom.roomType,
+			users: [],
+			queue: [],
+			questions: multiplicaiton(10, 12, 2, 2, 0),
+			results: [],
+		}
+		return cleanRoom;
 	}
-	return cleanRoom;
 }
