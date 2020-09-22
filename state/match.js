@@ -12,6 +12,7 @@ export const [useMatch] = create((set, get) => ({
    userAnswers: [],
    initialResponseTimer: 0, 
    userResponseTimes: [],
+   userAverageTime: 0,
    results: [],
    joinQueue: () => {
       set(() => ({
@@ -59,16 +60,25 @@ export const [useMatch] = create((set, get) => ({
    },
    userTypingAnswer: (answer) => {
       set(() => ({
-         currentAnswer: parseInt(answer, 10),
+         currentAnswer: answer,
       }));
    },
    userSubmitAnswer: () => {
       const initialTime = get().initialResponseTimer;
       set(prevState => ({
-         userAnswers: [...prevState.userAnswers, prevState.currentAnswer],
+         userAnswers: [...prevState.userAnswers, parseFloat(prevState.currentAnswer)],
          currentAnswer: '',
          userResponseTimes: [...prevState.userResponseTimes, Date.now() - initialTime],
       }));
+   },
+   setAverageTime: () => {
+      const responseTimes = get().userResponseTimes;
+      let sumResponseTimes = responseTimes.reduce((acc, curVal) => {
+         return acc + curVal;
+      });
+      set(() => ({
+         userAverageTime: sumResponseTimes/responseTimes.length,
+      }))
    },
    setResults: (results) => {
       set(() => ({

@@ -1,4 +1,4 @@
-function multiplication(questions, max, min, terms, decimals) {
+module.exports = function multiplication (questions, max, min, terms, decimals) {
 
     // questions > 0
     // max and min are boundless
@@ -65,7 +65,6 @@ function multiplication(questions, max, min, terms, decimals) {
 
     }
 
-    // console.log(string_v, solution_multi);
 
     const finalQuestions = [];
 
@@ -80,4 +79,3 @@ function multiplication(questions, max, min, terms, decimals) {
 
 }
 
-multiplication(1,5,0,2,0)
