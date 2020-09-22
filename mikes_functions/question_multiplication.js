@@ -7,9 +7,9 @@ function multiplication(questions, max, min, terms, decimals) {
 
     // create the vectors for addition
 
-    const first_v = []
-    const second_v = [];
-    const third_v = [];
+    const first_v = [];
+    const second_v = []; 
+    const third_v = []; 
     const fourth_v = [];
     const fifth_v = [];
     const solution_multi = [];
@@ -65,8 +65,19 @@ function multiplication(questions, max, min, terms, decimals) {
 
     }
 
-    console.log(string_v, solution_multi);
+    // console.log(string_v, solution_multi);
+
+    const finalQuestions = [];
+
+    for (let i = 0; i < questions; i++) {
+        finalQuestions.push({
+            question: string_v[i],
+            answer: solution_multi[i],
+        });
+    }
+
+    return finalQuestions;
 
 }
 
-multiplication(10,12,2,2,0)
+multiplication(1,5,0,2,0)
