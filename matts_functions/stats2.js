@@ -28,10 +28,11 @@ module.exports = function statsGenerator (roundsInfo) {
 
    const listOfRounds = Object.keys(roundsInfo); // ['round 1', 'round 2', ...]
 
-   const stats = {
-      'round 1': [],
-      'round 2': [],
-   }
+   const stats = {};
+
+   listOfRounds.forEach(round => {
+      stats[round] = [];
+   })
    
    const sumReducer = (sum, curVal) => sum + curVal;
 

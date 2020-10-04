@@ -1,5 +1,6 @@
 const addition = require('../mikes_functions/question_addition.js');
 const multiplication = require('../mikes_functions/question_multiplication.js');
+const equations = require('../mikes_functions/question_equations.js');
 // can make either a static room or random room
 
 module.exports = function generateStaticRoom (maxCapacity, roundAmount, arrayOfRoundTypes) {
@@ -10,6 +11,9 @@ module.exports = function generateStaticRoom (maxCapacity, roundAmount, arrayOfR
    const functionConverter = {
       'addition': addition(3, 30, 0, 2, 0),
       'multiplication': multiplication(3, 12, 2, 2, 0),
+      'equations_1': equations(3, 1, 1),
+      'equations_2': equations(3, 1, 2),
+      'equations_3': equations(3, 2, 1),
    }
 
    const listOfRounds = [

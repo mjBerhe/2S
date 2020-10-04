@@ -297,6 +297,6 @@ const prepMatch = (roomsObject, room) => {
 }
 
 const resetRoom = (currentRoom) => {
-	const newRoom = generateStaticRoom(2, 2, ['addition', 'multiplication']);
+	const newRoom = generateStaticRoom(2, 5, ['addition', 'multiplication']);
 	rooms[currentRoom] = newRoom;
 }
