@@ -69,16 +69,19 @@ module.exports = function addition (questions, max, min, terms, decimals) {
     // string_v = questionsArray
     // solution_add = solutionsArray
 
-    const finalQuestions = [];
+    // const finalQuestions = [];
 
-    for (let i = 0; i < questions; i++) {
-        finalQuestions.push({
-            question: string_v[i],
-            answer: solution_add[i],
-        });
-    }
+    // for (let i = 0; i < questions; i++) {
+    //     finalQuestions.push({
+    //         question: string_v[i],
+    //         answer: solution_add[i],
+    //     });
+    // }
 
-    return finalQuestions;
+    return {
+        questions: string_v,
+        answers: solution_add
+    };
 
 }
 

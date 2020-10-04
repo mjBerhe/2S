@@ -66,16 +66,19 @@ module.exports = function multiplication (questions, max, min, terms, decimals) 
     }
 
 
-    const finalQuestions = [];
+    // const finalQuestions = [];
 
-    for (let i = 0; i < questions; i++) {
-        finalQuestions.push({
-            question: string_v[i],
-            answer: solution_multi[i],
-        });
-    }
+    // for (let i = 0; i < questions; i++) {
+    //     finalQuestions.push({
+    //         question: string_v[i],
+    //         answer: solution_multi[i],
+    //     });
+    // }
 
-    return finalQuestions;
+    return {
+        questions: string_v, 
+        answers: solution_multi
+    };
 
 }
 
