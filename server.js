@@ -1,6 +1,5 @@
 const app = require('express')();
 const cors = require('cors');
-const e = require('express');
 const server = require('http').Server(app);
 const PORT = process.env.PORT || 3000;
 
@@ -14,6 +13,9 @@ const io = socket(server);
 
 const addition = require('./mikes_functions/question_addition.js');
 const multiplicaiton = require('./mikes_functions/question_multiplication.js');
+
+const statsGenerator = require('./matts_functions/stats2.js');
+const generateStaticRoom = require('./matts_functions/generateRoom.js');
 
 const availableRooms = [
 	'Chatroom 1',
@@ -32,24 +34,28 @@ const users = {
 };
 
 const rooms = {
-	'Gameroom 1': {
-		start: false,
-		maxCapacity: 2,
-		roomType: 'addition',
-		users: [],
-		queue: [],
-		questions: addition(10, 30, 0, 2, 0),
-		results: [],
-	},
-	'Gameroom 2': {
-		start: false,
-		maxCapacity: 2,
-		roomType: "multiplication",
-		users: [],
-		queue: [],
-		questions: multiplicaiton(10, 12, 2, 2, 0),
-		results: [],
-	}
+	'Gameroom 1': generateStaticRoom(2, 2, ['addition', 'multiplication']),
+	// 'Gameroom 2': {
+	// 	start: false,
+	// 	maxCapacity: 2,
+	// 	roundAmount: 2,   
+	// 	users: [],
+	// 	queue: [],
+	// 	rounds: {
+	// 		'round 1': {
+	// 			roundType: 'addition',
+	// 			questions: questions,
+	// 			answers: answers,
+	// 			results: [],
+	// 		},
+	// 		'round 2': {
+	// 			roundType: 'multiplication',
+	// 			questions: questionsMulti,
+	// 			answers: answersMulti,
+	// 			results: [],
+	// 		}
+	// 	},
+	// },
 }
 
 let currentUser;
@@ -122,11 +128,13 @@ nextApp.prepare()
 						rooms[data.room].start = true;
 
 						if (rooms[data.room].start) {
-							startGame(rooms, data.room);
+							prepMatch(rooms, data.room);
 
-							chatroom.to(data.room).emit('startGame', {
+							chatroom.to(data.room).emit('prepMatch', {
 								players: rooms[data.room].users,
-								questions: rooms[data.room].questions,
+								rounds: rooms[data.room].rounds,
+								roundAmount: rooms[data.room].roundAmount,
+								// questions: rooms[data.room].questions,
 							});
 						}
 					}
@@ -151,30 +159,30 @@ nextApp.prepare()
 				}
 			});
 
-			socket.on('sendQuestions', data => {
-				const answerResults = [];
-				console.log(data.userAnswers);
-				for (let i = 0; i < rooms[data.room].questions.length; i++) {
-					if (data.userAnswers[i] === rooms[data.room].questions[i].answer) {
-						answerResults.push(1);
+			socket.on('userRoundComplete', data => {
+				rooms[data.room].rounds[`round ${data.currentRound}`].results.push({
+					id: data.id,
+					name: data.name,
+					userAnswers: data.userAnswers,
+					userResponseTimes: data.userResponseTimes,
+				});
+
+				// waiting for all users to complete round
+				if (rooms[data.room].users.length === rooms[data.room].rounds[`round ${data.currentRound}`].results.length) {
+					// checking if that was the final round
+					if (rooms[data.room].roundAmount === data.currentRound) {
+						chatroom.to(data.room).emit('usersFinalRoundComplete', {
+							stats: statsGenerator(rooms[data.room].rounds),
+							msg: 'All users have completed the final round!',
+						});
+						resetRoom(data.room);
 					} else {
-						answerResults.push(2);
+						chatroom.to(data.room).emit('usersRoundComplete', {
+							msg: `All users have completed round ${data.currentRound}`,
+						});
 					}
 				}
-				rooms[data.room].results.push({
-					id: data.username.id,
-					name: data.username.name,
-					results: answerResults,
-					responseTimes: data.userResponseTimes,
-				});
-				// wait for all the results to come in
-				if (rooms[data.room].users.length === rooms[data.room].results.length) {
-					chatroom.to(data.room).emit('finalResults', rooms[data.room].results);
-					// reset the room
-					rooms[data.room] = resetRoom(rooms[data.room]);
-				}
 			});
-
 
 			// kick out user from room when they leave a room via button
 			socket.on('disconnectUser', data => {
@@ -281,7 +289,7 @@ const joinQueue = (roomsObject, room, username) => {
 }
 
 // move all people in queue to users
-const startGame = (roomsObject, room) => {
+const prepMatch = (roomsObject, room) => {
 	for (let i = 0; i < roomsObject[room].maxCapacity; i++) {
 		roomsObject[room].users.push(roomsObject[room].queue.shift());
 	}
@@ -289,27 +297,6 @@ const startGame = (roomsObject, room) => {
 }
 
 const resetRoom = (currentRoom) => {
-	if (currentRoom.roomType === 'addition') {
-		const cleanRoom = {
-			start: false,
-			maxCapacity: currentRoom.maxCapacity,
-			roomType: currentRoom.roomType,
-			users: [],
-			queue: [],
-			questions: addition(10, 30, 0, 2, 0),
-			results: [],
-		}
-		return cleanRoom;
-	} else if (currentRoom.roomType === 'mulitplication') {
-		const cleanRoom = {
-			start: false,
-			maxCapacity: currentRoom.maxCapacity,
-			roomType: currentRoom.roomType,
-			users: [],
-			queue: [],
-			questions: multiplicaiton(10, 12, 2, 2, 0),
-			results: [],
-		}
-		return cleanRoom;
-	}
+	const newRoom = generateStaticRoom(2, 2, ['addition', 'multiplication']);
+	rooms[currentRoom] = newRoom;
 }

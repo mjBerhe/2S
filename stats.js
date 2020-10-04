@@ -1,4 +1,4 @@
-function stats(userResponseTimes, answerResults, questions) {
+function stats (userResponseTimes, answerResults, questions) {
 
     // userResponseTimes self explanatory
     // answerResults is an array of 1's (right) and 0's (wrong)
@@ -7,20 +7,20 @@ function stats(userResponseTimes, answerResults, questions) {
 
     let sum_time = 0; // cumulative time spent answering question
 
-    for(let i = 0; i < userResponseTimes.length; i++) {
+    for (let i = 0; i < userResponseTimes.length; i++) {
         sum_time = sum_time + userResponseTimes[i];
     }
 
     let sum_correct = 0; // numbers of questions answered correctly
 
-    for(let i = 0; i < answerResults.length; i++) {
+    for (let i = 0; i < answerResults.length; i++) {
         sum_correct = sum_correct + answerResults[i];
     }
 
     let errors = []; // list of questions you got wrong
 
-    for(let i = 0; i < answerResults.length; i++) {
-        if(answerResults[i] == 0){
+    for (let i = 0; i < answerResults.length; i++) {
+        if (answerResults[i] == 0){
             errors.push(questions[i]);
         }
     }

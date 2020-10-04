@@ -4,16 +4,18 @@ export const [useMatch] = create((set, get) => ({
    queue: false,
    start: false,
    completed: false,
+   roundOngoing: false,
+   roundAmount: 0,
+   currentRound: 0,
    players: [],
-   questions: [],
-   answers: [],
+   roundsInfo: null,
+   currentRoundQuestions: [],
    currentQuestion: '',
    currentAnswer: '',
-   userAnswers: [],
    initialResponseTimer: 0, 
+   userAnswers: [],
    userResponseTimes: [],
-   userAverageTime: 0,
-   results: [],
+   completedStats: {},
    joinQueue: () => {
       set(() => ({
          queue: true,
@@ -24,20 +26,25 @@ export const [useMatch] = create((set, get) => ({
          queue: false,
       }))
    },
-   prepMatch: (players, questions) => {
-      const q = [];
-      const a = [];
-
-      questions.forEach(item => {
-         q.push(item.question);
-         a.push(item.answer);
-      });
-
+   prepMatch: (players, roundAmount, rounds) => {
       set(() => ({
+         roundAmount: roundAmount,
+         roundsInfo: rounds,
          queue: false,
          players: players,
-         questions: q,
-         answers: a,
+      }));
+   },
+   incCurrentRound: () => {
+      set(prevState => ({
+         roundOngoing: true,
+         currentRound: prevState.currentRound + 1,
+         userAnswers: [],
+         userResponseTimes: [],
+      }));
+   },
+   finishedRound: () => {
+      set(() => ({
+         roundOngoing: false,
       }));
    },
    startMatch: () => {
@@ -45,14 +52,14 @@ export const [useMatch] = create((set, get) => ({
          start: true,
       }));
    },
-   completeMatch: () => {
+   setRoundQuestions: (currentRound) => {
+      const roundsInfo = get().roundsInfo;
       set(() => ({
-         start: false,
-         completed: true,
+         currentRoundQuestions: roundsInfo[currentRound].questions,
       }));
    },
    loadQuestion: () => {
-      const questions = get().questions;
+      const questions = get().currentRoundQuestions;
       set(() => ({
          currentQuestion: questions.shift(),
          initialResponseTimer: Date.now(),
@@ -71,18 +78,11 @@ export const [useMatch] = create((set, get) => ({
          userResponseTimes: [...prevState.userResponseTimes, Date.now() - initialTime],
       }));
    },
-   setAverageTime: () => {
-      const responseTimes = get().userResponseTimes;
-      let sumResponseTimes = responseTimes.reduce((acc, curVal) => {
-         return acc + curVal;
-      });
+   completeMatch: (stats) => {
       set(() => ({
-         userAverageTime: sumResponseTimes/responseTimes.length,
-      }))
-   },
-   setResults: (results) => {
-      set(() => ({
-         results: results,
+         start: false,
+         completed: true,
+         completedStats: stats,
       }));
    },
    resetMatch: () => {
@@ -90,15 +90,18 @@ export const [useMatch] = create((set, get) => ({
          queue: false,
          start: false,
          completed: false,
+         roundOngoing: false,
+         roundAmount: 0,
+         currentRound: 0,
          players: [],
-         questions: [],
-         answers: [],
+         roundsInfo: null,
+         currentRoundQuestions: [],
          currentQuestion: '',
          currentAnswer: '',
-         userAnswers: [],
          initialResponseTimer: 0, 
+         userAnswers: [],
          userResponseTimes: [],
-         results: [],
+         completedStats: {},
       }));
    }
 }));
