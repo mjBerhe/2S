@@ -67,6 +67,17 @@ if (num === 1) {
             coeff_7: coeff_7,
         } = alpha_beta_solve(num, level);
 
+        // checks if the solutions from these equations can be inf many
+        infinite = function_infinite_check(2, rng, alpha, beta, coeff_4, coeff_5, coeff_6, coeff_7) ;
+
+        // define the solution for each difficulty
+        // we can change "." as a solution when there are Inf many
+        if (infinite === false) {
+            if (difficulty === 1) {answer = x_value} ;
+            if (difficulty === 2) {answer = x_value} ;
+            if (difficulty === 3) {answer = x_d_value} ;
+        } else {answer = 100}
+
         // if difficulty is selected to be 1, generate questions. 80% level 1, 20% level 2 questions
         if (difficulty === 1) {
 
@@ -74,18 +85,18 @@ if (num === 1) {
             if (i <= 0.8 * questions) {
 
                 // calculated the A in A = B*X + C so it's forced to be an integer number
-                string.push(`${alpha} = ${coeff_1}*X + ${coeff_2}`);
-                solution.push(x_value);
+                string.push(`${alpha} = ${coeff_1}x + ${coeff_2}`);
+                solution.push(answer);
             }
 
             else {
 
                 // push the equation and solution into their respective arrays
-                if (rng === 1) {string.push(`${alpha} + ${coeff_1}*X = ${coeff_2}*X + ${coeff_3}`)};
-                if (rng === 2) {string.push(`${alpha} + ${coeff_1} = ${coeff_2}*X + ${coeff_3}*X`)};
-                if (rng === 3) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}*X = ${coeff_3}*X`)};
-                if (rng === 4) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}*X + ${coeff_3}*X = 0`)};
-                solution.push(x_value);
+                if (rng === 1) {string.push(`${alpha} + ${coeff_1}x = ${coeff_2}x + ${coeff_3}`)};
+                if (rng === 2) {string.push(`${alpha} + ${coeff_1} = ${coeff_2}x + ${coeff_3}x`)};
+                if (rng === 3) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}x = ${coeff_3}x`)};
+                if (rng === 4) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}x + ${coeff_3}x = 0`)};
+                solution.push(answer);
             }
 
         }
@@ -96,24 +107,24 @@ if (num === 1) {
             if (i <= 0.2 * questions) {
 
                 // calculated the A in A = B*X + C so it's forced to be an integer number
-                string.push(`${alpha} = ${coeff_1}*X + ${coeff_2}`);
-                solution.push(x_value);
+                string.push(`${alpha} = ${coeff_1}x + ${coeff_2}`);
+                solution.push(answer);
             }
 
             else if (i <= 0.8 * questions) {
 
-                if (rng === 1) {string.push(`${alpha} + ${coeff_1}*X = ${coeff_2}*X + ${coeff_3}`)};
-                if (rng === 2) {string.push(`${alpha} + ${coeff_1} = ${coeff_2}*X + ${coeff_3}*X`)};
-                if (rng === 3) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}*X = ${coeff_3}*X`)};
-                if (rng === 4) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}*X + ${coeff_3}*X = 0`)};
-                solution.push(x_value);
+                if (rng === 1) {string.push(`${alpha} + ${coeff_1}x = ${coeff_2}x + ${coeff_3}`)};
+                if (rng === 2) {string.push(`${alpha} + ${coeff_1} = ${coeff_2}x + ${coeff_3}x`)};
+                if (rng === 3) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}x = ${coeff_3}x`)};
+                if (rng === 4) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}x + ${coeff_3}x = 0`)};
+                solution.push(answer);
             }
 
             else {
 
-                if(rng <= 2) {string.push(`${alpha} + ${coeff_4}(${coeff_5} + ${coeff_6}*X) = ${coeff_7}`)};
-                if(rng > 2) {string.push(`${alpha} + ${coeff_4}(${coeff_5} + ${coeff_6}*X) = ${coeff_7}*X`)};
-                solution.push(x_value);
+                if(rng <= 2) {string.push(`${alpha} + ${coeff_4}(${coeff_5} + ${coeff_6}x) = ${coeff_7}`)};
+                if(rng > 2) {string.push(`${alpha} + ${coeff_4}(${coeff_5} + ${coeff_6}x) = ${coeff_7}x`)};
+                solution.push(answer);
             }
 
         }
@@ -124,18 +135,18 @@ if (num === 1) {
             if (i <= 0.6 * questions) {
 
                 // note that x_d_value is used here as the solution
-                if (rng === 1) {string.push(`${alpha} + ${coeff_1}*X = ${coeff_2}*X + ${coeff_3}`)};
-                if (rng === 2) {string.push(`${alpha} + ${coeff_1} = ${coeff_2}*X + ${coeff_3}*X`)};
-                if (rng === 3) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}*X = ${coeff_3}*X`)};
-                if (rng === 4) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}*X + ${coeff_3}*X = 0`)};
-                solution.push(x_d_value);
+                if (rng === 1) {string.push(`${alpha} + ${coeff_1}x = ${coeff_2}x + ${coeff_3}`)};
+                if (rng === 2) {string.push(`${alpha} + ${coeff_1} = ${coeff_2}x + ${coeff_3}x`)};
+                if (rng === 3) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}x = ${coeff_3}x`)};
+                if (rng === 4) {string.push(`${alpha} + ${coeff_1} + ${coeff_2}x + ${coeff_3}x = 0`)};
+                solution.push(answer);
             }
 
             else {
 
-                if(rng <= 2) {string.push(`${alpha} + ${coeff_4}(${coeff_5} + ${coeff_6}*X) = ${coeff_7}`)};
-                if(rng > 2) {string.push(`${alpha} + ${coeff_4}(${coeff_5} + ${coeff_6}*X) = ${coeff_7}*X`)};
-                solution.push(x_d_value);
+                if(rng <= 2) {string.push(`${alpha} + ${coeff_4}(${coeff_5} + ${coeff_6}x) = ${coeff_7}`)};
+                if(rng > 2) {string.push(`${alpha} + ${coeff_4}(${coeff_5} + ${coeff_6}x) = ${coeff_7}x`)};
+                solution.push(answer);
             }
 
         }
@@ -174,26 +185,26 @@ if (num === 2) {
             if (difficulty === 1) {answer = Math.max(x_value,y_value)} ;
             if (difficulty === 2) {answer = x_d_value + y_d_value} ;
             if (difficulty === 3) {answer = x_d_value * y_d_value} ;
-        } else {answer = "."}
+        } else {answer = 100}
 
         if (difficulty === 1) {
 
-            if(rng <= 2) {string.push(`Y = X + ${alpha} AND Y = ${coeff_1}*X + ${beta},`)} ; // Y = X + A, Y = CX + B
-            if(rng > 2) {string.push(`Y = ${coeff_1}*X + ${alpha} AND Y = ${coeff_2}*X + ${beta},`)} ; // Y = CX + A, Y = DX + B
+            if(rng <= 2) {string.push(`y = x + ${alpha} AND y = ${coeff_1}x + ${beta},`)} ; // Y = X + A, Y = CX + B
+            if(rng > 2) {string.push(`y = ${coeff_1}x + ${alpha} AND y = ${coeff_2}x + ${beta},`)} ; // Y = CX + A, Y = DX + B
             solution.push(answer);
         }
 
         else if (difficulty === 2) {
 
-            if(rng <= 2) {string.push(`Y = ${coeff_4}*X + ${alpha} AND ${coeff_5}*Y = ${coeff_6}*X + ${beta},`)} ; // Y = CX + A, DY = EX + B
-            if(rng > 2) {string.push(`${alpha} + ${coeff_4}*Y = ${coeff_5}*X AND ${coeff_6}*X + ${beta} = ${coeff_7}*Y`)} ; // A + CY = DX, EX + B = FY
+            if(rng <= 2) {string.push(`y = ${coeff_4}x + ${alpha} AND ${coeff_5}y = ${coeff_6}x + ${beta},`)} ; // Y = CX + A, DY = EX + B
+            if(rng > 2) {string.push(`${alpha} + ${coeff_4}y = ${coeff_5}x AND ${coeff_6}x + ${beta} = ${coeff_7}y`)} ; // A + CY = DX, EX + B = FY
             solution.push(answer);
         }
 
         else if (difficulty === 3) {  
 
-            if(rng <= 2) {string.push(`${coeff_4}*X + ${coeff_5}*Y + ${alpha} = 0 AND ${coeff_6}*Y + ${coeff_7}*X + ${beta} = 0`)} ; // CX + DY + A = 0, EY + FX + B = 0
-            if(rng > 2) {string.push(`${coeff_4}*Y = ${coeff_5}*X + ${alpha}  AND ${coeff_6}*Y = ${coeff_7}*X + ${beta}`)} ; // CY = DX + A, EY = FX + B
+            if(rng <= 2) {string.push(`${coeff_4}x + ${coeff_5}y + ${alpha} = 0 AND ${coeff_6}y + ${coeff_7}x + ${beta} = 0`)} ; // CX + DY + A = 0, EY + FX + B = 0
+            if(rng > 2) {string.push(`${coeff_4}y = ${coeff_5}x + ${alpha}  AND ${coeff_6}y = ${coeff_7}x + ${beta}`)} ; // CY = DX + A, EY = FX + B
             solution.push(answer);
         }
     }
