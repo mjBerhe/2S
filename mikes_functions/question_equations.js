@@ -1,7 +1,7 @@
 const alpha_beta_solve = require('./function_equation_alphabeta.js');
 const function_infinite_check = require('./function_infinite_check.js');
 
-function equations (questions, num, difficulty) {
+module.exports = function equations (questions, num, difficulty) {
 
 // add equations like: x/A + B = C
 // add equations like: Aw + Bx + cz = 6, w = 5, z = 3, find x
