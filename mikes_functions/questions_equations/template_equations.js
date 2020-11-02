@@ -104,7 +104,7 @@ function equations_template (questions, equations, level, max) {
     }
 
     return {
-        questions_array: questions_array,
+        questions: questions_array,
         answers: solutions_array,
     }
 
