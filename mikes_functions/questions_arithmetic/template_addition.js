@@ -43,7 +43,7 @@ function addition_template (questions, level, min, max) {
     }
 
     return {
-        questions_array: questions_array,
+        questions: questions_array,
         answers: solutions_array,
     };
 
