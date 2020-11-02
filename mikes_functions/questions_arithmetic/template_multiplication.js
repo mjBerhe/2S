@@ -2,7 +2,7 @@ const multiplication_level_1 = require('./multiplication_levels/multiplication_l
 const multiplication_level_2 = require('./multiplication_levels/multiplication_level_2.js');
 const multiplication_level_3 = require('./multiplication_levels/multiplication_level_3.js');
 
-module.exports = function multiplication_template (questions, level, min, max) {
+function multiplication_template (questions, level, min, max) {
 
     // level 1: 2 terms
     // level 2: 3 terms
@@ -48,3 +48,5 @@ module.exports = function multiplication_template (questions, level, min, max) {
     };
 
 }
+
+module.exports = multiplication_template;

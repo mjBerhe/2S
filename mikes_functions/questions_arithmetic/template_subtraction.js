@@ -2,7 +2,7 @@ const subtraction_level_1 = require('./subtraction_levels/subtraction_level_1.js
 const subtraction_level_2 = require('./subtraction_levels/subtraction_level_2.js');
 const subtraction_level_3 = require('./subtraction_levels/subtraction_level_3.js');
 
-module.exports = function subtraction_template (questions, level, min, max) {
+function subtraction_template (questions, level, min, max) {
 
     // level 1: 2 terms
     // level 2: 3 terms, each subsequent term is smaller than the previous. can dip into negatives i.e. if min = 0, max = 50: potential question = 35 - 21 - 20 < 0, where 35 > 21 > 20
@@ -48,3 +48,5 @@ module.exports = function subtraction_template (questions, level, min, max) {
     };
 
 }
+
+module.exports = subtraction_template;

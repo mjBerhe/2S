@@ -103,11 +103,11 @@ function equations_template (questions, equations, level, max) {
 
     }
 
-    console.log(questions_array, solutions_array);
-
     return {
         questions_array: questions_array,
         answers: solutions_array,
     }
 
 }
+
+module.exports = equations_template;

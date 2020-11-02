@@ -2,7 +2,7 @@ const addition_level_1 = require('./addition_levels/addition_level_1.js');
 const addition_level_2 = require('./addition_levels/addition_level_2.js');
 const addition_level_3 = require('./addition_levels/addition_level_3.js');
 
-module.exports = function addition_template (questions, level, min, max) {
+function addition_template (questions, level, min, max) {
 
     // level 1: 2 terms
     // level 2: 3 terms
@@ -48,3 +48,5 @@ module.exports = function addition_template (questions, level, min, max) {
     };
 
 }
+
+module.exports = addition_template;

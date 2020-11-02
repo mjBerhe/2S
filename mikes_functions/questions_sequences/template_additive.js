@@ -13,8 +13,6 @@ function additive_sequence_template (questions) {
         solutions_array.push(answer);
     }
 
-    console.log(questions_array, solutions_array);
-
     return {
         questions_array: questions_array,
         answers: solutions_array,

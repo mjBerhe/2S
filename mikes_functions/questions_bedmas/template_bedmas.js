@@ -43,8 +43,6 @@ function bedmas_template (questions, level, min, max) {
 
     }
 
-    console.log(questions_array, solutions_array);
-
     return {
         questions_array: questions_array,
         answers: solutions_array,
@@ -52,4 +50,4 @@ function bedmas_template (questions, level, min, max) {
 
 }
 
-bedmas_template(100, 1, -10, 10)
+module.exports = bedmas_template;
