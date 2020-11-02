@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import io from 'socket.io-client';
 
 export default function MyApp() {
     return (
@@ -12,9 +11,10 @@ export default function MyApp() {
 
             <div>
                 <h1>
-                    Join the <Link href="/chatroom"> 
-                                <a>chatroom</a>
-                             </Link>
+                    Join the <Link href="/gamelobby"><a>game lobby</a></Link>
+                </h1>
+                <h1>
+                    Join the <Link href="/chatlobby"><a>chat lobby</a></Link>
                 </h1>
             </div>
         </div>

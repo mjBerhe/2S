@@ -11,11 +11,8 @@ const nextHandler = nextApp.getRequestHandler();
 const socket = require('socket.io');
 const io = socket(server);
 
-const addition = require('./mikes_functions/question_addition.js');
-const multiplicaiton = require('./mikes_functions/question_multiplication.js');
-
 const statsGenerator = require('./matts_functions/stats2.js');
-const generateStaticRoom = require('./matts_functions/generateRoom.js');
+const generateRoom = require('./matts_functions/generateRoom.js');
 
 const availableRooms = [
 	'Chatroom 1',
@@ -34,7 +31,8 @@ const users = {
 };
 
 const rooms = {
-	'Gameroom 1': generateStaticRoom(2, 2, ['addition', 'multiplication']),
+	'Gameroom 1': generateRoom.static(2, 2, ['addition', 'multiplication']),
+	'Gameroom 2': generateRoom.static(3, 2, ['addition', 'multiplication']),
 	// 'Gameroom 2': {
 	// 	start: false,
 	// 	maxCapacity: 2,
@@ -67,11 +65,13 @@ nextApp.prepare()
 			return nextHandler(req, res)
 		});
 
-		const chatroom = io.of('/chatroom');
+		const gamelobby = io.of('/gamelobby');
+		// const chatlobby = io.of('/chatlobby'); need to make new connection socket for chatlobby later
 
-		chatroom.on('connection', socket => {
-			console.log('a user has connected to /chatroom');
-			socket.emit('welcome', 'welcome to /chatroom');
+		// initializing socket when a user goes on /gamelobby
+		gamelobby.on('connection', socket => {
+			console.log('a user has connected to /gamelobby');
+			socket.emit('welcome', 'welcome to /gamelobby');
 
 			socket.on('joinRoom', data => {
 				// if room and new user is valid, join room
@@ -80,7 +80,7 @@ nextApp.prepare()
 					users[data.room] = addUser(users[data.room], data.room, data.username);
 					console.log(users[data.room]);
 
-					chatroom.to(data.room).emit('userConnected', {
+					gamelobby.to(data.room).emit('userConnected', {
 						message: `${data.username.name} has joined ${data.room}`,
 						room: data.room,
 						username: data.username,
@@ -102,14 +102,14 @@ nextApp.prepare()
 			});
 
 			socket.on('msgSent', data => {
-				chatroom.to(data.room).emit('msgSent', data);
+				gamelobby.to(data.room).emit('msgSent', data);
 				console.log(data);
 			});
 
 			socket.on('joinQueue', data => {
 				// send a message if there is a current game ongoing in room
 				if (rooms[data.room].users[0]) {
-					chatroom.to(data.room).emit('gameOngoing', {
+					gamelobby.to(data.room).emit('gameOngoing', {
 						id: data.username.id,
 						msg: 'Ongoing game in current room, try again later',
 					});
@@ -119,7 +119,7 @@ nextApp.prepare()
 				} else if (rooms[data.room].queue.length < rooms[data.room].maxCapacity) {
 					joinQueue(rooms, data.room, data.username);
 
-					chatroom.to(data.room).emit('joinedQueue', {
+					gamelobby.to(data.room).emit('joinedQueue', {
 						id: data.username.id,
 						msg: 'Successfully joined the queue'
 					});
@@ -130,7 +130,7 @@ nextApp.prepare()
 						if (rooms[data.room].start) {
 							prepMatch(rooms, data.room);
 
-							chatroom.to(data.room).emit('prepMatch', {
+							gamelobby.to(data.room).emit('prepMatch', {
 								players: rooms[data.room].users,
 								rounds: rooms[data.room].rounds,
 								roundAmount: rooms[data.room].roundAmount,
@@ -140,13 +140,14 @@ nextApp.prepare()
 					}
 				// send a message saying queue is currently full
 				} else {
-					chatroom.to(data.room).emit('queueFull', {
+					gamelobby.to(data.room).emit('queueFull', {
 						id: data.username.id,
 						msg: 'Queue is currently full, try again later',
 					});
 					console.log(`${data.username.name} tried to join the queue, QUEUE FULL`)
 				}
 			});
+
 
 			socket.on('leaveQueue', data => {
 				if (rooms[data.room]) {
@@ -171,18 +172,83 @@ nextApp.prepare()
 				if (rooms[data.room].users.length === rooms[data.room].rounds[`round ${data.currentRound}`].results.length) {
 					// checking if that was the final round
 					if (rooms[data.room].roundAmount === data.currentRound) {
-						chatroom.to(data.room).emit('usersFinalRoundComplete', {
+						gamelobby.to(data.room).emit('usersFinalRoundComplete', {
 							stats: statsGenerator(rooms[data.room].rounds),
 							msg: 'All users have completed the final round!',
 						});
 						resetRoom(data.room);
 					} else {
-						chatroom.to(data.room).emit('usersRoundComplete', {
+						gamelobby.to(data.room).emit('usersRoundComplete', {
 							msg: `All users have completed round ${data.currentRound}`,
 						});
 					}
 				}
 			});
+
+			socket.on('initiateDM', data => {
+				const ids = rooms[data.room].deathmatch.map(user => user.id);
+				rooms[data.room].users.forEach(user => {
+					if (!ids.includes(user.id)) {
+						// initialize ever user in the deathmatch
+						rooms[data.room].deathmatch.push({
+							id: user.id,
+							name: user.name,
+							correctQuestions: 0,
+							userAnswers: [],
+							userResponseTimes: [],
+						});
+					}
+				});
+			});
+
+			socket.on('dmQuestion', data => {
+				// when recieving a question via deathmatch
+				const deathmatch = rooms[data.room].deathmatch;
+				deathmatch.forEach((user, i) => {
+					if (user.id === data.id) {
+						deathmatch[i] = {
+							id: data.id,
+							name: data.name,
+							correctQuestions: deathmatch[i].correctQuestions + 1,
+							userAnswers: data.userAnswers,
+							userResponseTimes: data.userResponseTimes,
+						}
+					}
+				});
+
+				const eliminatedUser = checkDeathMatch(deathmatch, 3);
+				// if a user was eliminated in deathmatch
+				if (eliminatedUser) {
+					rooms[data.room].rounds[`round ${data.currentRound}`].results.push({
+						id: eliminatedUser.id,
+						name: eliminatedUser.name,
+						userAnswers: eliminatedUser.userAnswers,
+						userResponseTimes: eliminatedUser.userResponseTimes,
+					});
+					gamelobby.to(data.room).emit('eliminated', {
+						id: eliminatedUser.id,
+						msg: 'You have been eliminated',
+						stats: statsGenerator(rooms[data.room].rounds),
+					});
+
+					// checking if there is one person left (victor)
+					if (deathmatch.length === 1) {
+						rooms[data.room].rounds[`round ${data.currentRound}`].results.push({
+							id: deathmatch[0].id,
+							name: deathmatch[0].name,
+							userAnswers: deathmatch[0].userAnswers,
+							userResponseTimes: deathmatch[0].userResponseTimes,
+						});
+						gamelobby.to(data.room).emit('victory', {
+							id: deathmatch[0].id,
+							msg: 'Congratulations! You have won',
+							stats: statsGenerator(rooms[data.room].rounds),
+						});
+						resetRoom(data.room);
+					}
+				}
+			});
+
 
 			// kick out user from room when they leave a room via button
 			socket.on('disconnectUser', data => {
@@ -190,7 +256,7 @@ nextApp.prepare()
 				users[data.room] = removeUser(users[data.room], data.username, 'room');
 				console.log(users[data.room]);
 
-				chatroom.to(data.room).emit('removeUser', {
+				gamelobby.to(data.room).emit('removeUser', {
 					username: data.username,
 					room: data.room,
 				});
@@ -223,7 +289,7 @@ nextApp.prepare()
 					users[currentUser.room] = removeUser(users[currentUser.room], currentUser.username, 'room');
 					console.log(users[currentUser.room]);
 
-					chatroom.to(currentUser.room).emit('removeUser', {
+					gamelobby.to(currentUser.room).emit('removeUser', {
 						username: currentUser.username,
 						room: currentUser.room,
 					});
@@ -296,7 +362,21 @@ const prepMatch = (roomsObject, room) => {
 	console.log(roomsObject);
 }
 
+// resetting room after a game finishes
 const resetRoom = (currentRoom) => {
-	const newRoom = generateStaticRoom(2, 5, ['addition', 'multiplication']);
-	rooms[currentRoom] = newRoom;
+	rooms[currentRoom] = generateRoom.static(2, 2, ['addition', 'multiplication']);
+}
+
+const checkDeathMatch = (deathmatch, elimGap) => {
+	// sorts users in ascending order of correct questions
+	deathmatch.sort((a, b) => {
+		return a.correctQuestions - b.correctQuestions;
+	});
+
+	console.log(deathmatch);
+
+	if (deathmatch[0].correctQuestions <= deathmatch[1].correctQuestions - elimGap) {
+		console.log(`${deathmatch[0].id} has been eliminated`);
+		return deathmatch.shift();
+	} else return null;
 }

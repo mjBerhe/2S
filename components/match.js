@@ -1,19 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useMatch } from '../state/match.js';
+import { useDeathMatch } from '../state/deathmatch.js';
+import DeathMatch from './deathmatch.js';
+import shallow from 'zustand/shallow';
+import useCountdown from '../hooks/useCountdown';
 
 export default function Match({ socket, room, username }) {
 
-   const { userTypingAnswer, userSubmitAnswer, loadQuestion, startMatch, completeMatch, incCurrentRound, setRoundQuestions, finishedRound } = useMatch();
+	const { userTypingAnswer, userSubmitAnswer, loadQuestion, startMatch, completeMatch, incCurrentRound, setRoundQuestions, finishedRound } = useMatch();
+	const { startStatus, roundStatus, roundLimit, currentRound, roundsInfo, currentQuestion, currentAnswer, userAnswers, userResponseTimes } = useMatch(state => ({
+		startStatus: state.start,
+		roundStatus: state.roundOngoing,
+		roundLimit: state.roundAmount,
+		currentRound: state.currentRound,
+		roundsInfo: state.roundsInfo,
+		currentQuestion: state.currentQuestion,
+		currentAnswer: state.currentAnswer,
+		userAnswers: state.userAnswers,
+		userResponseTimes: state.userResponseTimes,
+	}), shallow);
 
-	const startStatus = useMatch(state => state.start);
-	const roundStatus = useMatch(state => state.roundOngoing);
-   const roundLimit = useMatch(state => state.roundAmount);
-   const currentRound = useMatch(state => state.currentRound);
-
-   const currentQuestion = useMatch(state => state.currentQuestion);
-	const currentAnswer = useMatch(state => state.currentAnswer);
-	const userAnswers = useMatch(state => state.userAnswers);
-	const userResponseTimes = useMatch(state => state.userResponseTimes);
+	const { startDM, setDMQuestions, loadDMQuestion } = useDeathMatch();
+	const DMStatus = useDeathMatch(state => state.start);
 
    const [countdown, setCountdown] = useState({
 		initialTime: 3,
@@ -27,17 +35,24 @@ export default function Match({ socket, room, username }) {
 	}
 
 	const handleSubmitAnswer = (e) => {
-      e.preventDefault();
-      userSubmitAnswer();
-
-      loadQuestion();
+		e.preventDefault();
+		
+      userSubmitAnswer(); // save answer
+      loadQuestion(); // load next question
    }
 
    // when currentRound changes, update currentRoundQuestions 
 	useEffect(() => {
-		if (currentRound === 1) {
+		if (currentRound === 1) { // first round
          startMatch();
          setRoundQuestions(`round ${currentRound}`);
+         setCountdown(prevCountdown => ({
+				...prevCountdown,
+				start: true,
+			}));
+		} else if (currentRound > 1 && currentRound === roundLimit) { // deathmatch
+			startDM(socket, room);
+			setDMQuestions(roundsInfo[`round ${currentRound}`].questions, roundsInfo[`round ${currentRound}`].answers);
          setCountdown(prevCountdown => ({
 				...prevCountdown,
 				start: true,
@@ -49,9 +64,39 @@ export default function Match({ socket, room, username }) {
 				start: true,
 			}));
       }
-   }, [currentRound]);
+	}, [currentRound]);
+	
+	// start the countdown when a match is found & start the game when the countdown finishes
+	useEffect(() => {
+		if (countdown.start) {
+			if (countdown.currentTime > 0) {
+				setTimeout(() => {
+					setCountdown(prevCountdown => ({
+						...prevCountdown,
+						currentTime: prevCountdown.currentTime - 1,
+					}));
+				}, 1000);
+			} else if (countdown.currentTime === 0) {
+				if (DMStatus) {
+					setCountdown(prevCountdown => ({
+						...prevCountdown,
+						currentTime: prevCountdown.initialTime,
+						start: false,
+					}));
+					loadDMQuestion();
+				} else {
+					setCountdown(prevCountdown => ({
+						...prevCountdown,
+						currentTime: prevCountdown.initialTime,
+						start: false,
+					}));
+					loadQuestion();
+				}
+			}
+		}
+	}, [countdown]);
 
-   // going to next round when a round has completed
+   // after round ends for user, communicate with server
 	useEffect(() => {
 		if (startStatus && !currentQuestion && currentRound <= roundLimit) {
 			finishedRound();
@@ -78,28 +123,12 @@ export default function Match({ socket, room, username }) {
 			console.log(data.msg);
 			completeMatch(data.stats);
 		});
-	}, []);
-   
-   // start the countdown when a match is found & start the game when the countdown finishes
-	useEffect(() => {
-		if (countdown.start) {
-			if (countdown.currentTime > 0) {
-				setTimeout(() => {
-					setCountdown(prevCountdown => ({
-						...prevCountdown,
-						currentTime: prevCountdown.currentTime - 1,
-					}));
-				}, 1000);
-			} else if (countdown.currentTime === 0) {
-				setCountdown(prevCountdown => ({
-					...prevCountdown,
-					currentTime: prevCountdown.initialTime,
-					start: false,
-				}));
-				loadQuestion();
-			}
+
+		return () => {
+			socket.off('usersRoundComplete');
+			socket.off('usersFinalRoundComplete');
 		}
-	}, [countdown]);
+	}, []);
 
    return (
       <div className='centered-flex-column'>
@@ -118,20 +147,24 @@ export default function Match({ socket, room, username }) {
                }
             </div>
          }
-			{!roundStatus && startStatus &&
+			{startStatus && !roundStatus &&
 				<div>
 					<h1>Round Completed!</h1>
 					<h2>Waiting for other users...</h2>
 				</div>
 			}
-         {startStatus && !countdown.start && roundStatus &&
+			{roundStatus && !countdown.start && !DMStatus &&
 				<div>
+					<h1>{`Round ${currentRound}`}</h1>
 					<h2>{currentQuestion}</h2>
                <form onSubmit={handleSubmitAnswer}>
                   <input className="answer-input" type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
                   <input type="submit" value="Submit"/>
                </form>
 				</div>
+			}
+			{roundStatus && !countdown.start && DMStatus &&
+				<DeathMatch socket={socket} room={room} username={username}/>
 			}
       </div>
    );

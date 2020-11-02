@@ -1,120 +1,113 @@
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import io from 'socket.io-client';
 import { useUsers } from '../state/users.js';
 import { useMatch } from '../state/match.js';
-import ChatBox from '../components/chatbox.js'
+import { useDeathMatch } from '../state/deathmatch.js';
 import GameRoom from '../components/gameroom.js';
 
-let chatroom;
-// const chatroom_ENDPOINT = "https://tooslow.herokuapp.com/chatroom";
-// const chatroom_ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
-const chatroom_ENDPOINT = "http://localhost:3000/chatroom";
+// const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/chatroom";
+// const gamelobby_ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
+const gamelobby_ENDPOINT = "http://localhost:3000/gamelobby";
+const gamelobby = io(gamelobby_ENDPOINT);
 
-
-export default function ChatRoom() {
+export default function GameLobby() {
 
 	const { users, addUser, removeUser, updateUsersList } = useUsers();
 	const { resetMatch } = useMatch();
+	const { resetDM } = useDeathMatch();
 
 	const [username, setUsername] = useState({
 		name: '',
 		id: null
 	});
 	const [currentRoom, setCurrentRoom] = useState('');
-	const [gameRoom, setGameRoom] = useState(false);
 
-	// testing rooms
+	// socket events
 	useEffect(() => {
-		chatroom = io(chatroom_ENDPOINT);
 
 		// welcome message on connection to socket
-		chatroom.on('welcome', msg => {
+		gamelobby.on('welcome', msg => {
 			console.log(msg)
 		});
 
 		// error message
-		chatroom.on('err', msg => {
+		gamelobby.on('err', msg => {
 			console.log(msg);
 		});
 
 		// when someone joins a room
-		chatroom.on('userConnected', data => {
+		gamelobby.on('userConnected', data => {
 			// add logic to check if that user isnt already connected to the room using ids
 			addUser(data.room, data.username);
 			console.log(data.message);
 		});
 
 		// when someone leaves a room
-		chatroom.on('removeUser', data => {
+		gamelobby.on('removeUser', data => {
 			removeUser(data.room, data.username);
 		});
 
 		// to update all users whenever someone joins/leaves a room
-		chatroom.on('connectedUsers', userList => {
+		gamelobby.on('connectedUsers', userList => {
 			updateUsersList(userList);
 		});
 
-	}, [])
-	
+		return () => {
+			gamelobby.off('welcome');
+			gamelobby.off('err');
+			gamelobby.off('userConnected');
+			gamelobby.off('removeUser');
+			gamelobby.off('connectedUsers');
+		}
 
+	}, []);
+	
 	const handleUsername = (e) => {
 		e.preventDefault();
 		setUsername({
 			name: e.target.value,
-			id: chatroom.id,
+			id: gamelobby.id,
 		});
 	}
 
 	const handleJoinRoom = (e) => {
 		e.preventDefault();
-		chatroom.emit('joinRoom', {
+		gamelobby.emit('joinRoom', {
 			room: e.target.value,
 			username: username,
 		});
 		setCurrentRoom(e.target.value);
-	}
-
-	const handleJoinGameRoom = (e) => {
-		e.preventDefault();
-		chatroom.emit('joinRoom', {
-			room: e.target.value,
-			username: username,
-		});
-		setCurrentRoom(e.target.value);
-		setGameRoom(true);
 	}
 
 	const handleLeaveRoom = (e) => {
 		e.preventDefault();
-		chatroom.emit('disconnectUser', {
+		gamelobby.emit('disconnectUser', {
 			room: currentRoom,
 			username: username,
 		});
 		setCurrentRoom('');
-	 	resetMatch();
-	}
-
-	const handleLeaveGameRoom = (e) => {
-		e.preventDefault();
-		chatroom.emit('disconnectUser', {
-			room: currentRoom,
-			username: username,
-		});
-		setCurrentRoom('');
-		setGameRoom(false);
-	 	resetMatch();
+		
+		resetMatch();
+		resetDM();
 	}
 
 	return (
-		<div className="chatroom-page-container">
+		<div className="lobby-page-container">
 			<Head>
-				<title>ze chatroom</title>
+				<title>ze game lobby</title>
 				<link rel="icon" type="image/png" href="/omega.png" />
+				<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"></link>
 			</Head>
 
 			<div className='header'>
-				<img src="/omega.png" alt=""/>
+				<div className='header-column1'>
+					<Link href='/'><a className='header-link'>Home</a></Link>
+				</div>
+				<div className='header-img'>
+					<img src="/omega.png" alt=""/>
+				</div>
 			</div>
 
 			<div className="column1">
@@ -125,37 +118,19 @@ export default function ChatRoom() {
 					<div className="room-container">
 						<input type="text" onChange={handleUsername} value={username.name} placeholder='Enter name'/>
 						<br/>
-						<button className='button-1' onClick={handleJoinRoom} value={'Chatroom 1'}>
-							Join Chatroom 1
-						</button>
-						<button className='button-1' onClick={handleJoinRoom} value={'Chatroom 2'}>
-							Join Chatroom 2
-						</button>
-						<button className='button-1' onClick={handleJoinRoom} value={'Chatroom 3'}>
-							Join Chatroom 3
-						</button>
-						<button className='button-1' onClick={handleJoinGameRoom} value={'Gameroom 1'}>
+						<button className='button-1' onClick={handleJoinRoom} value={'Gameroom 1'}>
 							Join Gameroom 1
 						</button>
-						<button className='button-1' onClick={handleJoinGameRoom} value={'Gameroom 2'}>
+						<button className='button-1' onClick={handleJoinRoom} value={'Gameroom 2'}>
 							Join Gameroom 2
 						</button>
 					</div>
 				}
-				{currentRoom && !gameRoom &&
-					<div className="room-container">
-						<ChatBox socket={chatroom} room={currentRoom} username={username.name}/>
+				{currentRoom &&
+					<div className='room-container'>
+						<GameRoom socket={gamelobby} room={currentRoom} username={username}/>
 						<br/>
 						<button className='button-1' onClick={handleLeaveRoom}>
-							Leave Room
-						</button>
-					</div> 
-				}
-				{currentRoom && gameRoom &&
-					<div className='room-container'>
-						<GameRoom socket={chatroom} room={currentRoom} username={username}/>
-						<br/>
-						<button className='button-1' onClick={handleLeaveGameRoom}>
 							Leave Room
 						</button>
 					</div>

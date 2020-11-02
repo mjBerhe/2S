@@ -3,7 +3,10 @@ import create from 'zustand';
 export const [useMatch] = create((set, get) => ({
    queue: false,
    start: false,
-   completed: false,
+   completed: {
+      status: false,
+      msg: '',
+   },
    roundOngoing: false,
    roundAmount: 0,
    currentRound: 0,
@@ -25,6 +28,7 @@ export const [useMatch] = create((set, get) => ({
       set(() => ({
          queue: false,
       }))
+       
    },
    prepMatch: (players, roundAmount, rounds) => {
       set(() => ({
@@ -41,6 +45,7 @@ export const [useMatch] = create((set, get) => ({
          userAnswers: [],
          userResponseTimes: [],
       }));
+      console.log('incrementing round')
    },
    finishedRound: () => {
       set(() => ({
@@ -71,17 +76,19 @@ export const [useMatch] = create((set, get) => ({
       }));
    },
    userSubmitAnswer: () => {
-      const initialTime = get().initialResponseTimer;
       set(prevState => ({
          userAnswers: [...prevState.userAnswers, parseFloat(prevState.currentAnswer)],
          currentAnswer: '',
-         userResponseTimes: [...prevState.userResponseTimes, Date.now() - initialTime],
+         userResponseTimes: [...prevState.userResponseTimes, Date.now() - prevState.initialResponseTimer],
       }));
    },
-   completeMatch: (stats) => {
+   completeMatch: (stats, msg) => {
       set(() => ({
          start: false,
-         completed: true,
+         completed: {
+            status: true,
+            msg: msg,
+         },
          completedStats: stats,
       }));
    },
@@ -89,7 +96,10 @@ export const [useMatch] = create((set, get) => ({
       set(() => ({
          queue: false,
          start: false,
-         completed: false,
+         completed: {
+            status: false,
+            msg: '',
+         },
          roundOngoing: false,
          roundAmount: 0,
          currentRound: 0,

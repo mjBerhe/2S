@@ -1,7 +1,7 @@
 // FOR NOW stats function is called once everyone finishes the game
 // will give the stats for each individual per round 
 
-module.exports = function statsGenerator (roundsInfo) {
+function statsGenerator (roundsInfo) {
 
    // FORMAT OF roundsInfo
    // roundsInfo: {
@@ -114,12 +114,13 @@ module.exports = function statsGenerator (roundsInfo) {
                responseTime: slowResponseTime,
             }
          });
-         // console.log(slowResponseTime, slowQuestionNum);
       });
    });
 
    return stats;
 }
+
+module.exports = statsGenerator;
 
 // const testAnswers = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 // const testRoundInfo = {

@@ -1,17 +1,20 @@
 import { useEffect } from 'react';
 import Match from './match.js';
 import { useMatch } from '../state/match.js';
+import shallow from 'zustand/shallow';
 
 export default function GameRoom({ socket, room, username }) {
 
-	const { joinQueue, leaveQueue, prepMatch, incCurrentRound} = useMatch();
+	const { joinQueue, leaveQueue, prepMatch, incCurrentRound } = useMatch();
+	const { queueStatus, startStatus, complete, currentRound, stats } = useMatch(state => ({
+		queueStatus: state.queue,
+		startStatus: state.start,
+		complete: state.completed,
+		currentRound: state.currentRound,
+		stats: state.completedStats,
+	}), shallow);
 
-	const queueStatus = useMatch(state => state.queue);
-	const startStatus = useMatch(state => state.start);
-	const completeStatus = useMatch(state => state.completed);
-
-	const currentRound = useMatch(state => state.currentRound);
-	const stats = useMatch(state => state.completedStats);
+	const listOfRounds = Object.keys(stats);
 
 	const handleFindGame = () => {
 		socket.emit('joinQueue', {
@@ -58,14 +61,21 @@ export default function GameRoom({ socket, room, username }) {
 			incCurrentRound();
 		});
 
-	}, [])
+		return () => {
+			socket.off('queueFull');
+			socket.off('gameOngoing');
+			socket.off('joinedQueue');
+			socket.off('prepMatch');
+		}
 
-	const listOfRounds = Object.keys(stats);
+	}, []);
 
 	return (
 		<div className='gameroom-container'>
-			<h1>{room}</h1>
-			{!queueStatus && !startStatus && !completeStatus &&
+			{!startStatus && !complete.status && 
+				<h1>{room}</h1>
+			}
+			{!queueStatus && !startStatus && !complete.status &&
 				<div className='centered-flex-column'>
 					<button className="button-1" onClick={handleFindGame}>
 						Look for Game
@@ -80,30 +90,25 @@ export default function GameRoom({ socket, room, username }) {
 					</button>
 				</div>
 			}
-			{!queueStatus && currentRound > 0 &&
-				<div>
-					<Match socket={socket} room={room} username={username}/>
-				</div>
+			{!queueStatus && !complete.status && currentRound > 0 &&
+				<Match socket={socket} room={room} username={username}/>
 			}
-			
-			{completeStatus && 
+			{complete.status && 
 				<div>
-					<h2>Game Complete!</h2>
-					<div>
-						<h3>Results: </h3> {listOfRounds.map((round, i) => 
-							<div key={i}>
-								<h3>{round}</h3> {stats[round].map((user, j) => 
-									<div className='round-results' key={j}>
-										<div className='stat-line'><h3>User:&ensp;</h3><h4>{user.name}</h4></div>
-										<div className='stat-line'><h3>Total Correct:&ensp;</h3><h4>{user.correctResponses}</h4></div>
-										<div className='stat-line'><h3>Accuracy:&ensp;</h3><h4>{user.accuracy*100}%</h4></div>
-										<div className='stat-line'><h3>Fastest Correct:&ensp;</h3><h4>{user.fastestCorrectResponse.responseTime}ms on question {user.fastestCorrectResponse.questionNumber}</h4></div>
-										<div className='stat-line'><h3>Slowest Correct:&ensp;</h3><h4>{user.slowestCorrectResponse.responseTime}ms on question {user.slowestCorrectResponse.questionNumber}</h4></div>
-									</div>
-								)}
-							</div>
-						)}
-					</div>
+					<h2>{complete.msg}</h2>
+					<h3>Results: </h3> {listOfRounds.map((round, i) => 
+						<div key={i}>
+							<h3>{round}</h3> {stats[round].map((user, j) => 
+								<div className='round-results' key={j}>
+									<div className='stat-line'><h3>User:&ensp;</h3><h4>{user.name}</h4></div>
+									<div className='stat-line'><h3>Total Correct:&ensp;</h3><h4>{user.correctResponses}</h4></div>
+									<div className='stat-line'><h3>Accuracy:&ensp;</h3><h4>{user.accuracy*100}%</h4></div>
+									<div className='stat-line'><h3>Fastest Correct:&ensp;</h3><h4>{user.fastestCorrectResponse.responseTime}ms on question {user.fastestCorrectResponse.questionNumber}</h4></div>
+									<div className='stat-line'><h3>Slowest Correct:&ensp;</h3><h4>{user.slowestCorrectResponse.responseTime}ms on question {user.slowestCorrectResponse.questionNumber}</h4></div>
+								</div>
+							)}
+						</div>
+					)}
 				</div>
 			}
 		</div>
