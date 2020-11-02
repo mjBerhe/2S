@@ -92,7 +92,7 @@ export default function ChatRoom() {
 			username: username,
 		});
 		setCurrentRoom('');
-	 resetMatch();
+	 	resetMatch();
 	}
 
 	const handleLeaveGameRoom = (e) => {
@@ -103,7 +103,7 @@ export default function ChatRoom() {
 		});
 		setCurrentRoom('');
 		setGameRoom(false);
-	 resetMatch();
+	 	resetMatch();
 	}
 
 	return (

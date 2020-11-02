@@ -8,6 +8,15 @@ html, body {
 	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+h3 {
+	font-size: 20px;
+}
+
+h4 {
+	font-size: 20px;
+	font-weight: normal;
+}
+
 .container {
  	min-height: 100vh;
   	padding: 0 0.5rem;
@@ -141,4 +150,20 @@ a:hover, a:focus, a:active {
 	grid-row: 1/2;
 	text-align: center;
 	/* border: black solid 1px; */
+}
+
+.round-results {
+	/* background: orange; */
+	display: flex;
+	flex-direction: column;
+	margin: 10px 0 10px 0;
+}
+
+.round-results h3, h4 {
+	margin: 0px;
+}
+
+.stat-line {
+	display: flex;
+	flex-direction: row;
 }
