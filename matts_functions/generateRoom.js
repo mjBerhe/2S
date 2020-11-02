@@ -1,11 +1,11 @@
-const addition = require('../mikes_functions/template_addition.js');
-const division = require('../mikes_functions/template_division.js');
-const multiplication = require('../mikes_functions/template_multiplication.js');
-const subtraction = require('../mikes_functions/template_subtraction.js');
-const bedmas = require('../mikes_functions/template_bedmas.js');
-const equations = require('../mikes_functions/template_equations.js');
-const additive = require('../mikes_functions/template_additive.js');
-const geometric = require('../mikes_functions/template_geometric.js');
+const addition = require('../mikes_functions/questions_arithmetic/template_addition.js');
+const division = require('../mikes_functions/questions_arithmetic/template_division.js');
+const multiplication = require('../mikes_functions/questions_arithmetic/template_multiplication.js');
+const subtraction = require('../mikes_functions/questions_arithmetic/template_subtraction.js');
+const bedmas = require('../mikes_functions/questions_bedmas/template_bedmas.js');
+const equations = require('../mikes_functions/questions_equations/template_equations.js');
+const additive = require('../mikes_functions/questions_sequences/template_additive.js');
+const geometric = require('../mikes_functions/questions_sequences/template_geometric.js');
 // can make either a static room or random room
 
 function generateStaticRoom (maxCapacity, roundAmount, arrayOfRoundTypes) {

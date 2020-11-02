@@ -32,7 +32,7 @@ const users = {
 
 const rooms = {
 	'Gameroom 1': generateRoom.static(2, 10, ['addition1', 'subtraction2', 'multiplication1', 'multiplication2', 'division1', 'bedmas2', 'equations1', 'equations2', 'geometric', 'additive']),
-	'Gameroom 2': generateRoom.static(3, 2, ['addition', 'multiplication']),
+	'Gameroom 2': generateRoom.static(3, 2, ['addition1', 'multiplication1']),
 	// 'Gameroom 2': {
 	// 	start: false,
 	// 	maxCapacity: 2,
