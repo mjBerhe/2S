@@ -1,6 +1,11 @@
-const addition = require('../mikes_functions/question_addition.js');
-const multiplication = require('../mikes_functions/question_multiplication.js');
-const equations = require('../mikes_functions/question_equations.js');
+const addition = require('../mikes_functions/template_addition.js');
+const division = require('../mikes_functions/template_division.js');
+const multiplication = require('../mikes_functions/template_multiplication.js');
+const subtraction = require('../mikes_functions/template_subtraction.js');
+const bedmas = require('../mikes_functions/template_bedmas.js');
+const equations = require('../mikes_functions/template_equations.js');
+const additive = require('../mikes_functions/template_additive.js');
+const geometric = require('../mikes_functions/template_geometric.js');
 // can make either a static room or random room
 
 function generateStaticRoom (maxCapacity, roundAmount, arrayOfRoundTypes) {
@@ -9,11 +14,20 @@ function generateStaticRoom (maxCapacity, roundAmount, arrayOfRoundTypes) {
    }
 
    const functionConverter = {
-      'addition': addition(1, 30, 0, 2, 0),
-      'multiplication': multiplication(10, 12, 2, 2, 0),
-      'equations_1': equations(3, 1, 1),
-      'equations_2': equations(3, 1, 2),
-      'equations_3': equations(3, 2, 1),
+      'addition1': addition(10, 1, 1, 30),
+      'addition2': addition(10, 2, 1, 30),
+      'subtraction1': subtraction(10, 1, 1, 30),
+      'subtraction2': subtraction(10, 2, 1, 30),
+      'multiplication1': multiplication(10, 1, 1, 12),
+      'multiplication2': multiplication(10, 2, 1, 10),
+      'division1': division(10, 1, 1, 12),
+      'division2': division(10, 2, 1, 10),
+      'bedmas1': bedmas(10, 1, 1, 10),
+      'bedmas2': bedmas(10, 2, 1, 10),
+      'equations1': equations(10, 1, 1, 3),
+      'equations2': equations(10, 2, 1, 3),
+      'additive': additive(100),
+      'geometric': geometric(10),
    }
 
    // generating list of round names

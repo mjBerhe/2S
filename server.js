@@ -31,7 +31,7 @@ const users = {
 };
 
 const rooms = {
-	'Gameroom 1': generateRoom.static(2, 2, ['addition', 'multiplication']),
+	'Gameroom 1': generateRoom.static(2, 10, ['addition1', 'subtraction2', 'multiplication1', 'multiplication2', 'division1', 'bedmas2', 'equations1', 'equations2', 'geometric', 'additive']),
 	'Gameroom 2': generateRoom.static(3, 2, ['addition', 'multiplication']),
 	// 'Gameroom 2': {
 	// 	start: false,
@@ -364,7 +364,7 @@ const prepMatch = (roomsObject, room) => {
 
 // resetting room after a game finishes
 const resetRoom = (currentRoom) => {
-	rooms[currentRoom] = generateRoom.static(2, 2, ['addition', 'multiplication']);
+	rooms[currentRoom] = generateRoom.static(10, 2, ['addition1', 'subtraction2', 'multiplication1', 'multiplication2', 'division1', 'bedmas2', 'equations1', 'equations2', 'geometric', 'additive']);
 }
 
 const checkDeathMatch = (deathmatch, elimGap) => {
