@@ -66,8 +66,6 @@ function geometric () {
         answer = pattern;
     }
 
-    console.log(question, answer);
-
     return {
         question: question,
         answer: answer,

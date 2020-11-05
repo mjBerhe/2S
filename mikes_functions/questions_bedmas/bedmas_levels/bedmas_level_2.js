@@ -16,16 +16,16 @@ module.exports = function bedmas_level_2 (min, max) {
 
     if (rng === 1) {
         answer = term_1 * (term_2 + term_3 + term_4) + term_5;
-        question = `What is ${term_1} ( ${term_2} + ${term_3} + ${term_4} ) + ${term_5} ?`;
+        question = `${term_1} ( ${term_2} + ${term_3} + ${term_4} ) + ${term_5} ?`;
     } else if (rng === 2) {
         answer = (term_1 + term_2) * (term_3 + term_4) + term_5;
-        question = `What is ( ${term_1} + ${term_2} ) ( ${term_3} + ${term_4} ) + ${term_5} ?`;
+        question = `( ${term_1} + ${term_2} ) ( ${term_3} + ${term_4} ) + ${term_5} ?`;
     } else if (rng === 3) {
         answer = term_1 * term_2 + term_3 + term_4 * term_5;
-        question = `What is ${term_1} * ${term_2} + ${term_3} + ${term_4} * ${term_5} ) ?`;
+        question = `${term_1} * ${term_2} + ${term_3} + ${term_4} * ${term_5} ?`;
     } else if (rng === 4) {
         answer = term_1 * (term_2 + term_3) + term_4 + term_5;
-        question = `What is ${term_1} ( ${term_2} + ${term_3} ) + ${term_4} + ${term_5} ?`;
+        question = `${term_1} ( ${term_2} + ${term_3} ) + ${term_4} + ${term_5} ?`;
     }
 
     return {
