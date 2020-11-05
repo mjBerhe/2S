@@ -2,11 +2,9 @@ import create from 'zustand';
 
 export const [useUsers] = create((set, get) => ({
 	users: {
-		'Chatroom 1': [],
-		'Chatroom 2': [],
-		'Chatroom 3': [],
 		'Gameroom 1': [],
 		'Gameroom 2': [],
+		'Testing Room': [],
 	},
 	addUser: (room, username) => {
 		set(prevState => ({
@@ -27,7 +25,7 @@ export const [useUsers] = create((set, get) => ({
 		}));
 	},
 	updateUsersList: (userList) => {
-		set(prevState => ({
+		set(() => ({
 			users: userList,
 		}));
 	}

@@ -105,6 +105,7 @@ function statsGenerator (roundsInfo) {
             name: user.name,
             correctResponses: totalCorrectAnswers(user.userAnswers, roundsInfo[round].answers),
             accuracy: totalCorrectAnswers(user.userAnswers, roundsInfo[round].answers)/roundsInfo[round].answers.length,
+            avgResponseTime: user.userResponseTimes.filter(sumReducer)/user.userResponseTimes.length,
             fastestCorrectResponse: {
                questionNumber: fastQuestionNum,
                responseTime: fastResponseTime,

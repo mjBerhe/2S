@@ -1,5 +1,4 @@
 const app = require('express')();
-const cors = require('cors');
 const server = require('http').Server(app);
 const PORT = process.env.PORT || 3000;
 
@@ -13,47 +12,24 @@ const io = socket(server);
 
 const statsGenerator = require('./matts_functions/stats2.js');
 const generateRoom = require('./matts_functions/generateRoom.js');
+const match =  require('./matts_functions/matchHelpers.js');
 
 const availableRooms = [
-	'Chatroom 1',
-	'Chatroom 2',
-	'Chatroom 3',
 	'Gameroom 1',
 	'Gameroom 2',
+	'Testing Room',
 ];
 
 const users = {
-	'Chatroom 1': [],
-	'Chatroom 2': [],
-	'Chatroom 3': [],
 	'Gameroom 1': [],
 	'Gameroom 2': [],
+	'Testing Room': [],
 };
 
 const rooms = {
 	'Gameroom 1': generateRoom.static(2, 10, ['addition1', 'subtraction2', 'multiplication1', 'multiplication2', 'division1', 'bedmas2', 'equations1', 'equations2', 'geometric', 'additive']),
 	'Gameroom 2': generateRoom.static(3, 2, ['addition1', 'multiplication1']),
-	// 'Gameroom 2': {
-	// 	start: false,
-	// 	maxCapacity: 2,
-	// 	roundAmount: 2,   
-	// 	users: [],
-	// 	queue: [],
-	// 	rounds: {
-	// 		'round 1': {
-	// 			roundType: 'addition',
-	// 			questions: questions,
-	// 			answers: answers,
-	// 			results: [],
-	// 		},
-	// 		'round 2': {
-	// 			roundType: 'multiplication',
-	// 			questions: questionsMulti,
-	// 			answers: answersMulti,
-	// 			results: [],
-	// 		}
-	// 	},
-	// },
+	'Testing Room': generateRoom.static(2, 2, ['additionTest', 'multiplicationTest']),
 }
 
 let currentUser;
@@ -77,7 +53,7 @@ nextApp.prepare()
 				// if room and new user is valid, join room
 				if (availableRooms.includes(data.room) && data.username.id) {
 					socket.join(data.room);
-					users[data.room] = addUser(users[data.room], data.room, data.username);
+					users[data.room] = match.addUser(users[data.room], data.room, data.username);
 					console.log(users[data.room]);
 
 					gamelobby.to(data.room).emit('userConnected', {
@@ -117,7 +93,7 @@ nextApp.prepare()
 
 				// join queue if queue is not full & no current game running
 				} else if (rooms[data.room].queue.length < rooms[data.room].maxCapacity) {
-					joinQueue(rooms, data.room, data.username);
+					rooms[data.room].queue = match.joinQueue(rooms[data.room].queue, data.room, data.username);
 
 					gamelobby.to(data.room).emit('joinedQueue', {
 						id: data.username.id,
@@ -128,7 +104,7 @@ nextApp.prepare()
 						rooms[data.room].start = true;
 
 						if (rooms[data.room].start) {
-							prepMatch(rooms, data.room);
+							match.prepMatch(rooms, data.room);
 
 							gamelobby.to(data.room).emit('prepMatch', {
 								players: rooms[data.room].users,
@@ -153,7 +129,7 @@ nextApp.prepare()
 				if (rooms[data.room]) {
 					rooms[data.room].queue.forEach(user => {
 						if (user.id === data.username.id) {
-							rooms[data.room].queue = removeUser(rooms[data.room].queue, data.username, 'queue');
+							rooms[data.room].queue = match.removeUser(rooms[data.room].queue, data.username, 'queue');
 							console.log(rooms[data.room].queue);
 						}
 					});
@@ -216,7 +192,7 @@ nextApp.prepare()
 					}
 				});
 
-				const eliminatedUser = checkDeathMatch(deathmatch, 3);
+				const eliminatedUser = match.checkDeathMatch(deathmatch, 3);
 				// if a user was eliminated in deathmatch
 				if (eliminatedUser) {
 					rooms[data.room].rounds[`round ${data.currentRound}`].results.push({
@@ -253,7 +229,7 @@ nextApp.prepare()
 			// kick out user from room when they leave a room via button
 			socket.on('disconnectUser', data => {
 				socket.leave(data.room);
-				users[data.room] = removeUser(users[data.room], data.username, 'room');
+				users[data.room] = match.removeUser(users[data.room], data.username, 'room');
 				console.log(users[data.room]);
 
 				gamelobby.to(data.room).emit('removeUser', {
@@ -267,14 +243,14 @@ nextApp.prepare()
 					// checking if disconnecting user was in a queue, and to remove them if true
 					rooms[data.room].queue.forEach(user => {
 						if (user.id === data.username.id) {
-							rooms[data.room].queue = removeUser(rooms[data.room].queue, data.username, 'queue');
+							rooms[data.room].queue = match.removeUser(rooms[data.room].queue, data.username, 'queue');
 							console.log(rooms[data.room].queue);
 						}
 					});
 					// checking if disconnecting user was in a room, and to remove them if true
 					rooms[data.room].users.forEach(user => {
 						if (user.id === data.username.id) {
-							rooms[data.room].users = removeUser(rooms[data.room].users, data.username, 'game');
+							rooms[data.room].users = match.removeUser(rooms[data.room].users, data.username, 'game');
 							console.log(rooms[data.room].users);
 						}
 					});
@@ -286,7 +262,7 @@ nextApp.prepare()
 			socket.on('disconnect', () => {
 				if (currentUser) {
 					socket.leave(currentUser.room);
-					users[currentUser.room] = removeUser(users[currentUser.room], currentUser.username, 'room');
+					users[currentUser.room] = match.removeUser(users[currentUser.room], currentUser.username, 'room');
 					console.log(users[currentUser.room]);
 
 					gamelobby.to(currentUser.room).emit('removeUser', {
@@ -300,14 +276,14 @@ nextApp.prepare()
 						// checking if disconnecting user was in a queue, and to remove them if true
 						rooms[currentUser.room].queue.forEach(user => {
 							if (user.id === currentUser.username.id) {
-								rooms[currentUser.room].queue = removeUser(rooms[currentUser.room].queue, currentUser.username, 'queue');
+								rooms[currentUser.room].queue = match.removeUser(rooms[currentUser.room].queue, currentUser.username, 'queue');
 								console.log(rooms[currentUser.room].queue);
 							}
 						});
 						// checking if disconnecting user was in a room, and to remove them if true
 						rooms[currentUser.room].users.forEach(user => {
 							if (user.id === currentUser.username.id) {
-								rooms[currentUser.room].users = removeUser(rooms[currentUser.room].users, currentUser.username, 'game');
+								rooms[currentUser.room].users = match.removeUser(rooms[currentUser.room].users, currentUser.username, 'game');
 								console.log(rooms[currentUser.room].users);
 							}
 						});
@@ -317,66 +293,9 @@ nextApp.prepare()
 		});
 
 		server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-	})
-
-
-// returns the new userArray after adding the user
-const addUser = (userArray, room, username) => {
-	// need to fix validation for checking is user already exits in the room
-	if (!userArray.includes(username)) {
-		userArray.push(username);
-		console.log(`${username.name} has joined ${room}`);
-		return userArray;
-	} else {
-		console.log(`${username.name} could not join ${room}`);
-		return userArray;
-	}
-}
-
-// returns the new userArray after removing the user
-const removeUser = (usersArray, username, location) => {
-	const index = usersArray.findIndex(user => user.id === username.id);
-
-	if (index > -1) {
-		usersArray.splice(index, 1);
-		console.log(`${username.name} disconnected from the ${location}`);
-		return usersArray;
-	} else {
-		console.log(`Error removing ${username.name} from the ${location}`);
-		return usersArray;
-	}
-}
-
-// covert this to addUser
-const joinQueue = (roomsObject, room, username) => {
-	roomsObject[room].queue.push(username);
-	console.log(`${username.name} has joined the queue in ${room}`);
-	console.log(roomsObject);
-}
-
-// move all people in queue to users
-const prepMatch = (roomsObject, room) => {
-	for (let i = 0; i < roomsObject[room].maxCapacity; i++) {
-		roomsObject[room].users.push(roomsObject[room].queue.shift());
-	}
-	console.log(roomsObject);
-}
-
-// resetting room after a game finishes
-const resetRoom = (currentRoom) => {
-	rooms[currentRoom] = generateRoom.static(10, 2, ['addition1', 'subtraction2', 'multiplication1', 'multiplication2', 'division1', 'bedmas2', 'equations1', 'equations2', 'geometric', 'additive']);
-}
-
-const checkDeathMatch = (deathmatch, elimGap) => {
-	// sorts users in ascending order of correct questions
-	deathmatch.sort((a, b) => {
-		return a.correctQuestions - b.correctQuestions;
 	});
 
-	console.log(deathmatch);
-
-	if (deathmatch[0].correctQuestions <= deathmatch[1].correctQuestions - elimGap) {
-		console.log(`${deathmatch[0].id} has been eliminated`);
-		return deathmatch.shift();
-	} else return null;
+// resetting room after a game finishes
+resetRoom = (currentRoom) => {
+	rooms[currentRoom] = generateRoom.static(2, 2, ['additionTest', 'multiplicationTest']);
 }

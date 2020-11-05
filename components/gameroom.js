@@ -103,6 +103,7 @@ export default function GameRoom({ socket, room, username }) {
 									<div className='stat-line'><h3>User:&ensp;</h3><h4>{user.name}</h4></div>
 									<div className='stat-line'><h3>Total Correct:&ensp;</h3><h4>{user.correctResponses}</h4></div>
 									<div className='stat-line'><h3>Accuracy:&ensp;</h3><h4>{user.accuracy*100}%</h4></div>
+									<div className='stat-line'><h3>Average Response Time:&ensp;</h3><h4>{user.avgResponseTime}</h4></div>
 									<div className='stat-line'><h3>Fastest Correct:&ensp;</h3><h4>{user.fastestCorrectResponse.responseTime}ms on question {user.fastestCorrectResponse.questionNumber}</h4></div>
 									<div className='stat-line'><h3>Slowest Correct:&ensp;</h3><h4>{user.slowestCorrectResponse.responseTime}ms on question {user.slowestCorrectResponse.questionNumber}</h4></div>
 								</div>

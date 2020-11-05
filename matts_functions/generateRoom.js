@@ -14,6 +14,8 @@ function generateStaticRoom (maxCapacity, roundAmount, arrayOfRoundTypes) {
    }
 
    const functionConverter = {
+      'additionTest': addition(1, 1, 1, 20),
+      'multiplicationTest': multiplication(20, 1, 1, 12),
       'addition1': addition(10, 1, 1, 30),
       'addition2': addition(10, 2, 1, 30),
       'subtraction1': subtraction(10, 1, 1, 30),

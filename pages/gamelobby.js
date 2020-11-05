@@ -7,9 +7,9 @@ import { useMatch } from '../state/match.js';
 import { useDeathMatch } from '../state/deathmatch.js';
 import GameRoom from '../components/gameroom.js';
 
-const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
+// const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
 // const gamelobby_ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
-// const gamelobby_ENDPOINT = "http://localhost:3000/gamelobby";
+const gamelobby_ENDPOINT = "http://localhost:3000/gamelobby";
 const gamelobby = io(gamelobby_ENDPOINT);
 
 export default function GameLobby() {
@@ -123,6 +123,9 @@ export default function GameLobby() {
 						</button>
 						<button className='button-1' onClick={handleJoinRoom} value={'Gameroom 2'}>
 							Join Gameroom 2
+						</button>
+						<button className='button-1' onClick={handleJoinRoom} value={'Testing Room'}>
+							Join Testing Room
 						</button>
 					</div>
 				}
