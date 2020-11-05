@@ -15,13 +15,13 @@ module.exports = function bedmas_level_1 (min, max) {
 
     if (rng === 1) {
         answer = term_1 * ( term_2 + term_3 );
-        question = `What is ${term_1} ( ${term_2} + ${term_3} ) ?`;
+        question = `${term_1} ( ${term_2} + ${term_3} ) ?`;
     } else if (rng === 2) {
         answer = term_1;
-        question = `What is ${(term_1 - term_3)*term_2} / ${term_2} + ${term_3}`
+        question = `${(term_1 - term_3)*term_2} / ${term_2} + ${term_3}`
     } else if (rng === 3) {
         answer = term_1 * term_2 + term_3;
-        question = `What is ${term_1} * ${term_2} + ${term_3} ?`;
+        question = `${term_1} * ${term_2} + ${term_3} ?`;
     }
 
     return {
