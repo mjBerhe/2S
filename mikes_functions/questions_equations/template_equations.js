@@ -68,8 +68,6 @@ function equations_template (questions, equations, level, max) {
 
                 const {question, x_value, y_value, z_value} = equationsMULTI_level_1 (max);
 
-                console.log(z_value);
-
                 if (z_value == undefined) {
                      ({question_2, answer} = solution_generator_2coeff (x_value, y_value));
                 } else {
@@ -79,7 +77,7 @@ function equations_template (questions, equations, level, max) {
                 questions_array.push(question.concat(question_2));
                 solutions_array.push(answer);
     
-                }
+            }
     
             if (level === 2) {
     
