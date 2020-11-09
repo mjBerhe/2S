@@ -14,13 +14,13 @@ const statsGenerator = require('./matts_functions/stats2.js');
 const generateRoom = require('./matts_functions/generateRoom.js');
 const match =  require('./matts_functions/matchHelpers.js');
 
-const availableRooms = [
+const availableRooms = [ // used to identify which rooms actually exist
 	'Gameroom 1',
 	'Gameroom 2',
 	'Testing Room',
 ];
 
-const users = {
+const users = { // stores users
 	'Gameroom 1': [],
 	'Gameroom 2': [],
 	'Testing Room': [],
@@ -154,10 +154,29 @@ nextApp.prepare()
 						});
 						resetRoom(data.room);
 					} else {
+						// send stats for corresponding round
 						gamelobby.to(data.room).emit('usersRoundComplete', {
+							stats: statsGenerator(rooms[data.room].rounds),
 							msg: `All users have completed round ${data.currentRound}`,
 						});
 					}
+				}
+			});
+
+			socket.on('readyNextRound', data => {
+				// want to validate if user is in the actual game
+				rooms[data.room].roundQueue.push({
+					id: data.id,
+					name: data.name,
+				});
+				console.log(`${data.name} is ready`);
+				// if every current user is ready for next round
+				if (rooms[data.room].roundQueue.length === rooms[data.room].users.length) {
+					gamelobby.to(data.room).emit('startNextRound', {
+						msg: 'All players ready for next round',
+					});
+					// clear the round queue
+					rooms[data.room].roundQueue = [];
 				}
 			});
 
@@ -165,7 +184,7 @@ nextApp.prepare()
 				const ids = rooms[data.room].deathmatch.map(user => user.id);
 				rooms[data.room].users.forEach(user => {
 					if (!ids.includes(user.id)) {
-						// initialize ever user in the deathmatch
+						// initialize every user in the deathmatch
 						rooms[data.room].deathmatch.push({
 							id: user.id,
 							name: user.name,
@@ -205,6 +224,8 @@ nextApp.prepare()
 						id: eliminatedUser.id,
 						msg: 'You have been eliminated',
 						stats: statsGenerator(rooms[data.room].rounds),
+						questionsAnswered: eliminatedUser.userAnswers.length,
+						currentRound: data.currentRound,
 					});
 
 					// checking if there is one person left (victor)
@@ -219,6 +240,8 @@ nextApp.prepare()
 							id: deathmatch[0].id,
 							msg: 'Congratulations! You have won',
 							stats: statsGenerator(rooms[data.room].rounds),
+							questionsAnswered: deathmatch[0].userAnswers.length,
+							currentRound: data.currentRound,
 						});
 						resetRoom(data.room);
 					}

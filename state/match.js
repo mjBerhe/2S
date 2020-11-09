@@ -7,17 +7,16 @@ export const [useMatch] = create((set, get) => ({
       status: false,
       msg: '',
    },
-   roundOngoing: false,
+   roundStatus: {
+      start: false,
+      showStats: false,
+   },
+   deathmatchOngoing: false,
    roundAmount: 0,
    currentRound: 0,
    players: [],
    roundsInfo: null,
-   currentRoundQuestions: [],
-   currentQuestion: '',
-   currentAnswer: '',
-   initialResponseTimer: 0, 
-   userAnswers: [],
-   userResponseTimes: [],
+   roundStats: {},
    completedStats: {},
    joinQueue: () => {
       set(() => ({
@@ -27,8 +26,7 @@ export const [useMatch] = create((set, get) => ({
    leaveQueue: () => {
       set(() => ({
          queue: false,
-      }))
-       
+      }));
    },
    prepMatch: (players, roundAmount, rounds) => {
       set(() => ({
@@ -38,48 +36,59 @@ export const [useMatch] = create((set, get) => ({
          players: players,
       }));
    },
-   incCurrentRound: () => {
-      set(prevState => ({
-         roundOngoing: true,
-         currentRound: prevState.currentRound + 1,
-         userAnswers: [],
-         userResponseTimes: [],
-      }));
-      console.log('incrementing round')
-   },
-   finishedRound: () => {
-      set(() => ({
-         roundOngoing: false,
-      }));
-   },
    startMatch: () => {
       set(() => ({
          start: true,
       }));
    },
-   setRoundQuestions: (currentRound) => {
-      const roundsInfo = get().roundsInfo;
-      set(() => ({
-         currentRoundQuestions: roundsInfo[currentRound].questions,
-      }));
-   },
-   loadQuestion: () => {
-      const questions = get().currentRoundQuestions;
-      set(() => ({
-         currentQuestion: questions.shift(),
-         initialResponseTimer: Date.now(),
-      }));
-   },
-   userTypingAnswer: (answer) => {
-      set(() => ({
-         currentAnswer: answer,
-      }));
-   },
-   userSubmitAnswer: () => {
+   incCurrentRound: () => {
       set(prevState => ({
-         userAnswers: [...prevState.userAnswers, parseFloat(prevState.currentAnswer)],
-         currentAnswer: '',
-         userResponseTimes: [...prevState.userResponseTimes, Date.now() - prevState.initialResponseTimer],
+         roundStatus: {
+            start: true,
+            showStats: false,
+         },
+         currentRound: prevState.currentRound + 1,
+      }));
+      console.log(`starting round ${get().currentRound}`);
+   },
+   finishedRound: () => {
+      set(() => ({
+         roundStatus: {
+            start: false,
+            showStats: false,
+         },
+      }));
+   },
+   showRoundStats: (stats) => {
+      set(() => ({
+         roundStatus: {
+            start: false,
+            showStats: true,
+         },
+         roundStats: stats,
+      }));
+   },
+   startDM: (socket, room) => {
+      socket.emit('initiateDM', {
+         msg: 'deathmatch is starting',
+         room: room,
+      });
+      set(() => ({
+         deathmatchOngoing: true,
+      }));
+   },
+   sliceFinalRound: (amount, round) => {
+      const roundsInfo = get().roundsInfo;
+      const newQuestionsMaster = roundsInfo[`round ${round}`].questionsMaster.slice(0, amount);
+      console.log(newQuestionsMaster);
+      set(prevState => ({
+         roundsInfo: {
+            ...prevState.roundsInfo,
+            [`round ${round}`]: {
+               ...prevState.roundsInfo[`round ${round}`],
+               questionsMaster: newQuestionsMaster,
+            },
+         },
       }));
    },
    completeMatch: (stats, msg) => {
@@ -100,17 +109,15 @@ export const [useMatch] = create((set, get) => ({
             status: false,
             msg: '',
          },
-         roundOngoing: false,
+         roundStatus: {
+            start: false,
+            showStats: false,
+         },
+         deathmatchOngoing: false,
          roundAmount: 0,
          currentRound: 0,
          players: [],
          roundsInfo: null,
-         currentRoundQuestions: [],
-         currentQuestion: '',
-         currentAnswer: '',
-         initialResponseTimer: 0, 
-         userAnswers: [],
-         userResponseTimes: [],
          completedStats: {},
       }));
    }

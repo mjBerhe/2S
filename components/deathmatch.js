@@ -16,7 +16,7 @@ export default function DeathMatch({ socket, room, username }) {
       userResponseTimes: state.userResponseTimes,
    }), shallow);
   
-   const { completeMatch } = useMatch();
+   const { sliceFinalRound, completeMatch } = useMatch();
    const currentRound = useMatch(state => state.currentRound);
 
    const [questionNumber, setQuestionNumber] = useState(1);
@@ -78,13 +78,16 @@ export default function DeathMatch({ socket, room, username }) {
       socket.on('eliminated', data => {
          if (data.id === username.id) {
             console.log(data.msg);
+            sliceFinalRound(data.questionsAnswered + 1, data.currentRound);
             completeMatch(data.stats, data.msg);
          }
       });
 
       socket.on('victory', data => {
+         console.log(data)
          if (data.id === username.id) {
             console.log(data.msg);
+            sliceFinalRound(data.questionsAnswered, data.currentRound);
             completeMatch(data.stats, data.msg);
          }
       })
@@ -96,21 +99,23 @@ export default function DeathMatch({ socket, room, username }) {
    }, []);
 
    return (
-      <div>
+      <div className='question-area'>
          <h1>Deathmatch</h1>
-         <h2>{currentQuestion}</h2>
-         {!incorrectResponse &&
-            <form onSubmit={handleSubmitAnswer}>
-               <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
-               <input type="submit" value="Submit"/>
-            </form>
-         }
-         {incorrectResponse && 
-            <form onSubmit={doNothing}>
-               <input className='answer-incorrect' type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
-               <input type="submit" value="Submit"/>
-            </form>
-         }
+         <div>
+            <h2>{currentQuestion}</h2>
+            {!incorrectResponse &&
+               <form onSubmit={handleSubmitAnswer}>
+                  <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
+                  <input type="submit" value="Submit"/>
+               </form>
+            }
+            {incorrectResponse && 
+               <form onSubmit={doNothing}>
+                  <input className='answer-incorrect' type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
+                  <input type="submit" value="Submit"/>
+               </form>
+            }
+         </div>
       </div>
    )
 }

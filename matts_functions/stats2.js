@@ -33,68 +33,8 @@ function statsGenerator (roundsInfo) {
    listOfRounds.forEach(round => {
       stats[round] = [];
    })
-   
-   const sumReducer = (sum, curVal) => sum + curVal;
 
-   const totalCorrectAnswers = (userAnswers, correctAnswers) => {
-      const correctResponses = userAnswers.filter((userAnswer, index) => {
-         return userAnswer === correctAnswers[index]});
-      return correctResponses.length;
-   }
-
-   const fastestCorrectResponse = (userAnswers, userResponseTimes, correctAnswers) => {
-      const correctIndexes = [];
-      const correctUserResponseTimes = [];
-      userAnswers.forEach((answer, index) => {
-         if (answer === correctAnswers[index]) {
-            correctIndexes.push(index);
-         }
-      });
-      
-      if (correctIndexes.length) {
-         correctIndexes.forEach(index => {
-            correctUserResponseTimes.push(userResponseTimes[index]);
-         });
-         const fastestResponse = Math.min(...correctUserResponseTimes);
-         return {
-            fastResponseTime: fastestResponse,
-            fastQuestionNum: userResponseTimes.indexOf(fastestResponse) + 1,
-         }
-      } else {
-         return {
-            fastResponseTime: 0,
-            fastQuestionNum: 0,
-         }
-      }
-   }
-
-   const slowestCorrectResponse = (userAnswers, userResponseTimes, correctAnswers) => {
-      const correctIndexes = [];
-      const correctUserResponseTimes = [];
-      userAnswers.forEach((answer, index) => {
-         if (answer === correctAnswers[index]) {
-            correctIndexes.push(index);
-         }
-      });
-      
-      if (correctIndexes.length) {
-         correctIndexes.forEach(index => {
-            correctUserResponseTimes.push(userResponseTimes[index]);
-         });
-         const slowestResponse = Math.max(...correctUserResponseTimes);
-         return {
-            slowResponseTime: slowestResponse,
-            slowQuestionNum: userResponseTimes.indexOf(slowestResponse) + 1,
-         }
-      } else {
-         return {
-            slowResponseTime: 0,
-            slowQuestionNum: 0,
-         }
-      }
-   }
-
-   // looping through each round object
+   // looping through each round 
    listOfRounds.forEach(round => {
       // looping through each user's results
       roundsInfo[round].results.forEach(user => {
@@ -105,15 +45,23 @@ function statsGenerator (roundsInfo) {
             name: user.name,
             correctResponses: totalCorrectAnswers(user.userAnswers, roundsInfo[round].answers),
             accuracy: totalCorrectAnswers(user.userAnswers, roundsInfo[round].answers)/roundsInfo[round].answers.length,
-            avgResponseTime: user.userResponseTimes.filter(sumReducer)/user.userResponseTimes.length,
+            avgResponseTime: avgResponseTime(user.userResponseTimes),
             fastestCorrectResponse: {
                questionNumber: fastQuestionNum,
                responseTime: fastResponseTime,
             },
+            fastestResponse: {
+               questionNumber: user.userResponseTimes.indexOf(Math.min(...user.userResponseTimes)) + 1,
+               responseTime: Math.min(...user.userResponseTimes),
+            },
             slowestCorrectResponse: {
                questionNumber: slowQuestionNum,
                responseTime: slowResponseTime,
-            }
+            },
+            slowestResponse: {
+               questionNumber: user.userResponseTimes.indexOf(Math.max(...user.userResponseTimes)) + 1,
+               responseTime: Math.max(...user.userResponseTimes),
+            },
          });
       });
    });
@@ -122,6 +70,74 @@ function statsGenerator (roundsInfo) {
 }
 
 module.exports = statsGenerator;
+
+const sumReducer = (sum, curVal) => sum + curVal;
+
+const totalCorrectAnswers = (userAnswers, correctAnswers) => {
+   const correctResponses = userAnswers.filter((userAnswer, index) => {
+      return userAnswer === correctAnswers[index]});
+   return correctResponses.length;
+}
+
+const fastestCorrectResponse = (userAnswers, userResponseTimes, correctAnswers) => {
+   const correctIndexes = [];
+   const correctUserResponseTimes = [];
+   userAnswers.forEach((answer, index) => {
+      if (answer === correctAnswers[index]) {
+         correctIndexes.push(index);
+      }
+   });
+   
+   if (correctIndexes.length) {
+      correctIndexes.forEach(index => {
+         correctUserResponseTimes.push(userResponseTimes[index]);
+      });
+      const fastestResponse = Math.min(...correctUserResponseTimes);
+      return {
+         fastResponseTime: fastestResponse,
+         fastQuestionNum: userResponseTimes.indexOf(fastestResponse) + 1,
+      }
+   } else {
+      return {
+         fastResponseTime: 0,
+         fastQuestionNum: 0,
+      }
+   }
+}
+
+const slowestCorrectResponse = (userAnswers, userResponseTimes, correctAnswers) => {
+   const correctIndexes = [];
+   const correctUserResponseTimes = [];
+   userAnswers.forEach((answer, index) => {
+      if (answer === correctAnswers[index]) {
+         correctIndexes.push(index);
+      }
+   });
+   
+   if (correctIndexes.length) {
+      correctIndexes.forEach(index => {
+         correctUserResponseTimes.push(userResponseTimes[index]);
+      });
+      const slowestResponse = Math.max(...correctUserResponseTimes);
+      return {
+         slowResponseTime: slowestResponse,
+         slowQuestionNum: userResponseTimes.indexOf(slowestResponse) + 1,
+      }
+   } else {
+      return {
+         slowResponseTime: 0,
+         slowQuestionNum: 0,
+      }
+   }
+}
+
+const avgResponseTime = (responseTimesArray) => {
+   if (responseTimesArray.length === 0) {
+      return 0;
+   } else {
+      return responseTimesArray.reduce(sumReducer)/responseTimesArray.length;
+   }
+}
 
 // const testAnswers = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 // const testRoundInfo = {

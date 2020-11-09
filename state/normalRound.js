@@ -1,20 +1,20 @@
 import create from 'zustand';
 
-export const [useDeathMatch] = create((set, get) => ({
+export const [useNormalRound] = create((set, get) => ({
    questions: [],
    answers: [],
    currentQuestion: '',
    currentAnswer: '',
-   initialResponseTimer: 0,
+   initialResponseTimer: 0, 
    userAnswers: [],
    userResponseTimes: [],
-   setDMQuestions: (questions, answers) => {
+   setRoundQuestions: (questions, answers) => {
       set(() => ({
          questions: questions,
          answers: answers,
       }));
    },
-   loadDMQuestion: () => {
+   loadQuestion: () => {
       const questions = get().questions;
       set(() => ({
          currentQuestion: questions.shift(),
@@ -36,16 +36,21 @@ export const [useDeathMatch] = create((set, get) => ({
    checkAnswer: (questionNumber) => {
       if (parseFloat(get().currentAnswer) === get().answers[questionNumber - 1]) {
          return true;
-      } else return false;
+      } else {
+         set(() => ({
+            currentAnswer: '',
+         }));
+         return false;
+      }
    },
-   resetDMState: () => {
+   resetRoundState: () => {
       set(() => ({
          questions: [],
          answers: [],
          currentQuestion: '',
          currentAnswer: '',
+         initialResponseTimer: 0, 
          userAnswers: [],
-         initialResponseTimer: 0,
          userResponseTimes: [],
       }));
    }

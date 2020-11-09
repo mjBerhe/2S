@@ -54,9 +54,10 @@ const checkDeathMatch = (deathmatch, elimGap) => {
 
 	console.log(deathmatch);
 
+	// if last place is behind 2nd last by elimGap, eliminate last place
 	if (deathmatch[0].correctQuestions <= deathmatch[1].correctQuestions - elimGap) {
 		console.log(`${deathmatch[0].id} has been eliminated`);
-		return deathmatch.shift();
+		return deathmatch.shift(); // returns eliminated user
 	} else return null;
 }
 

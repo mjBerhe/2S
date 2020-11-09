@@ -6,11 +6,12 @@ import shallow from 'zustand/shallow';
 export default function GameRoom({ socket, room, username }) {
 
 	const { joinQueue, leaveQueue, prepMatch, incCurrentRound } = useMatch();
-	const { queueStatus, startStatus, complete, currentRound, stats } = useMatch(state => ({
+	const { queueStatus, startStatus, complete, currentRound, roundsInfo, stats } = useMatch(state => ({
 		queueStatus: state.queue,
 		startStatus: state.start,
 		complete: state.completed,
 		currentRound: state.currentRound,
+		roundsInfo: state.roundsInfo,
 		stats: state.completedStats,
 	}), shallow);
 
@@ -76,14 +77,14 @@ export default function GameRoom({ socket, room, username }) {
 				<h1>{room}</h1>
 			}
 			{!queueStatus && !startStatus && !complete.status &&
-				<div className='centered-flex-column'>
+				<div className='centered-of-parent'>
 					<button className="button-1" onClick={handleFindGame}>
 						Look for Game
 					</button>
 				</div>
 			}
 			{queueStatus && !startStatus &&
-				<div className='centered-flex-column'>
+				<div className='centered-of-parent'>
 					<h1>SEARCHING FOR GAME...</h1>
 					<button className='button-1' onClick={handleLeaveQueue}>
 						Leave Queue
@@ -101,11 +102,13 @@ export default function GameRoom({ socket, room, username }) {
 							<h3>{round}</h3> {stats[round].map((user, j) => 
 								<div className='round-results' key={j}>
 									<div className='stat-line'><h3>User:&ensp;</h3><h4>{user.name}</h4></div>
-									<div className='stat-line'><h3>Total Correct:&ensp;</h3><h4>{user.correctResponses}</h4></div>
-									<div className='stat-line'><h3>Accuracy:&ensp;</h3><h4>{user.accuracy*100}%</h4></div>
-									<div className='stat-line'><h3>Average Response Time:&ensp;</h3><h4>{user.avgResponseTime}</h4></div>
-									<div className='stat-line'><h3>Fastest Correct:&ensp;</h3><h4>{user.fastestCorrectResponse.responseTime}ms on question {user.fastestCorrectResponse.questionNumber}</h4></div>
-									<div className='stat-line'><h3>Slowest Correct:&ensp;</h3><h4>{user.slowestCorrectResponse.responseTime}ms on question {user.slowestCorrectResponse.questionNumber}</h4></div>
+									<div className='stat-line'><h3>Total Correct:&ensp;</h3><h4>{user.correctResponses}/{roundsInfo[round].questionsMaster.length}</h4></div>
+									{/* <div className='stat-line'><h3>Accuracy:&ensp;</h3><h4>{user.accuracy*100}%</h4></div> */}
+									<div className='stat-line'><h3>Average Response Time:&ensp;</h3><h4>{user.avgResponseTime}ms</h4></div>
+									{/* <div className='stat-line'><h3>Fastest Correct:&ensp;</h3><h4>{user.fastestCorrectResponse.responseTime}ms on question {user.fastestCorrectResponse.questionNumber}</h4></div>
+									<div className='stat-line'><h3>Slowest Correct:&ensp;</h3><h4>{user.slowestCorrectResponse.responseTime}ms on question {user.slowestCorrectResponse.questionNumber}</h4></div> */}
+									<div className="stat-line"><h3>Fastest Response Time:&ensp;</h3><h4>{user.fastestResponse.responseTime}ms on question {user.fastestResponse.questionNumber}</h4></div>
+									<div className="stat-line"><h3>Slowest Response Time:&ensp;</h3><h4>{user.slowestResponse.responseTime}ms on question {user.slowestResponse.questionNumber}</h4></div>
 								</div>
 							)}
 						</div>

@@ -6,6 +6,7 @@ import { useUsers } from '../state/users.js';
 import { useMatch } from '../state/match.js';
 import { useDeathMatch } from '../state/deathmatch.js';
 import GameRoom from '../components/gameroom.js';
+import QuestionsList from '../components/questionsList.js';
 
 // const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
 // const gamelobby_ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
@@ -16,7 +17,7 @@ export default function GameLobby() {
 
 	const { users, addUser, removeUser, updateUsersList } = useUsers();
 	const { resetMatch } = useMatch();
-	const { resetDM } = useDeathMatch();
+	const { resetDMState } = useDeathMatch();
 
 	const [username, setUsername] = useState({
 		name: '',
@@ -90,7 +91,7 @@ export default function GameLobby() {
 		setCurrentRoom('');
 		
 		resetMatch();
-		resetDM();
+		resetDMState();
 	}
 
 	return (
@@ -111,6 +112,7 @@ export default function GameLobby() {
 			</div>
 
 			<div className="column1">
+				<QuestionsList/>
 			</div>
 
 			<div className="column2">
