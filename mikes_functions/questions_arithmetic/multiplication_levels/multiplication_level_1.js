@@ -7,7 +7,7 @@ module.exports = function multiplication_level_1 (min, max) {
 
     const answer = term_1 * term_2;
 
-    const question = `What is ${term_1} * ${term_2} ?`
+    const question = `${term_1} * ${term_2}`
 
     return {
         question: question,

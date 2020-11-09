@@ -22,20 +22,20 @@ function equations_level_2 (max) {
     if (rng === 1) { // A+BX = CX+D, solve for D, x = coeff_1
         infinite = infinite_check(2, rng, coeff_1, coeff_2, coeff_3, coeff_4, 0, 0, 0, 0);
         answer = coeff_1;
-        question = `Solve for X. ${coeff_2} + ${coeff_3}X = ${coeff_4}X + ${coeff_2 + coeff_1*(coeff_3-coeff_4)}`;
+        question = `${coeff_2} + ${coeff_3}X = ${coeff_4}X + ${coeff_2 + coeff_1*(coeff_3-coeff_4)}`;
     } else if (rng === 2) { // A + BX = C, solve for C, x = coeff_1
         answer = coeff_1;
-        question = `Solve for X. ${coeff_2} + ${coeff_3}X = ${coeff_2 + coeff_1*coeff_3}`;
+        question = `${coeff_2} + ${coeff_3}X = ${coeff_2 + coeff_1*coeff_3}`;
     } else if (rng === 3) { // A + X/B = C, solve for X
         answer = (coeff_3 - coeff_1) * coeff_2;
-        question = `Solve for X. ${coeff_1} + X/${coeff_2} = ${coeff_3}`;
+        question = `${coeff_1} + X/${coeff_2} = ${coeff_3}`;
     } else if (rng === 4) { // A = B(C+DX), solve for C, x = coeff_1, A = coeff_2*coeff_3, B = coeff_2, A/B = coeff_3
         answer = coeff_1;
-        question = `Solve for X. ${coeff_2*coeff_3} = ${coeff_2}( ${coeff_3 - coeff_4*coeff_1} + ${coeff_4}X)`;
+        question = `${coeff_2*coeff_3} = ${coeff_2}( ${coeff_3 - coeff_4*coeff_1} + ${coeff_4}X)`;
     } else if (rng === 5) { // A + BX + C + DX = 0, solve for B, x = coeff_1, A = coeff_*coeff_2, C = coeff_1*coeff_3
         infinite = infinite_check(2, rng, coeff_1, coeff_2, coeff_3, coeff_4, 0, 0, 0, 0);
         answer = coeff_1;
-        question = `Solve for X. ${coeff_1*coeff_2} + ${-coeff_2 - coeff_3 - coeff_4}X + ${coeff_1*coeff_3} + ${coeff_4}X = 0`;
+        question = `${coeff_1*coeff_2} + ${-coeff_2 - coeff_3 - coeff_4}X + ${coeff_1*coeff_3} + ${coeff_4}X = 0`;
     }
 
     return {
