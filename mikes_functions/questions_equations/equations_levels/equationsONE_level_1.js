@@ -14,16 +14,16 @@ function equations_level_1 (max) {
 
     if (rng === 1) { // X/A = B
         answer = coeff_1 * coeff_2;
-        question = `Solve for X. X / ${coeff_1} = ${coeff_2}`;
+        question = `X / ${coeff_1} = ${coeff_2}`;
     } else if (rng === 2) { // X+A = B
         answer = coeff_2 - coeff_1;
-        question = `Solve for X. X + ${coeff_1} = ${coeff_2}`
+        question = `X + ${coeff_1} = ${coeff_2}`
     } else if (rng === 3) { // X*A = B
         answer = coeff_1 * coeff_2 / coeff_2;
-        question = `Solve for X. X * ${coeff_2} = ${coeff_1*coeff_2} ?`;
+        question = `X * ${coeff_2} = ${coeff_1*coeff_2}`;
     } else if (rng === 4) { // A/X = B 
         answer = coeff_1;
-        question = `Solve for X. ${coeff_1*coeff_2} / X = ${coeff_2} ?`;
+        question = `${coeff_1*coeff_2} / X = ${coeff_2}`;
     }
 
     return {

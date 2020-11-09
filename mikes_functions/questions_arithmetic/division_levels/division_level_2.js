@@ -8,7 +8,7 @@ module.exports = function division_level_2 (min, max) {
 
     const product = term_1 * term_2 * term_3;
 
-    const question = `What is ${product} / ${term_1} / ${term_2} ?`
+    const question = `${product} / ${term_1} / ${term_2}`
 
     return {
         question: question,

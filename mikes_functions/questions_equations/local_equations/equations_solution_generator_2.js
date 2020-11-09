@@ -9,24 +9,24 @@ function solution_generator_2coeff (x, y) {
     // for T/F questions, 1 = TRUE, 0 = FALSE
 
     if (rng === 1) {
-        question = " What is the MIN(X, Y) ?";
+        question = " MIN(X, Y) ?";
         answer = Math.min(x,y);
     } else if (rng === 2) {
-        question = " What is the MAX(X,Y) ?";
+        question = " MAX(X,Y) ?";
         answer = Math.max(x,y);
     } else if (rng === 3) {
-        question = " What is X + Y ?";
+        question = " X + Y ?";
         answer = x + y;
     } else if (rng === 4) {
-        question = " What is X - Y";
+        question = " X - Y ?";
         answer = x - y;
     } else if (rng === 5) {
-        question = " Is X > Y ?";
+        question = " X > Y ?";
         if (x > y) {
             answer = 1;
         } else {answer = 0};
     } else if (rng === 6) {
-        question = " Is Y > X ?";
+        question = " Y > X ?";
         if (y > x) {
             answer = 1;
         } else {answer = 0};
