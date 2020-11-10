@@ -84,7 +84,6 @@ export default function DeathMatch({ socket, room, username }) {
       });
 
       socket.on('victory', data => {
-         console.log(data)
          if (data.id === username.id) {
             console.log(data.msg);
             sliceFinalRound(data.questionsAnswered, data.currentRound);

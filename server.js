@@ -27,9 +27,9 @@ const users = { // stores users
 };
 
 const rooms = {
-	'Gameroom 1': generateRoom.static(2, 10, ['addition1', 'subtraction2', 'multiplication1', 'multiplication2', 'division1', 'bedmas2', 'equations1', 'equations2', 'geometric', 'additive']),
+	'Gameroom 1': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Gameroom 2': generateRoom.static(3, 2, ['addition1', 'multiplication1']),
-	'Testing Room': generateRoom.static(2, 2, ['additionTest', 'multiplicationTest']),
+	'Testing Room': generateRoom.static(2, 2, ['additionTest', 'multiplicationDM']),
 }
 
 let currentUser;
@@ -320,5 +320,5 @@ nextApp.prepare()
 
 // resetting room after a game finishes
 resetRoom = (currentRoom) => {
-	rooms[currentRoom] = generateRoom.static(2, 2, ['additionTest', 'multiplicationTest']);
+	rooms[currentRoom] = generateRoom.static(2, 2, ['additionTest', 'multiplicationDM']);
 }

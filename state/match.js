@@ -80,7 +80,6 @@ export const [useMatch] = create((set, get) => ({
    sliceFinalRound: (amount, round) => {
       const roundsInfo = get().roundsInfo;
       const newQuestionsMaster = roundsInfo[`round ${round}`].questionsMaster.slice(0, amount);
-      console.log(newQuestionsMaster);
       set(prevState => ({
          roundsInfo: {
             ...prevState.roundsInfo,
