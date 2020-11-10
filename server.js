@@ -28,7 +28,7 @@ const users = { // stores users
 
 const rooms = {
 	'Gameroom 1': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
-	'Gameroom 2': generateRoom.static(3, 2, ['addition1', 'multiplication1']),
+	'Gameroom 2': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Testing Room': generateRoom.static(2, 2, ['additionTest', 'multiplicationDM']),
 }
 
