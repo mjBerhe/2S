@@ -320,5 +320,5 @@ nextApp.prepare()
 
 // resetting room after a game finishes
 resetRoom = (currentRoom) => {
-	rooms[currentRoom] = generateRoom.static(2, 2, ['additionTest', 'multiplicationDM']);
+	rooms[currentRoom] = generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']);
 }
