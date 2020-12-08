@@ -8,10 +8,10 @@ import { useDeathMatch } from '../state/deathmatch.js';
 import GameRoom from '../components/gameroom.js';
 import QuestionsList from '../components/questionsList.js';
 
-// const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
-const gamelobby_ENDPOINT = "https://2slow.vercel.app/gamelobby";
+const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
+// const gamelobby_ENDPOINT = "https://2slow.vercel.app/gamelobby";
 // const gamelobby_ENDPOINT = "http://localhost:3000/gamelobby";
-const gamelobby = io(gamelobby_ENDPOINT);
+const gamelobbySocket = io(gamelobby_ENDPOINT);
 
 export default function GameLobby() {
 
@@ -29,38 +29,38 @@ export default function GameLobby() {
 	useEffect(() => {
 
 		// welcome message on connection to socket
-		gamelobby.on('welcome', msg => {
+		gamelobbySocket.on('welcome', msg => {
 			console.log(msg)
 		});
 
 		// error message
-		gamelobby.on('err', msg => {
+		gamelobbySocket.on('err', msg => {
 			console.log(msg);
 		});
 
 		// when someone joins a room
-		gamelobby.on('userConnected', data => {
+		gamelobbySocket.on('userConnected', data => {
 			// add logic to check if that user isnt already connected to the room using ids
 			addUser(data.room, data.username);
 			console.log(data.message);
 		});
 
 		// when someone leaves a room
-		gamelobby.on('removeUser', data => {
+		gamelobbySocket.on('removeUser', data => {
 			removeUser(data.room, data.username);
 		});
 
 		// to update all users whenever someone joins/leaves a room
-		gamelobby.on('connectedUsers', userList => {
+		gamelobbySocket.on('connectedUsers', userList => {
 			updateUsersList(userList);
 		});
 
 		return () => {
-			gamelobby.off('welcome');
-			gamelobby.off('err');
-			gamelobby.off('userConnected');
-			gamelobby.off('removeUser');
-			gamelobby.off('connectedUsers');
+			gamelobbySocket.off('welcome');
+			gamelobbySocket.off('err');
+			gamelobbySocket.off('userConnected');
+			gamelobbySocket.off('removeUser');
+			gamelobbySocket.off('connectedUsers');
 		}
 
 	}, []);
@@ -69,13 +69,13 @@ export default function GameLobby() {
 		e.preventDefault();
 		setUsername({
 			name: e.target.value,
-			id: gamelobby.id,
+			id: gamelobbySocket.id,
 		});
 	}
 
 	const handleJoinRoom = (e) => {
 		e.preventDefault();
-		gamelobby.emit('joinRoom', {
+		gamelobbySocket.emit('joinRoom', {
 			room: e.target.value,
 			username: username,
 		});
@@ -84,7 +84,7 @@ export default function GameLobby() {
 
 	const handleLeaveRoom = (e) => {
 		e.preventDefault();
-		gamelobby.emit('disconnectUser', {
+		gamelobbySocket.emit('disconnectUser', {
 			room: currentRoom,
 			username: username,
 		});
@@ -133,7 +133,7 @@ export default function GameLobby() {
 				}
 				{currentRoom &&
 					<div className='room-container'>
-						<GameRoom socket={gamelobby} room={currentRoom} username={username}/>
+						<GameRoom socket={gamelobbySocket} room={currentRoom} username={username}/>
 						<br/>
 						<button className='button-1' onClick={handleLeaveRoom}>
 							Leave Room
