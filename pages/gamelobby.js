@@ -9,7 +9,7 @@ import GameRoom from '../components/gameroom.js';
 import QuestionsList from '../components/questionsList.js';
 
 // const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
-const gamelobby_ENDPOINT = "https://2slow-git-master.berhe.vercel.app/";
+const gamelobby_ENDPOINT = "https://2slow.vercel.app/gamelobby";
 // const gamelobby_ENDPOINT = "http://localhost:3000/gamelobby";
 const gamelobby = io(gamelobby_ENDPOINT);
 
