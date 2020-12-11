@@ -1,6 +1,8 @@
 import create from 'zustand';
 
 export const [useNormalRound] = create((set, get) => ({
+   questionType: null,
+   incorrectMethod: null,
    questions: [],
    answers: [],
    currentQuestion: '',
@@ -8,10 +10,12 @@ export const [useNormalRound] = create((set, get) => ({
    initialResponseTimer: 0, 
    userAnswers: [],
    userResponseTimes: [],
-   setRoundQuestions: (questions, answers) => {
+   setRoundInfo: (roundsInfo) => {
       set(() => ({
-         questions: questions,
-         answers: answers,
+         questionType: roundsInfo.questionType,
+         incorrectMethod: roundsInfo.incorrectMethod,
+         questions: roundsInfo.questions,
+         answers: roundsInfo.answers,
       }));
    },
    loadQuestion: () => {
@@ -45,6 +49,8 @@ export const [useNormalRound] = create((set, get) => ({
    },
    resetRoundState: () => {
       set(() => ({
+         questionType: null,
+         incorrectMethod: null,
          questions: [],
          answers: [],
          currentQuestion: '',

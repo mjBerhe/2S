@@ -10,7 +10,7 @@ import useCountdown from '../hooks/useCountdown';
 
 export default function Match({ socket, room, username }) {
 
-	const { startMatch, completeMatch, showRoundStats, incCurrentRound, startDM } = useMatch();
+	const { startMatch, completeMatch, showRoundStats, incCurrentRound, startRound, startDM } = useMatch();
 	const { startStatus, roundStatus, DMStatus, roundLimit, currentRound, roundsInfo, roundStats } = useMatch(state => ({
 		startStatus: state.start,
 		roundStatus: state.roundStatus,
@@ -21,35 +21,39 @@ export default function Match({ socket, room, username }) {
 		roundStats: state.roundStats,
 	}), shallow);
 
-	const { setRoundQuestions, loadQuestion } = useNormalRound();
-	const { setDMQuestions, loadDMQuestion } = useDeathMatch();
+	const { setRoundInfo, loadQuestion } = useNormalRound();
+	const { setDMInfo, loadDMQuestion } = useDeathMatch();
 
 	const [countdown, startCountdown] = useCountdown(3, () => {
 		if (DMStatus) {
 			loadDMQuestion();
 		} else {
 			loadQuestion();
+			startRound();
 		}
 	});
 
-	const [ready, setReady] = useState(false);
-
-   // when currentRound changes, update currentRoundQuestions 
+   // when currentRound changes, set the info for the next round
 	useEffect(() => {
-		// first round
-		if (currentRound === 1) {
-         startMatch();
-			setRoundQuestions(roundsInfo[`round ${currentRound}`].questions, roundsInfo[`round ${currentRound}`].answers);
-			startCountdown();
-		// deathmatch
-		} else if (currentRound > 1 && currentRound === roundLimit) { 
-			startDM(socket, room);
-			setDMQuestions(roundsInfo[`round ${currentRound}`].questions, roundsInfo[`round ${currentRound}`].answers);
-			startCountdown();
-		// normal round
-		} else if (currentRound > 1) { 
-			setRoundQuestions(roundsInfo[`round ${currentRound}`].questions, roundsInfo[`round ${currentRound}`].answers);
-			startCountdown();
+		if (currentRound === 1) { // if first round
+			startMatch();
+			if (!roundsInfo[`round ${currentRound}`].deathmatchRound) { // normal round
+				setRoundInfo(roundsInfo[`round ${currentRound}`]);
+				startCountdown();
+			} else { // deathmatch round
+				startDM(socket, room);
+				setDMInfo(roundsInfo[`round ${currentRound}`]);
+				startCountdown();
+			}
+		} else if (currentRound > 1) { // subsequent round
+			if (!roundsInfo[`round ${currentRound}`].deathmatchRound) { // normal round
+				setRoundInfo(roundsInfo[`round ${currentRound}`]);
+				startCountdown();
+			} else { // deathmatch round
+				startDM(socket, room);
+				setDMInfo(roundsInfo[`round ${currentRound}`]);
+				startCountdown();
+			}
       }
 	}, [currentRound]);
 
@@ -80,6 +84,8 @@ export default function Match({ socket, room, username }) {
 			socket.off('usersFinalRoundComplete');
 		}
 	}, []);
+
+	const [ready, setReady] = useState(false);
 
 	const handleReadyUp = (e) => {
 		e.preventDefault();

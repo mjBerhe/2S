@@ -8,9 +8,9 @@ import { useDeathMatch } from '../state/deathmatch.js';
 import GameRoom from '../components/gameroom.js';
 import QuestionsList from '../components/questionsList.js';
 
-const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
+// const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
 // const gamelobby_ENDPOINT = "https://2slow.vercel.app/gamelobby";
-// const gamelobby_ENDPOINT = "http://localhost:3000/gamelobby";
+const gamelobby_ENDPOINT = "http://localhost:3000/gamelobby";
 const gamelobbySocket = io(gamelobby_ENDPOINT);
 
 export default function GameLobby() {
@@ -27,14 +27,13 @@ export default function GameLobby() {
 
 	// socket events
 	useEffect(() => {
-
 		// welcome message on connection to socket
 		gamelobbySocket.on('welcome', msg => {
 			console.log(msg)
 		});
 
 		// error message
-		gamelobbySocket.on('err', msg => {
+		gamelobbySocket.on('invalidRoom', msg => {
 			console.log(msg);
 		});
 
@@ -42,25 +41,26 @@ export default function GameLobby() {
 		gamelobbySocket.on('userConnected', data => {
 			// add logic to check if that user isnt already connected to the room using ids
 			addUser(data.room, data.username);
-			console.log(data.message);
+			console.log(data.msg);
 		});
 
 		// when someone leaves a room
 		gamelobbySocket.on('removeUser', data => {
 			removeUser(data.room, data.username);
+			console.log(data.msg);
 		});
 
 		// to update all users whenever someone joins/leaves a room
-		gamelobbySocket.on('connectedUsers', userList => {
+		gamelobbySocket.on('sendUserList', userList => {
 			updateUsersList(userList);
 		});
 
 		return () => {
 			gamelobbySocket.off('welcome');
-			gamelobbySocket.off('err');
+			gamelobbySocket.off('error');
 			gamelobbySocket.off('userConnected');
 			gamelobbySocket.off('removeUser');
-			gamelobbySocket.off('connectedUsers');
+			gamelobbySocket.off('sendUserList');
 		}
 
 	}, []);

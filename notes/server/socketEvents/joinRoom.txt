@@ -1,0 +1,16 @@
+Event name: joinRoom
+Type: listener
+Data recieved = {
+   room: String,
+   username: {
+      name: String,
+      id: String,
+   }
+}
+
+- gets called once a user on the app joins a specific room
+- must first validate that the room is valid and the user is unique
+- socket then joins that room
+- new user gets inserted to the users object (server side)
+- emits 'userConnected' event to the specific room to tell the app that everything worked
+- emits 'sendUserList' event to share the new updated users list

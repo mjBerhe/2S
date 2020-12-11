@@ -26,7 +26,7 @@ const users = { // stores users
 	'Testing Room': [],
 };
 
-const rooms = {
+const rooms = { // available rooms
 	'Gameroom 1': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Gameroom 2': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Testing Room': generateRoom.static(2, 2, ['additionTest', 'multiplicationDM']),
@@ -37,7 +37,7 @@ let currentUser;
 nextApp.prepare().then(() => {
 
 	app.get('*', (req, res) => {
-		return nextHandler(req, res)
+		return nextHandler(req, res);
 	});
 
 	const gamelobby = io.of('/gamelobby');
@@ -56,12 +56,12 @@ nextApp.prepare().then(() => {
 				console.log(users[data.room]);
 
 				gamelobby.to(data.room).emit('userConnected', {
-					message: `${data.username.name} has joined ${data.room}`,
+					msg: `${data.username.name} has joined ${data.room}`,
 					room: data.room,
 					username: data.username,
 				})
 
-				socket.emit('connectedUsers', users);
+				socket.emit('sendUserList', users);
 
 				currentUser = {
 					username: {
@@ -72,14 +72,14 @@ nextApp.prepare().then(() => {
 				}
 
 			} else {
-				socket.emit('err', `Error, no room named ${data.room}`);
+				socket.emit('invalidRoom', `Error, no room named ${data.room}`);
 			}
 		});
 
-		socket.on('msgSent', data => {
-			gamelobby.to(data.room).emit('msgSent', data);
-			console.log(data);
-		});
+		// socket.on('msgSent', data => {
+		// 	gamelobby.to(data.room).emit('msgSent', data);
+		// 	console.log(data);
+		// });
 
 		socket.on('joinQueue', data => {
 			// send a message if there is a current game ongoing in room
@@ -102,16 +102,13 @@ nextApp.prepare().then(() => {
 				if (rooms[data.room].queue.length === rooms[data.room].maxCapacity) {
 					rooms[data.room].start = true;
 
-					if (rooms[data.room].start) {
-						match.prepMatch(rooms, data.room);
+					match.prepMatch(rooms, data.room);
 
-						gamelobby.to(data.room).emit('prepMatch', {
-							players: rooms[data.room].users,
-							rounds: rooms[data.room].rounds,
-							roundAmount: rooms[data.room].roundAmount,
-							// questions: rooms[data.room].questions,
-						});
-					}
+					gamelobby.to(data.room).emit('prepMatch', {
+						players: rooms[data.room].users,
+						rounds: rooms[data.room].rounds,
+						roundAmount: rooms[data.room].roundAmount,
+					});
 				}
 			// send a message saying queue is currently full
 			} else {
@@ -255,11 +252,12 @@ nextApp.prepare().then(() => {
 			console.log(users[data.room]);
 
 			gamelobby.to(data.room).emit('removeUser', {
+				msg: `${data.username.name} has left ${data.room}`,
 				username: data.username,
 				room: data.room,
 			});
 
-			socket.emit('connectedUsers', users);
+			socket.emit('sendUserList', users);
 
 			if (rooms[data.room]) {
 				// checking if disconnecting user was in a queue, and to remove them if true
@@ -292,7 +290,7 @@ nextApp.prepare().then(() => {
 					room: currentUser.room,
 				});
 
-				socket.emit('connectedUsers', users);
+				socket.emit('sendUserList', users);
 
 				if (rooms[currentUser.room]) {
 					// checking if disconnecting user was in a queue, and to remove them if true

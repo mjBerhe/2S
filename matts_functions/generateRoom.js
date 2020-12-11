@@ -1,3 +1,4 @@
+const e = require('express');
 const addition = require('../mikes_functions/questions_arithmetic/template_addition.js');
 const division = require('../mikes_functions/questions_arithmetic/template_division.js');
 const multiplication = require('../mikes_functions/questions_arithmetic/template_multiplication.js');
@@ -8,13 +9,13 @@ const additive = require('../mikes_functions/questions_sequences/template_additi
 const geometric = require('../mikes_functions/questions_sequences/template_geometric.js');
 // can make either a static room or random room
 
-function generateStaticRoom (maxCapacity, roundAmount, arrayOfRoundTypes) {
-   if (arrayOfRoundTypes.length !== roundAmount) {
-      return 0;
+function generateStaticRoom (maxCapacity, roundAmount, arrayOfQuestionTypes) {
+   if (arrayOfQuestionTypes.length !== roundAmount) {
+      return 0; // not valid
    }
 
    const functionConverter = {
-      'additionTest': addition(1, 1, 1, 20),
+      'additionTest': addition(3, 1, 1, 20),
       'additionTest2': addition(3, 1, 1, 20),
       'multiplicationDM': multiplication(30, 1, 1, 12),
       'addition1': addition(10, 1, 1, 30),
@@ -43,14 +44,33 @@ function generateStaticRoom (maxCapacity, roundAmount, arrayOfRoundTypes) {
    // generating rounds
    const rounds = {};
    
-   arrayOfRoundTypes.forEach((roundType, i) => {
-      const {questions, answers} = functionConverter[roundType];
-      rounds[listOfRounds[i]] = {
-         roundType: roundType,
-         questionsMaster: questions,
-         questions: questions,
-         answers: answers,
-         results: [],
+   arrayOfQuestionTypes.forEach((questionType, i) => { // looping through each given round
+      if (!functionConverter[questionType]) { // question type doesn't exist
+         console.log('error, question type does not exist');
+      } else { 
+         if (i === roundAmount - 1) { // last round (deathmatch)
+            const {questions, answers} = functionConverter[questionType];
+            rounds[listOfRounds[i]] = {
+               questionType: questionType,
+               deathmatchRound: true,
+               incorrectMethod: 'continue', // can be continue or repeat*
+               questionsMaster: questions,
+               questions: questions,
+               answers: answers,
+               results: [],
+            }
+         } else { // normal round
+            const {questions, answers} = functionConverter[questionType];
+            rounds[listOfRounds[i]] = {
+               questionType: questionType,
+               deathmatchRound: false,
+               incorrectMethod: 'continue', // can be continue or repeat*
+               questionsMaster: questions,
+               questions: questions,
+               answers: answers,
+               results: [],
+            }
+         }
       }
    });
 

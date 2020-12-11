@@ -5,7 +5,7 @@ export default function MyApp() {
    return (
       <div className="container">
          <Head>
-            <title>hehe xD</title>
+            <title>Lobby</title>
             <link rel="icon" type="image/png" href="/omega.png" />
          </Head>
          <div>

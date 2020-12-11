@@ -1,6 +1,8 @@
 import create from 'zustand';
 
 export const [useDeathMatch] = create((set, get) => ({
+   questionType: null,
+   incorrectMethod: null,
    questions: [],
    answers: [],
    currentQuestion: '',
@@ -8,10 +10,12 @@ export const [useDeathMatch] = create((set, get) => ({
    initialResponseTimer: 0,
    userAnswers: [],
    userResponseTimes: [],
-   setDMQuestions: (questions, answers) => {
+   setDMInfo: (DMInfo) => {
       set(() => ({
-         questions: questions,
-         answers: answers,
+         questionType: DMInfo.questionType,
+         incorrectMethod: DMInfo.incorrectMethod,
+         questions: DMInfo.questions,
+         answers: DMInfo.answers,
       }));
    },
    loadDMQuestion: () => {

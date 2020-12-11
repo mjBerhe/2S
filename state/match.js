@@ -42,14 +42,23 @@ export const [useMatch] = create((set, get) => ({
       }));
    },
    incCurrentRound: () => {
-      set(prevState => ({
+      const currentRound = get().currentRound;
+      set(() => ({
+         roundStatus: {
+            start: false,
+            showStats: false,
+         },
+         currentRound: currentRound + 1,
+      }));
+      console.log(`starting round ${get().currentRound}`);
+   },
+   startRound: () => {
+      set(() => ({
          roundStatus: {
             start: true,
             showStats: false,
-         },
-         currentRound: prevState.currentRound + 1,
+         }
       }));
-      console.log(`starting round ${get().currentRound}`);
    },
    finishedRound: () => {
       set(() => ({
