@@ -24,6 +24,7 @@ export default function Match({ socket, room, username }) {
 	const { setRoundInfo, loadQuestion } = useNormalRound();
 	const { setDMInfo, loadDMQuestion } = useDeathMatch();
 
+	// countdown is for first round and any subsequent rounds
 	const [countdown, startCountdown] = useCountdown(3, () => {
 		if (DMStatus) {
 			loadDMQuestion();
@@ -33,7 +34,7 @@ export default function Match({ socket, room, username }) {
 		}
 	});
 
-   // when currentRound changes, set the info for the next round
+   // after incCurrentRound() is called, set the info for the next round
 	useEffect(() => {
 		if (currentRound === 1) { // if first round
 			startMatch();
@@ -61,7 +62,6 @@ export default function Match({ socket, room, username }) {
 		// when all users have completed a round, move to next round
 		socket.on('usersRoundComplete', data => {
 			console.log(data.msg);
-			// console.log(data.stats);
 			showRoundStats(data.stats);
 		});
 
@@ -117,7 +117,7 @@ export default function Match({ socket, room, username }) {
                }
             </div>
          }
-			{startStatus && !roundStatus.start && !roundStatus.showStats &&
+			{startStatus && !countdown.start && !roundStatus.start && !roundStatus.showStats && !DMStatus &&
 				<div className='centered-of-parent'>
 					<h1>Round Completed!</h1>
 					<h2>Waiting for other users...</h2>
@@ -143,10 +143,10 @@ export default function Match({ socket, room, username }) {
 					</button>
 				</div>
 			}
-			{roundStatus.start && !countdown.start && !DMStatus &&
+			{roundStatus.start && !countdown.start &&
 				<NormalRound socket={socket} room={room} username={username}/>
 			}
-			{roundStatus.start && !countdown.start && DMStatus &&
+			{DMStatus && !countdown.start && 
 				<DeathMatch socket={socket} room={room} username={username}/>
 			}
       </div>

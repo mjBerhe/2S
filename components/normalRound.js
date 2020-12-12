@@ -51,8 +51,8 @@ export default function NormalRound({ socket, room, username }) {
             console.log(`Question ${questionNumber} is wrong`);
          }
       } else if (incorrectMethod === 'continue') {
-         userSubmitAnswer();
-         loadQuestion();
+         userSubmitAnswer(); // save answer
+         loadQuestion(); // load next question
          setQuestionNumber(n => n + 1);
       }
    }
@@ -78,7 +78,7 @@ export default function NormalRound({ socket, room, username }) {
       
       return () => {
          if (!currentQuestion && userAnswers.length > 0) {
-            console.log('normalRound component unmounted')
+            // console.log('normalRound component unmounted');
             resetRoundState();
          }
       }

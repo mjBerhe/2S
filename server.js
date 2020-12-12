@@ -195,14 +195,24 @@ nextApp.prepare().then(() => {
 		socket.on('dmQuestion', data => {
 			// when recieving a question via deathmatch
 			const deathmatch = rooms[data.room].deathmatch;
-			deathmatch.forEach((user, i) => {
+			deathmatch.forEach((user, i) => { // finds user by data.id
 				if (user.id === data.id) {
-					deathmatch[i] = {
-						id: data.id,
-						name: data.name,
-						correctQuestions: deathmatch[i].correctQuestions + 1,
-						userAnswers: data.userAnswers,
-						userResponseTimes: data.userResponseTimes,
+					if (data.prevAnswerCorrect) { // if question was correct
+						deathmatch[i] = {
+							id: data.id,
+							name: data.name,
+							correctQuestions: deathmatch[i].correctQuestions + 1,
+							userAnswers: data.userAnswers,
+							userResponseTimes: data.userResponseTimes,
+						}
+					} else { // else question was wrong
+						deathmatch[i] = {
+							id: data.id,
+							name: data.name,
+							correctQuestions: deathmatch[i].correctQuestions,
+							userAnswers: data.userAnswers,
+							userResponseTimes: data.userResponseTimes,
+						}
 					}
 				}
 			});

@@ -7,6 +7,7 @@ export const [useDeathMatch] = create((set, get) => ({
    answers: [],
    currentQuestion: '',
    currentAnswer: '',
+   prevAnswerCorrect: false,
    initialResponseTimer: 0,
    userAnswers: [],
    userResponseTimes: [],
@@ -23,6 +24,7 @@ export const [useDeathMatch] = create((set, get) => ({
       set(() => ({
          currentQuestion: questions.shift(),
          initialResponseTimer: Date.now(),
+         prevAnswerCorrect: false,
       }));
    },
    userTypingAnswer: (answer) => {
@@ -39,8 +41,16 @@ export const [useDeathMatch] = create((set, get) => ({
    },
    checkAnswer: (questionNumber) => {
       if (parseFloat(get().currentAnswer) === get().answers[questionNumber - 1]) {
+         set(() => ({
+            prevAnswerCorrect: true,
+         }));
          return true;
-      } else return false;
+      } else {
+         set(() => ({
+            prevAnswerCorrect: false,
+         }));
+         return false;
+      }
    },
    resetDMState: () => {
       set(() => ({

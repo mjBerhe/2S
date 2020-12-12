@@ -5,14 +5,14 @@
  "scripts": {
   "dev": "node server.js",
   "build": "next build",
-  "start": "NODE_ENV=production node server.js",
+  "start": "node server.js",
   "server": "node server.js"
  },
  "dependencies": {
   "cors": "^2.8.5",
   "express": "^4.17.1",
   "fs": "0.0.1-security",
-  "next": "9.4.4",
+  "next": "^10.0.3",
   "react": "16.13.1",
   "react-dom": "16.13.1",
   "socket.io": "^2.3.0",

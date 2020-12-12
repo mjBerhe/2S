@@ -8,10 +8,11 @@ import useCountdown from '../hooks/useCountdown';
 export default function DeathMatch({ socket, room, username }) {
 
    const { userTypingAnswer, userSubmitAnswer, checkAnswer, loadDMQuestion } = useDeathMatch();
-   const { currentQuestion, currentAnswer, currentInitialTime, userAnswers, userResponseTimes } = useDeathMatch(state => ({
+   const { incorrectMethod, currentQuestion, currentAnswer, prevAnswerCorrect, userAnswers, userResponseTimes } = useDeathMatch(state => ({
+      incorrectMethod: state.incorrectMethod,
       currentQuestion: state.currentQuestion,
       currentAnswer: state.currentAnswer,
-      currentInitialTime: state.currentInitialTime,
+      prevAnswerCorrect: state.prevAnswerCorrect,
       userAnswers: state.userAnswers,
       userResponseTimes: state.userResponseTimes,
    }), shallow);
@@ -37,15 +38,20 @@ export default function DeathMatch({ socket, room, username }) {
 	const handleSubmitAnswer = (e) => {
       e.preventDefault();
 
-      if (checkAnswer(questionNumber)) {
-         // submit answer if correct
-         setAnswerInputClass('answer-input');
-         userSubmitAnswer()
-      } else {
-         // do something when wrong
-         setIncorrectResponse(true);
-         startCountdown();
-         console.log(`Question ${questionNumber} is wrong`);
+      if (incorrectMethod === 'repeat') {
+         if (checkAnswer(questionNumber)) {
+            // submit answer if correct
+            setAnswerInputClass('answer-input');
+            userSubmitAnswer()
+         } else {
+            // do something when wrong
+            setIncorrectResponse(true);
+            startCountdown();
+            console.log(`Question ${questionNumber} is wrong`);
+         }
+      } else if (incorrectMethod === 'continue') {
+         checkAnswer(questionNumber);
+         userSubmitAnswer();
       }
    }
    
@@ -54,24 +60,42 @@ export default function DeathMatch({ socket, room, username }) {
    }
 
    useEffect(() => {
-      // if a correct response was made
-      if (userAnswers.length === questionNumber) {
-         socket.emit('dmQuestion', {
-            id: username.id,
-            name: username.name,
-            room: room,
-            currentRound: currentRound,
-            answer: currentAnswer,
-            questionNumber: questionNumber,
-            userAnswers: userAnswers,
-            userResponseTimes: userResponseTimes,
-            responseTime: Date.now() - currentInitialTime,
-         });
+      if (incorrectMethod === 'repeat') {
+         // if a correct response was made
+         if (userAnswers.length === questionNumber) {
+            socket.emit('dmQuestion', {
+               id: username.id,
+               name: username.name,
+               room: room,
+               currentRound: currentRound,
+               answer: currentAnswer,
+               prevAnswerCorrect: prevAnswerCorrect,
+               userAnswers: userAnswers,
+               userResponseTimes: userResponseTimes,
+            });
 
-         loadDMQuestion(); // load next question
-         setQuestionNumber(n => n + 1); // inc question number
-         setAnswerInputClass('answer-correct');
-      } else console.log('not updated yet');
+            loadDMQuestion(); // load next question
+            setQuestionNumber(n => n + 1); // inc question number
+            setAnswerInputClass('answer-correct'); // set input box class
+         } else console.log('not updated yet');
+
+      } else if (incorrectMethod === 'continue') {
+         if (userAnswers.length === questionNumber) {
+            socket.emit('dmQuestion', {
+               id: username.id,
+               name: username.name,
+               room: room,
+               currentRound: currentRound,
+               answer: currentAnswer,
+               prevAnswerCorrect: prevAnswerCorrect,
+               userAnswers: userAnswers,
+               userResponseTimes: userResponseTimes,
+            });
+   
+            loadDMQuestion(); // load next question
+            setQuestionNumber(n => n + 1); // inc question number
+         }
+      }
    }, [userAnswers])
 
    useEffect(() => {
