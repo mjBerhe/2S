@@ -54,12 +54,15 @@ export const [useDeathMatch] = create((set, get) => ({
    },
    resetDMState: () => {
       set(() => ({
+         questionType: null,
+         incorrectMethod: null,
          questions: [],
          answers: [],
          currentQuestion: '',
          currentAnswer: '',
-         userAnswers: [],
+         prevAnswerCorrect: false,
          initialResponseTimer: 0,
+         userAnswers: [],
          userResponseTimes: [],
       }));
    }

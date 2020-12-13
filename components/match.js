@@ -10,11 +10,11 @@ import useCountdown from '../hooks/useCountdown';
 
 export default function Match({ socket, room, username }) {
 
-	const { startMatch, completeMatch, showRoundStats, incCurrentRound, startRound, startDM } = useMatch();
+	const { startMatch, completeMatch, showRoundStats, incCurrentRound, startRound, startDM, eliminatedDM, finishDM, sliceQuestions } = useMatch();
 	const { startStatus, roundStatus, DMStatus, roundLimit, currentRound, roundsInfo, roundStats } = useMatch(state => ({
 		startStatus: state.start,
 		roundStatus: state.roundStatus,
-		DMStatus: state.deathmatchOngoing,
+		DMStatus: state.DMStatus,
 		roundLimit: state.roundAmount,
 		currentRound: state.currentRound,
 		roundsInfo: state.roundsInfo,
@@ -22,11 +22,11 @@ export default function Match({ socket, room, username }) {
 	}), shallow);
 
 	const { setRoundInfo, loadQuestion } = useNormalRound();
-	const { setDMInfo, loadDMQuestion } = useDeathMatch();
+	const { setDMInfo, loadDMQuestion, resetDMState } = useDeathMatch();
 
 	// countdown is for first round and any subsequent rounds
 	const [countdown, startCountdown] = useCountdown(3, () => {
-		if (DMStatus) {
+		if (DMStatus.start) {
 			loadDMQuestion();
 		} else {
 			loadQuestion();
@@ -42,7 +42,7 @@ export default function Match({ socket, room, username }) {
 				setRoundInfo(roundsInfo[`round ${currentRound}`]);
 				startCountdown();
 			} else { // deathmatch round
-				startDM(socket, room);
+				startDM(socket, room, currentRound);
 				setDMInfo(roundsInfo[`round ${currentRound}`]);
 				startCountdown();
 			}
@@ -51,7 +51,7 @@ export default function Match({ socket, room, username }) {
 				setRoundInfo(roundsInfo[`round ${currentRound}`]);
 				startCountdown();
 			} else { // deathmatch round
-				startDM(socket, room);
+				startDM(socket, room, currentRound);
 				setDMInfo(roundsInfo[`round ${currentRound}`]);
 				startCountdown();
 			}
@@ -65,6 +65,33 @@ export default function Match({ socket, room, username }) {
 			showRoundStats(data.stats);
 		});
 
+		// when all user have completed final round, complete match
+		socket.on('usersFinalRoundComplete', data => {
+			console.log(data.msg);
+			completeMatch(data.stats);
+		});
+
+		// when a user has been eliminated from a DM, wait for winner
+		socket.on('usersDMEliminated', data => {
+			if (username.id === data.id) {
+				console.log(data.msg);
+				// make them wait for winner
+				eliminatedDM();
+			}
+		});
+
+		socket.on ('usersDMComplete', data => {
+			finishDM();
+			if (data.currentRound === roundLimit) {
+				sliceQuestions(data.questionsAnswered, data.currentRound);
+				completeMatch(data.stats, data.id, data.name);
+			} else {
+				sliceQuestions(data.questionsAnswered, data.currentRound);
+				showRoundStats(data.stats);
+				resetDMState();
+			}
+		})
+
 		// when all users are ready, start next round
 		socket.on('startNextRound', data => {
 			console.log(data.msg);
@@ -72,16 +99,12 @@ export default function Match({ socket, room, username }) {
 			setReady(false);
 		});
 
-		// when all user have completed final round, complete match
-		socket.on('usersFinalRoundComplete', data => {
-			console.log(data.msg);
-			completeMatch(data.stats);
-		});
-
 		return () => {
 			socket.off('usersRoundComplete');
 			socket.off('startNextRound');
 			socket.off('usersFinalRoundComplete');
+			socket.off('usersDMEliminated');
+			socket.off('usersDMComplete');
 		}
 	}, []);
 
@@ -117,9 +140,21 @@ export default function Match({ socket, room, username }) {
                }
             </div>
          }
-			{startStatus && !countdown.start && !roundStatus.start && !roundStatus.showStats && !DMStatus &&
+			{startStatus && !countdown.start && !roundStatus.start && !roundStatus.showStats && !DMStatus.start && !DMStatus.waiting &&
 				<div className='centered-of-parent'>
 					<h1>Round Completed!</h1>
+					<h2>Waiting for other users...</h2>
+				</div>
+			}
+			{roundStatus.start && !countdown.start &&
+				<NormalRound socket={socket} room={room} username={username}/>
+			}
+			{DMStatus.start && !countdown.start && 
+				<DeathMatch socket={socket} room={room} username={username}/>
+			}
+			{DMStatus.waiting &&
+				<div className='centered-of-parent'>
+					<h1>Eliminated</h1>
 					<h2>Waiting for other users...</h2>
 				</div>
 			}
@@ -142,12 +177,6 @@ export default function Match({ socket, room, username }) {
 						Ready Up
 					</button>
 				</div>
-			}
-			{roundStatus.start && !countdown.start &&
-				<NormalRound socket={socket} room={room} username={username}/>
-			}
-			{DMStatus && !countdown.start && 
-				<DeathMatch socket={socket} room={room} username={username}/>
 			}
       </div>
    );

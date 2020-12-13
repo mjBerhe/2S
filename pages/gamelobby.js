@@ -126,8 +126,11 @@ export default function GameLobby() {
 						<button className='button-1' onClick={handleJoinRoom} value={'Gameroom 2'}>
 							Join Gameroom 2
 						</button>
-						<button className='button-1' onClick={handleJoinRoom} value={'Testing Room'}>
-							Join Testing Room
+						<button className='button-1' onClick={handleJoinRoom} value={'Testing Room 1'}>
+							Join Testing Room 1
+						</button>
+						<button className='button-1' onClick={handleJoinRoom} value={'Testing Room 2'}>
+							Join Testing Room 2
 						</button>
 					</div>
 				}

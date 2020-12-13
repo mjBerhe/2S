@@ -17,19 +17,22 @@ const match =  require('./matts_functions/matchHelpers.js');
 const availableRooms = [ // used to identify which rooms actually exist
 	'Gameroom 1',
 	'Gameroom 2',
-	'Testing Room',
+	'Testing Room 1',
+	'Testing Room 2',
 ];
 
 const users = { // stores users
 	'Gameroom 1': [],
 	'Gameroom 2': [],
-	'Testing Room': [],
+	'Testing Room 1': [],
+	'Testing Room 2': [],
 };
 
 const rooms = { // available rooms
 	'Gameroom 1': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Gameroom 2': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
-	'Testing Room': generateRoom.static(2, 2, ['additionTest', 'multiplicationDM']),
+	'Testing Room 1': generateRoom.static(3, 3, ['additionTest', 'additionDM', 'multiplicationDM']),
+	'Testing Room 2': generateRoom.deathmatch(2, 2, ['additionDM', 'multiplicationDM']),
 }
 
 let currentUser;
@@ -133,6 +136,7 @@ nextApp.prepare().then(() => {
 		});
 
 		socket.on('userRoundComplete', data => {
+			// recieving results from a user that completed a round
 			rooms[data.room].rounds[`round ${data.currentRound}`].results.push({
 				id: data.id,
 				name: data.name,
@@ -177,11 +181,12 @@ nextApp.prepare().then(() => {
 		});
 
 		socket.on('initiateDM', data => {
-			const ids = rooms[data.room].deathmatch.map(user => user.id);
+			const deathmatch = rooms[data.room].rounds[`round ${data.currentRound}`].deathmatch;
+			const ids = deathmatch.map(user => user.id);
 			rooms[data.room].users.forEach(user => {
 				if (!ids.includes(user.id)) {
 					// initialize every user in the deathmatch
-					rooms[data.room].deathmatch.push({
+					deathmatch.push({
 						id: user.id,
 						name: user.name,
 						correctQuestions: 0,
@@ -193,8 +198,10 @@ nextApp.prepare().then(() => {
 		});
 
 		socket.on('dmQuestion', data => {
-			// when recieving a question via deathmatch
-			const deathmatch = rooms[data.room].deathmatch;
+			const deathmatch = rooms[data.room].rounds[`round ${data.currentRound}`].deathmatch;
+			const results = rooms[data.room].rounds[`round ${data.currentRound}`].results;
+
+			// when recieving a question via deathmatch, record it
 			deathmatch.forEach((user, i) => { // finds user by data.id
 				if (user.id === data.id) {
 					if (data.prevAnswerCorrect) { // if question was correct
@@ -220,13 +227,14 @@ nextApp.prepare().then(() => {
 			const eliminatedUser = match.checkDeathMatch(deathmatch, 3);
 			// if a user was eliminated in deathmatch
 			if (eliminatedUser) {
-				rooms[data.room].rounds[`round ${data.currentRound}`].results.push({
+				// recording eliminated users results
+				results.push({
 					id: eliminatedUser.id,
 					name: eliminatedUser.name,
 					userAnswers: eliminatedUser.userAnswers,
 					userResponseTimes: eliminatedUser.userResponseTimes,
 				});
-				gamelobby.to(data.room).emit('eliminated', {
+				gamelobby.to(data.room).emit('usersDMEliminated', {
 					id: eliminatedUser.id,
 					msg: 'You have been eliminated',
 					stats: statsGenerator(rooms[data.room].rounds),
@@ -236,20 +244,23 @@ nextApp.prepare().then(() => {
 
 				// checking if there is one person left (victor)
 				if (deathmatch.length === 1) {
-					rooms[data.room].rounds[`round ${data.currentRound}`].results.push({
+					results.push({
 						id: deathmatch[0].id,
 						name: deathmatch[0].name,
 						userAnswers: deathmatch[0].userAnswers,
 						userResponseTimes: deathmatch[0].userResponseTimes,
 					});
-					gamelobby.to(data.room).emit('victory', {
+					gamelobby.to(data.room).emit('usersDMComplete', {
 						id: deathmatch[0].id,
-						msg: 'Congratulations! You have won',
+						name: deathmatch[0].name,
 						stats: statsGenerator(rooms[data.room].rounds),
 						questionsAnswered: deathmatch[0].userAnswers.length,
 						currentRound: data.currentRound,
 					});
-					resetRoom(data.room);
+					// if this was the final round, end the game
+					if (rooms[data.room].roundAmount === data.currentRound) {
+						resetRoom(data.room);
+					}
 				}
 			}
 		});
@@ -327,5 +338,5 @@ nextApp.prepare().then(() => {
 
 // resetting room after a game finishes
 resetRoom = (currentRoom) => {
-	rooms[currentRoom] = generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']);
+	rooms[currentRoom] = generateRoom.static(2, 2, ['additionTest', 'multiplicationDM']);
 }

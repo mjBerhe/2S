@@ -5,13 +5,19 @@ export const [useMatch] = create((set, get) => ({
    start: false,
    completed: {
       status: false,
-      msg: '',
+      winner: {
+         id: null,
+         name: null,
+      },
    },
    roundStatus: {
       start: false,
       showStats: false,
    },
-   deathmatchOngoing: false,
+   DMStatus: {
+      start: false,
+      waiting: false,
+   },
    roundAmount: 0,
    currentRound: 0,
    players: [],
@@ -77,16 +83,35 @@ export const [useMatch] = create((set, get) => ({
          roundStats: stats,
       }));
    },
-   startDM: (socket, room) => {
+   startDM: (socket, room, currentRound) => {
       socket.emit('initiateDM', {
          msg: 'deathmatch is starting',
          room: room,
+         currentRound: currentRound,
       });
       set(() => ({
-         deathmatchOngoing: true,
+         DMStatus: {
+            start: true,
+         }
       }));
    },
-   sliceFinalRound: (amount, round) => {
+   eliminatedDM: () => {
+      set(() => ({
+         DMStatus: {
+            start: false,
+            waiting: true,
+         }
+      }));
+   },
+   finishDM: () => {
+      set(() => ({
+         DMStatus: {
+            start: false,
+            waiting: false,
+         }
+      }));
+   },
+   sliceQuestions: (amount, round) => {
       const roundsInfo = get().roundsInfo;
       const newQuestionsMaster = roundsInfo[`round ${round}`].questionsMaster.slice(0, amount);
       set(prevState => ({
@@ -99,12 +124,15 @@ export const [useMatch] = create((set, get) => ({
          },
       }));
    },
-   completeMatch: (stats, msg) => {
+   completeMatch: (stats, id, name) => {
       set(() => ({
          start: false,
          completed: {
             status: true,
-            msg: msg,
+            winner: {
+               id: id,
+               name: name,
+            }
          },
          completedStats: stats,
       }));
@@ -115,17 +143,24 @@ export const [useMatch] = create((set, get) => ({
          start: false,
          completed: {
             status: false,
-            msg: '',
+            winner: {
+               id: null,
+               name: null,
+            },
          },
          roundStatus: {
             start: false,
             showStats: false,
          },
-         deathmatchOngoing: false,
+         DMStatus: {
+            start: false,
+            waiting: false,
+         },
          roundAmount: 0,
          currentRound: 0,
          players: [],
          roundsInfo: null,
+         roundStats: {},
          completedStats: {},
       }));
    }

@@ -97,7 +97,7 @@ export default function GameRoom({ socket, room, username }) {
 			}
 			{complete.status && 
 				<div>
-					<h2>{complete.msg}</h2>
+					<h2>{`Winner is ${complete.winner.name}`}</h2>
 					<h3>Results: </h3> {listOfRounds.map((round, i) => 
 						<div key={i}>
 							<h3>{round}</h3> {stats[round].map((user, j) => 

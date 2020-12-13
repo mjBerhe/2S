@@ -98,29 +98,6 @@ export default function DeathMatch({ socket, room, username }) {
       }
    }, [userAnswers])
 
-   useEffect(() => {
-      socket.on('eliminated', data => {
-         if (data.id === username.id) {
-            console.log(data.msg);
-            sliceFinalRound(data.questionsAnswered + 1, data.currentRound);
-            completeMatch(data.stats, data.msg);
-         }
-      });
-
-      socket.on('victory', data => {
-         if (data.id === username.id) {
-            console.log(data.msg);
-            sliceFinalRound(data.questionsAnswered, data.currentRound);
-            completeMatch(data.stats, data.msg);
-         }
-      })
-
-      return () => {
-         socket.off('eliminated');
-         socket.off('victory');
-      }
-   }, []);
-
    return (
       <div className='question-area'>
          <h1>Deathmatch</h1>
