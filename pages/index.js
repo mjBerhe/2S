@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function MyApp() {
    return (
-      <div className="container">
+      <div className="landing-page-container">
          <Head>
             <title>Lobby</title>
             <link rel="icon" type="image/png" href="/omega.png" />

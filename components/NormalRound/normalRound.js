@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useMatch } from '../state/match.js';
-import { useNormalRound } from '../state/normalRound.js';
-import useCountdown from '../hooks/useCountdown';
+import { useMatch } from '../../state/match.js';
+import { useNormalRound } from '../../state/normalRound.js';
+import useCountdown from '../../hooks/useCountdown';
 import shallow from 'zustand/shallow';
 
 export default function NormalRound({ socket, room, username }) {

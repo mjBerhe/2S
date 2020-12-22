@@ -1,0 +1,490 @@
+.header-container {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 3;
+  grid-column: 1/4;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1/2;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: minmax(33%, 34%) minmax(33%, 34%) minmax(33%, 34%);
+      grid-template-columns: minmax(33%, 34%) minmax(33%, 34%) minmax(33%, 34%);
+}
+
+.header-container img {
+  width: 40px;
+  margin: 5px;
+}
+
+.header-column1 {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0 0 0 15px;
+}
+
+.header-link {
+  color: black;
+  text-decoration: none;
+}
+
+.header-img {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 1;
+  grid-column: 2/3;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+}
+
+.footer-container {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 3;
+  grid-column: 1/4;
+  -ms-grid-row: 3;
+  -ms-grid-row-span: 1;
+  grid-row: 3/4;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.questionsList-container {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+  padding: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  /* justify-content: center; */
+}
+
+.center-container {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 1;
+  grid-column: 2/3;
+  background: rgba(63, 194, 238, 0.781);
+}
+
+.room-container {
+  border: 1px solid red;
+  height: 100%;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 100%;
+      grid-template-columns: 100%;
+  -ms-grid-rows: 40% 60%;
+      grid-template-rows: 40% 60%;
+}
+
+.title-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.title-container h1 {
+  font-size: 50px;
+}
+
+.room-select {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.room-select input {
+  margin-bottom: 10px;
+  padding-left: 7px;
+  height: 30px;
+  width: 200px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+.room-select button {
+  margin: 5px;
+  padding: 3px;
+  width: 150px;
+}
+
+.gameroom-container {
+  border: solid yellow 2px;
+  height: 100%;
+  min-height: 85%;
+  width: 95%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  /* justify-content: center; */
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  overflow: auto;
+}
+
+.gameroom-container h1 {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1/2;
+  text-align: center;
+}
+
+.match-container {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  /* border: solid black 2px; */
+}
+
+.round-results {
+  /* background: orange; */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 10px 0 10px 0;
+}
+
+.round-results h3, h4 {
+  margin: 0px;
+}
+
+.stat-line {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.question-area {
+  border: solid green 2px;
+  height: 100%;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 0.1fr 0.6fr;
+      grid-template-rows: 0.1fr 0.6fr;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.answer-input {
+  height: 60px;
+  width: 120px;
+  font-size: 30px;
+  border: 2px solid black;
+}
+
+.answer-correct {
+  height: 60px;
+  width: 120px;
+  font-size: 30px;
+  border: 2px solid black;
+  outline: none;
+  -webkit-animation-name: correct;
+          animation-name: correct;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
+}
+
+.answer-incorrect {
+  height: 60px;
+  width: 120px;
+  font-size: 30px;
+  border: 2px solid black;
+  background: grey;
+  outline: none;
+  -webkit-animation-name: incorrect;
+          animation-name: incorrect;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
+}
+
+@-webkit-keyframes correct {
+  from {
+    border: 3px solid #36e444;
+  }
+  to {
+    border: 2px solid black;
+  }
+}
+
+@keyframes correct {
+  from {
+    border: 3px solid #36e444;
+  }
+  to {
+    border: 2px solid black;
+  }
+}
+
+@-webkit-keyframes incorrect {
+  from {
+    border: 3px solid red;
+  }
+  to {
+    border: 2px solid black;
+  }
+}
+
+@keyframes incorrect {
+  from {
+    border: 3px solid red;
+  }
+  to {
+    border: 2px solid black;
+  }
+}
+
+.question-area {
+  border: solid green 2px;
+  height: 100%;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 0.1fr 0.6fr;
+      grid-template-rows: 0.1fr 0.6fr;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.answer-input {
+  height: 60px;
+  width: 120px;
+  font-size: 30px;
+  border: 2px solid black;
+}
+
+.answer-correct {
+  height: 60px;
+  width: 120px;
+  font-size: 30px;
+  border: 2px solid black;
+  outline: none;
+  -webkit-animation-name: correct;
+          animation-name: correct;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
+}
+
+.answer-incorrect {
+  height: 60px;
+  width: 120px;
+  font-size: 30px;
+  border: 2px solid black;
+  background: grey;
+  outline: none;
+  -webkit-animation-name: incorrect;
+          animation-name: incorrect;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
+}
+
+@keyframes correct {
+  from {
+    border: 3px solid #36e444;
+  }
+  to {
+    border: 2px solid black;
+  }
+}
+
+@keyframes incorrect {
+  from {
+    border: 3px solid red;
+  }
+  to {
+    border: 2px solid black;
+  }
+}
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 20px;
+  font-weight: normal;
+}
+
+a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+a:hover:focus:active {
+  text-decoration: underline;
+}
+
+.landing-page-container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  /*background: yellow;*/
+}
+
+.gamelobby-page-container {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: minmax(150px, 20%) 1fr minmax(150px, 20%);
+      grid-template-columns: minmax(150px, 20%) 1fr minmax(150px, 20%);
+  -ms-grid-rows: minmax(5vh, auto) minmax(90vh, 1fr) minmax(5vh, auto);
+      grid-template-rows: minmax(5vh, auto) minmax(90vh, 1fr) minmax(5vh, auto);
+  /*place-items: center;*/
+  /* background: ; */
+}
+
+.users-container {
+  -ms-grid-column: 3;
+  -ms-grid-column-span: 1;
+  grid-column: 3/4;
+  padding: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.centered-of-parent {
+  border: solid pink 2px;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.button-1 {
+  margin: 5px;
+  width: 140px;
+}
+
+.chatbox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  /*justify-content: center;*/
+  /*align-items: center;*/
+  padding-left: 5px;
+  border: solid black 2px;
+  width: 40vw;
+  height: 50vh;
+  overflow: scroll;
+  background: white;
+}
+/*# sourceMappingURL=styles.css.map */

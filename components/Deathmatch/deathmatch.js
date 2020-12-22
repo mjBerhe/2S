@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useMatch } from '../state/match.js';
-import { useDeathMatch } from '../state/deathmatch.js';
+import { useMatch } from '../../state/match.js';
+import { useDeathMatch } from '../../state/deathmatch.js';
 import shallow from 'zustand/shallow';
-import useCountdown from '../hooks/useCountdown';
+import useCountdown from '../../hooks/useCountdown';
 
 // deathmatch only renders on final round
 export default function DeathMatch({ socket, room, username }) {

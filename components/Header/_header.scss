@@ -1,0 +1,30 @@
+.header-container {
+	grid-column: 1/4;
+	grid-row: 1/2;
+	display: grid;
+	grid-template-columns: minmax(33%, 34%) minmax(33%, 34%) minmax(33%, 34%);
+   // background: teal;
+   img {
+      width: 40px;
+      margin: 5px;
+   }
+}
+
+.header-column1 {
+	grid-column: 1/2;
+	display: flex;
+	align-items: center;
+	margin: 0 0 0 15px;
+}
+
+.header-link {
+	color: black;
+	text-decoration: none;
+}
+
+.header-img {
+	grid-column: 2/3;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+}

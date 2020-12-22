@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,wBAAwB,CAAC;EACxB,WAAW,EAAE,GAAG;EAChB,OAAO,EAAE,GAAG;EACZ,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;EACtB,WAAW,EAAE,MAAM;EACnB,8BAA8B;CAE9B",
+    "sources": [
+        "questionsList.scss"
+    ],
+    "names": [],
+    "file": "questionsList.css"
+}

@@ -1,0 +1,68 @@
+@mixin flexColumn () {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+
+.center-container {
+	grid-column: 2/3;
+	// display: flex;
+	// justify-content: center;
+	background: rgba(63, 194, 238, 0.781);
+}
+
+.room-container {
+	border: 1px solid red;
+	height: 100%;
+	width: 100%;
+	// @include flexColumn();
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 40% 60%;
+}
+
+.title-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	h1 {
+		font-size: 50px;
+	}
+}
+
+.room-select {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	input {
+		margin-bottom: 10px;
+		padding-left: 7px;
+		height: 30px;
+		width: 200px;
+		border: 2px solid black;
+		border-radius: 5px;
+	}
+	button {
+		margin: 5px;
+		padding: 3px;
+		width: 150px;
+	}
+}
+
+.gameroom-container {
+	border: solid yellow 2px;
+	height: 100%;
+	min-height: 85%;
+	width: 95%;
+	display: flex;
+	flex-direction: column;
+	/* justify-content: center; */
+	align-items: center;
+   overflow: auto;
+   h1 {
+      grid-row: 1/2;
+	   text-align: center;
+   }
+}

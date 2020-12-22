@@ -1,0 +1,88 @@
+.question-area {
+  border: solid green 2px;
+  height: 100%;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 0.1fr 0.6fr;
+      grid-template-rows: 0.1fr 0.6fr;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.answer-input {
+  height: 60px;
+  width: 120px;
+  font-size: 30px;
+  border: 2px solid black;
+}
+
+.answer-correct {
+  height: 60px;
+  width: 120px;
+  font-size: 30px;
+  border: 2px solid black;
+  outline: none;
+  -webkit-animation-name: correct;
+          animation-name: correct;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
+}
+
+.answer-incorrect {
+  height: 60px;
+  width: 120px;
+  font-size: 30px;
+  border: 2px solid black;
+  background: grey;
+  outline: none;
+  -webkit-animation-name: incorrect;
+          animation-name: incorrect;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
+}
+
+@-webkit-keyframes correct {
+  from {
+    border: 3px solid #36e444;
+  }
+  to {
+    border: 2px solid black;
+  }
+}
+
+@keyframes correct {
+  from {
+    border: 3px solid #36e444;
+  }
+  to {
+    border: 2px solid black;
+  }
+}
+
+@-webkit-keyframes incorrect {
+  from {
+    border: 3px solid red;
+  }
+  to {
+    border: 2px solid black;
+  }
+}
+
+@keyframes incorrect {
+  from {
+    border: 3px solid red;
+  }
+  to {
+    border: 2px solid black;
+  }
+}
+/*# sourceMappingURL=normalRound.css.map */

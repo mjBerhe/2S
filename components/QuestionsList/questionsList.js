@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useMatch } from '../state/match.js';
+import { useMatch } from '../../state/match.js';
 import shallow from 'zustand/shallow';
 
 export default function QuestionsList() {
@@ -19,7 +19,7 @@ export default function QuestionsList() {
    }
 
    return (
-      <div>
+      <div className='questionsList-container'>
          {startStatus && !roundStatus.start && roundStatus.showStats &&
             <div className='centered-flex-column'>
                {roundsInfo[`round ${currentRound}`].questionsMaster.map((question, i) =>

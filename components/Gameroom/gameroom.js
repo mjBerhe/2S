@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import Match from './match.js';
-import { useMatch } from '../state/match.js';
-import { roundNumber } from '../formulas/roundNumber.js';
+import Match from '../Match/match.js';
+import { useMatch } from '../../state/match.js';
+import { roundNumber } from '../../formulas/roundNumber.js';
 import shallow from 'zustand/shallow';
 
-export default function GameRoom({ socket, room, username }) {
+export default function GameRoom({ socket, room, username, leaveRoom }) {
 
 	const { joinQueue, leaveQueue, prepMatch, incCurrentRound } = useMatch();
 	const { queueStatus, startStatus, complete, currentRound, roundsInfo, stats } = useMatch(state => ({
@@ -116,6 +116,9 @@ export default function GameRoom({ socket, room, username }) {
 					)}
 				</div>
 			}
+			<button className='button-1' onClick={leaveRoom}>
+				Leave Room
+			</button>
 		</div>
 	)
 }

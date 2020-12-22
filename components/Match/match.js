@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useMatch } from '../state/match.js';
-import { useNormalRound } from '../state/normalRound.js'; 
-import { useDeathMatch } from '../state/deathmatch.js';
-import { roundNumber } from '../formulas/roundNumber.js';
-import NormalRound from './normalRound.js';
-import DeathMatch from './deathmatch.js';
+import { useMatch } from '../../state/match.js';
+import { useNormalRound } from '../../state/normalRound.js'; 
+import { useDeathMatch } from '../../state/deathmatch.js';
+import { roundNumber } from '../../formulas/roundNumber.js';
+import NormalRound from '../NormalRound/normalRound.js';
+import DeathMatch from '../Deathmatch/deathmatch.js';
 import shallow from 'zustand/shallow';
-import useCountdown from '../hooks/useCountdown';
+import useCountdown from '../../hooks/useCountdown';
 
 export default function Match({ socket, room, username }) {
 
@@ -124,7 +124,7 @@ export default function Match({ socket, room, username }) {
 	}
 
    return (
-      <div className='centered-flex-column'>
+      <div className='match-container'>
          {countdown.start && currentRound < roundLimit && currentRound === 1 &&
 				<div className='centered-of-parent'>
 					<h1>MATCH FOUND</h1>
