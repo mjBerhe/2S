@@ -9,45 +9,59 @@ function bedmas_template (questions, level, min, max) {
     // level 2: 3 terms
     // level 3: 4 terms
 
-    const questions_array = [];
+    const question_type_array = [];
+    const terms_array = [];
     const solutions_array = [];
+    var classification = 1;
+
+    if (level > 2) {classification = 2};
     
     for (i = 1; i <= questions; i++) {
         
         if (level === 1) { 
 
-        const {question, answer} = bedmas_level_1 (min, max);
+        const {terms, answer, question_type} = bedmas_level_1 (min, max);
 
-        questions_array.push(question);
+        terms_array.push(terms);
         solutions_array.push(answer);
+        question_type_array.push(question_type);
 
         }
 
         if (level === 2) {
 
-            const {question, answer} = bedmas_level_2 (min, max);
+            const {terms, answer, question_type} = bedmas_level_2 (min, max);
 
-        questions_array.push(question);
-        solutions_array.push(answer);
+            terms_array.push(terms);
+            solutions_array.push(answer);
+            question_type_array.push(question_type);
     
         }
 
         if (level === 3) {
 
-            const {question, answer} = bedmas_level_3 (min, max);
+            const {terms, answer, question_type} = bedmas_level_3 (min, max);
 
-        questions_array.push(question);
-        solutions_array.push(answer);
+            terms_array.push(terms);
+            solutions_array.push(answer);
+            question_type_array.push(question_type);
         
         }
 
     }
 
+    console.log(terms_array, solutions_array, question_type_array);
+
     return {
-        questions: questions_array,
+        terms: terms_array,
         answers: solutions_array,
+        type: "bedmas",
+        classification: classification,
+        question_type: question_type_array,
     };
 
 }
+
+bedmas_template(10, 3, 1, 5);
 
 module.exports = bedmas_template;
