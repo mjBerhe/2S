@@ -50,8 +50,6 @@ function bedmas_template (questions, level, min, max) {
 
     }
 
-    console.log(terms_array, solutions_array, question_type_array);
-
     return {
         terms: terms_array,
         answers: solutions_array,
