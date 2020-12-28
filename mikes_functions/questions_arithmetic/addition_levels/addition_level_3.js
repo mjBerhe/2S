@@ -9,6 +9,8 @@ function addition_level_3 (min, max) {
 
     const answer = term_1 + term_2 + term_3 + term_4;
 
+    const question = `${term_1} + ${term_2} + ${term_3} + ${term_4}`
+
     const terms = {
         term_1: term_1,
         term_2: term_2,
@@ -18,6 +20,7 @@ function addition_level_3 (min, max) {
 
     return {
         terms: terms,
+        question: question,
         answer: answer,
     }
 
