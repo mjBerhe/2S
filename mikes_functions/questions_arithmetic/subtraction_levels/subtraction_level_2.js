@@ -10,9 +10,18 @@ module.exports = function subtraction_level_2 (min, max) {
 
     const question = `${term_1} - ${term_2} - ${term_3}` ;
 
+    const terms = {
+        term_1: term_1,
+        term_2: term_2,
+        term_3: term_3,
+    }
+
     return {
-        question: question,
+        terms: terms,
         answer: answer,
+        question: question,
     }
 
 }
+
+module.exports = subtraction_level_2;

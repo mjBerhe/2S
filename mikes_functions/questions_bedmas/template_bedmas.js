@@ -9,6 +9,7 @@ function bedmas_template (questions, level, min, max) {
     // level 2: 3 terms
     // level 3: 4 terms
 
+    const questions_array = [];
     const question_type_array = [];
     const terms_array = [];
     const solutions_array = [];
@@ -52,6 +53,7 @@ function bedmas_template (questions, level, min, max) {
 
     return {
         terms: terms_array,
+        questions: questions_array,
         answers: solutions_array,
         type: "bedmas",
         classification: classification,
@@ -59,7 +61,5 @@ function bedmas_template (questions, level, min, max) {
     };
 
 }
-
-bedmas_template(10, 3, 1, 5);
 
 module.exports = bedmas_template;
