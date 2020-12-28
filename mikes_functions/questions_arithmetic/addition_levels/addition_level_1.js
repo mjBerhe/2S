@@ -7,6 +7,8 @@ function addition_level_1 (min, max) {
 
     const answer = term_1 + term_2;
 
+    const question = `${term_1} + ${term_2}`
+
     const terms = {
         term_1: term_1,
         term_2: term_2,
@@ -15,6 +17,7 @@ function addition_level_1 (min, max) {
     return {
         terms: terms,
         answer: answer,
+        question: question,
     }
 
 }

@@ -9,8 +9,9 @@ function addition_template (questions, level, min, max) {
     // level 3: 4 terms
 
     const terms_array = [];
+    const questions_array = [];
     const solutions_array = [];
-    var classification = 1;
+    const classification = 1;
 
     if (level > 2) {classification = 2};
     
@@ -18,27 +19,30 @@ function addition_template (questions, level, min, max) {
         
         if (level === 1) {
 
-        const {terms, answer} = addition_level_1(min ,max);
+        const {terms, question, answer} = addition_level_1(min ,max);
 
         terms_array.push(terms);
+        questions_array.push(question);
         solutions_array.push(answer);
 
         }
 
         if (level === 2) {
 
-            const {terms, answer} = addition_level_2(min ,max);
+            const {terms, question, answer} = addition_level_2(min ,max);
 
             terms_array.push(terms);
+            questions_array.push(question);
             solutions_array.push(answer);
     
         }
 
         if (level === 3) {
 
-            const {terms, answer} = addition_level_3(min ,max);
+            const {terms, question, answer} = addition_level_3(min ,max);
 
         terms_array.push(terms);
+        questions_array.push(question);
         solutions_array.push(answer);
 
         }
@@ -47,6 +51,7 @@ function addition_template (questions, level, min, max) {
 
     return {
         terms: terms_array,
+        questions: questions_array,
         answers: solutions_array,
         type: "addition",
         classification: classification,
