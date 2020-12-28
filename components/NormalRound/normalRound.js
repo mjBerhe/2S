@@ -3,11 +3,13 @@ import { useMatch } from '../../state/match.js';
 import { useNormalRound } from '../../state/normalRound.js';
 import useCountdown from '../../hooks/useCountdown';
 import shallow from 'zustand/shallow';
+import Addition from '../QuestionTemplates/addition';
 
 export default function NormalRound({ socket, room, username }) {
 
    const { userTypingAnswer, userSubmitAnswer, checkAnswer, loadQuestion, resetRoundState } = useNormalRound();
-   const { incorrectMethod, answers, currentQuestion, currentAnswer, userAnswers, userResponseTimes } = useNormalRound(state => ({
+   const { questionType, incorrectMethod, answers, currentQuestion, currentAnswer, userAnswers, userResponseTimes } = useNormalRound(state => ({
+      questionType: state.questionType,
       incorrectMethod: state.incorrectMethod,
       answers: state.answers,
       currentQuestion: state.currentQuestion,
@@ -89,7 +91,9 @@ export default function NormalRound({ socket, room, username }) {
          <h1>{`Round ${currentRound}`}</h1>
          {incorrectMethod === 'repeat' && 
             <div>
-               <h2>{currentQuestion}</h2>
+               {questionType === 'addition' &&
+                  <Addition type={questionType} terms={currentQuestion}/>
+               }
                {!incorrectResponse &&
                   <form onSubmit={handleSubmitAnswer}>
                      <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
@@ -106,7 +110,9 @@ export default function NormalRound({ socket, room, username }) {
          }
          {incorrectMethod === 'continue' && 
             <div>
-               <h2>{currentQuestion}</h2>
+               {questionType === 'addition' &&
+                  <Addition type={questionType} terms={currentQuestion}/>
+               }
                <form onSubmit={handleSubmitAnswer}>
                   <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
                   <input type="submit" value="Submit"/>

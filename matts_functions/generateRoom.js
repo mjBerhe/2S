@@ -51,26 +51,26 @@ function generateStaticRoom (maxCapacity, roundAmount, arrayOfQuestionTypes) {
       } else { 
          // if (i === roundAmount - 1) { // last round (deathmatch)
          if (i > 0) {
-            const {questions, answers} = functionConverter[questionType];
+            const {terms, answers, type, classification} = functionConverter[questionType];
             rounds[listOfRounds[i]] = {
-               questionType: questionType,
+               questionType: type,
                deathmatchRound: true,
                deathmatch: [],
                incorrectMethod: 'continue', // can be continue or repeat*
-               questionsMaster: questions,
-               questions: questions,
+               questionsMaster: terms,
+               questions: terms,
                answers: answers,
                results: [],
             }
          } else { // normal round
-            const {questions, answers} = functionConverter[questionType];
+            const {terms, answers, type, classification} = functionConverter[questionType];
             rounds[listOfRounds[i]] = {
-               questionType: questionType,
+               questionType: type,
                deathmatchRound: false,
                deathmatch: [],
                incorrectMethod: 'continue', // can be continue or repeat*
-               questionsMaster: questions,
-               questions: questions,
+               questionsMaster: terms,
+               questions: terms,
                answers: answers,
                results: [],
             }

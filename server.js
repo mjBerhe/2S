@@ -31,7 +31,7 @@ const users = { // stores users
 const rooms = { // available rooms
 	'Gameroom 1': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Gameroom 2': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
-	'Testing Room 1': generateRoom.static(3, 3, ['additionTest', 'additionDM', 'multiplicationDM']),
+	'Testing Room 1': generateRoom.static(2, 2, ['additionTest', 'additionDM']),
 	'Testing Room 2': generateRoom.deathmatch(2, 2, ['additionDM', 'multiplicationDM']),
 }
 
