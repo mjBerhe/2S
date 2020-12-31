@@ -3,7 +3,7 @@ import { useMatch } from '../../state/match.js';
 import { useNormalRound } from '../../state/normalRound.js';
 import useCountdown from '../../hooks/useCountdown';
 import shallow from 'zustand/shallow';
-import Addition from '../QuestionTemplates/addition';
+import AdditionQuestions from '../QuestionTemplates/additionQuestions';
 
 export default function NormalRound({ socket, room, username }) {
 
@@ -92,7 +92,7 @@ export default function NormalRound({ socket, room, username }) {
          {incorrectMethod === 'repeat' && 
             <div>
                {questionType === 'addition' &&
-                  <Addition type={questionType} terms={currentQuestion}/>
+                  <AdditionQuestions type={questionType} terms={currentQuestion}/>
                }
                {!incorrectResponse &&
                   <form onSubmit={handleSubmitAnswer}>
@@ -111,7 +111,7 @@ export default function NormalRound({ socket, room, username }) {
          {incorrectMethod === 'continue' && 
             <div>
                {questionType === 'addition' &&
-                  <Addition type={questionType} terms={currentQuestion}/>
+                  <AdditionQuestions type={questionType} terms={currentQuestion}/>
                }
                <form onSubmit={handleSubmitAnswer}>
                   <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>

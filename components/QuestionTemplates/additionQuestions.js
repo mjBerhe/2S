@@ -1,4 +1,4 @@
-const Addition = ({ type, terms }) => {
+const AdditionQuestions = ({ type, terms }) => {
 
    const output = terms => {
       if (terms) {
@@ -15,4 +15,4 @@ const Addition = ({ type, terms }) => {
    )
 }
 
-export default Addition;
+export default AdditionQuestions;

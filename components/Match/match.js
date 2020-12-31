@@ -22,6 +22,8 @@ export default function Match({ socket, room, username }) {
 	}), shallow);
 
 	const { setRoundInfo, loadQuestion } = useNormalRound();
+	const roundType = useNormalRound(state => state.questionType);
+
 	const { setDMInfo, loadDMQuestion, resetDMState } = useDeathMatch();
 
 	// countdown is for first round and any subsequent rounds
@@ -129,7 +131,10 @@ export default function Match({ socket, room, username }) {
 				<div className='centered-of-parent'>
 					<h1>MATCH FOUND</h1>
 					{countdown.currentTime > 0 &&
-						<h1>Starting Round {currentRound} in: {countdown.currentTime}</h1>
+						<div>
+							<h1>Starting Round {currentRound} in: {countdown.currentTime}</h1>
+							<h1>Topic: {roundType}</h1>
+						</div>
 					}
 				</div>
 			}

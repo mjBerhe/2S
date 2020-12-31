@@ -4,6 +4,7 @@ export const [useDeathMatch] = create((set, get) => ({
    questionType: null,
    incorrectMethod: null,
    questions: [],
+   terms: [],
    answers: [],
    currentQuestion: '',
    currentAnswer: '',
@@ -16,13 +17,14 @@ export const [useDeathMatch] = create((set, get) => ({
          questionType: DMInfo.questionType,
          incorrectMethod: DMInfo.incorrectMethod,
          questions: DMInfo.questions,
+         terms: DMInfo.terms,
          answers: DMInfo.answers,
       }));
    },
    loadDMQuestion: () => {
-      const questions = get().questions;
+      const terms = get().terms;
       set(() => ({
-         currentQuestion: questions.shift(),
+         currentQuestion: terms.shift(),
          initialResponseTimer: Date.now(),
          prevAnswerCorrect: false,
       }));
@@ -57,6 +59,7 @@ export const [useDeathMatch] = create((set, get) => ({
          questionType: null,
          incorrectMethod: null,
          questions: [],
+         terms: [],
          answers: [],
          currentQuestion: '',
          currentAnswer: '',

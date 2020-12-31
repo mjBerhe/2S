@@ -12,6 +12,7 @@ const geometric = require('../mikes_functions/questions_sequences/template_geome
 const functionConverter = {
    'additionTest': addition(2, 1, 1, 20),
    'additionTest2': addition(3, 1, 1, 20),
+   'bedmasTest': bedmas(3, 1, 1, 10),
    'additionDM': addition(30, 1, 1, 20),
    'multiplicationDM': multiplication(30, 1, 1, 12),
    'addition1': addition(10, 1, 1, 30),
@@ -51,26 +52,28 @@ function generateStaticRoom (maxCapacity, roundAmount, arrayOfQuestionTypes) {
       } else { 
          // if (i === roundAmount - 1) { // last round (deathmatch)
          if (i > 0) {
-            const {terms, answers, type, classification} = functionConverter[questionType];
+            const {terms, questions, answers, type, classification} = functionConverter[questionType];
             rounds[listOfRounds[i]] = {
-               questionType: type,
+               questionType: type, // i.e addition, subtraction, etc
                deathmatchRound: true,
                deathmatch: [],
                incorrectMethod: 'continue', // can be continue or repeat*
-               questionsMaster: terms,
-               questions: terms,
+               questionsMaster: questions,
+               questions: questions,
+               terms: terms,
                answers: answers,
                results: [],
             }
          } else { // normal round
-            const {terms, answers, type, classification} = functionConverter[questionType];
+            const {terms, questions, answers, type, classification} = functionConverter[questionType];
             rounds[listOfRounds[i]] = {
-               questionType: type,
+               questionType: type, // i.e addition, subtraction, etc
                deathmatchRound: false,
                deathmatch: [],
                incorrectMethod: 'continue', // can be continue or repeat*
-               questionsMaster: terms,
-               questions: terms,
+               questionsMaster: questions,
+               questions: questions,
+               terms: terms,
                answers: answers,
                results: [],
             }

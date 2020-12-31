@@ -3,12 +3,14 @@ import { useMatch } from '../../state/match.js';
 import { useDeathMatch } from '../../state/deathmatch.js';
 import shallow from 'zustand/shallow';
 import useCountdown from '../../hooks/useCountdown';
+import AdditionQuestions from '../QuestionTemplates/additionQuestions';
 
 // deathmatch only renders on final round
 export default function DeathMatch({ socket, room, username }) {
 
    const { userTypingAnswer, userSubmitAnswer, checkAnswer, loadDMQuestion } = useDeathMatch();
-   const { incorrectMethod, currentQuestion, currentAnswer, prevAnswerCorrect, userAnswers, userResponseTimes } = useDeathMatch(state => ({
+   const { questionType, incorrectMethod, currentQuestion, currentAnswer, prevAnswerCorrect, userAnswers, userResponseTimes } = useDeathMatch(state => ({
+      questionType: state.questionType,
       incorrectMethod: state.incorrectMethod,
       currentQuestion: state.currentQuestion,
       currentAnswer: state.currentAnswer,
@@ -102,7 +104,9 @@ export default function DeathMatch({ socket, room, username }) {
       <div className='question-area'>
          <h1>Deathmatch</h1>
          <div>
-            <h2>{currentQuestion}</h2>
+            {questionType === 'addition' &&
+               <AdditionQuestions type={questionType} terms={currentQuestion}/>
+            }
             {!incorrectResponse &&
                <form onSubmit={handleSubmitAnswer}>
                   <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>

@@ -4,6 +4,7 @@ export const [useNormalRound] = create((set, get) => ({
    questionType: null,
    incorrectMethod: null,
    questions: [],
+   terms: [],
    answers: [],
    currentQuestion: '',
    currentAnswer: '',
@@ -15,13 +16,14 @@ export const [useNormalRound] = create((set, get) => ({
          questionType: roundsInfo.questionType,
          incorrectMethod: roundsInfo.incorrectMethod,
          questions: roundsInfo.questions,
+         terms: roundsInfo.terms,
          answers: roundsInfo.answers,
       }));
    },
    loadQuestion: () => {
-      const questions = get().questions;
+      const terms = get().terms;
       set(() => ({
-         currentQuestion: questions.shift(),
+         currentQuestion: terms.shift(),
          initialResponseTimer: Date.now(),
       }));
    },
@@ -52,6 +54,7 @@ export const [useNormalRound] = create((set, get) => ({
          questionType: null,
          incorrectMethod: null,
          questions: [],
+         terms: [],
          answers: [],
          currentQuestion: '',
          currentAnswer: '',
