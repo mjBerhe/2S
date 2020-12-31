@@ -1,6 +1,6 @@
 const randomNumber = require('../../global_functions/function_number_generator.js');
 
-module.exports = function subtraction_level_2 (min, max) {
+function subtraction_level_2 (min, max) {
 
     const term_1 = randomNumber(min, max);
     const term_2 = randomNumber(min, term_1);

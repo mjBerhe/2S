@@ -55,7 +55,7 @@ function multiplication_template (questions, level, min, max) {
         answers: solutions_array,
         type: 3,
         classification: classification,
-        level = level,
+        level: level,
     };
 
 }
