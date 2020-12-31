@@ -14,6 +14,7 @@ function bedmas_level_1 (min, max) {
     let terms;
 
     if (rng === 1) {
+        question = `${term_1} * ( ${term_2} + ${term_3} )`
         answer = term_1 * ( term_2 + term_3 );
         
         terms = {
@@ -23,6 +24,7 @@ function bedmas_level_1 (min, max) {
         }
 
     } else if (rng === 2) {
+        question = `${term_2*(term_1 - term_3)} / ${term_2} + ${term_3}`
         answer = term_1;
         
         terms = {
@@ -32,6 +34,7 @@ function bedmas_level_1 (min, max) {
         }
 
     } else if (rng === 3) {
+        question = `${term_1} * ${term_2} + ${term_3}`
         answer = term_1 * term_2 + term_3;
         
         terms = {
@@ -42,6 +45,7 @@ function bedmas_level_1 (min, max) {
     }
 
     return {
+        question: question,
         question_type: rng,
         terms: terms,
         answer: answer,
