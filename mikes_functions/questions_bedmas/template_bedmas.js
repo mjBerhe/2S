@@ -21,9 +21,10 @@ function bedmas_template (questions, level, min, max) {
         
         if (level === 1) { 
 
-        const {terms, answer, question_type} = bedmas_level_1 (min, max);
+        const {terms, answer, question, question_type} = bedmas_level_1 (min, max);
 
         terms_array.push(terms);
+        questions_array.push(question);
         solutions_array.push(answer);
         question_type_array.push(question_type);
 
@@ -31,9 +32,10 @@ function bedmas_template (questions, level, min, max) {
 
         if (level === 2) {
 
-            const {terms, answer, question_type} = bedmas_level_2 (min, max);
+            const {terms, answer, question, question_type} = bedmas_level_2 (min, max);
 
             terms_array.push(terms);
+            questions_array.push(question);
             solutions_array.push(answer);
             question_type_array.push(question_type);
     
@@ -41,9 +43,10 @@ function bedmas_template (questions, level, min, max) {
 
         if (level === 3) {
 
-            const {terms, answer, question_type} = bedmas_level_3 (min, max);
+            const {terms, answer, question, question_type} = bedmas_level_3 (min, max);
 
             terms_array.push(terms);
+            questions_array.push(question);
             solutions_array.push(answer);
             question_type_array.push(question_type);
         
