@@ -24,6 +24,7 @@ function bedmas_level_2 (min, max) {
             term_3: term_3,
             term_4: term_4,
             term_5: term_5,
+            question_type: rng,
         }
 
     } else if (rng === 2) {
@@ -36,6 +37,7 @@ function bedmas_level_2 (min, max) {
             term_3: term_3,
             term_4: term_4,
             term_5: term_5,
+            question_type: rng,
         }
 
     } else if (rng === 3) {
@@ -48,6 +50,7 @@ function bedmas_level_2 (min, max) {
             term_3: term_3,
             term_4: term_4,
             term_5: term_5,
+            question_type: rng,
         }
 
     } else if (rng === 4) {
@@ -60,13 +63,13 @@ function bedmas_level_2 (min, max) {
             term_3: term_3,
             term_4: term_4,
             term_5: term_5,
+            question_type: rng,
         }
 
     }
 
     return {
         question: question,
-        question_type: rng,
         terms: terms,
         answer: answer,
     }

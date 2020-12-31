@@ -53,8 +53,9 @@ function subtraction_template (questions, level, min, max) {
         terms: terms_array,
         questions: questions_array,
         answers: solutions_array,
-        type: "subtraction",
+        type: 2,
         classification: classification,
+        level: level,
     };
 
 }

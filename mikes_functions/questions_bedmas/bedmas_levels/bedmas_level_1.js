@@ -21,6 +21,7 @@ function bedmas_level_1 (min, max) {
             term_1: term_1,
             term_2: term_2,
             term_3: term_3,
+            question_type: rng,
         }
 
     } else if (rng === 2) {
@@ -30,7 +31,8 @@ function bedmas_level_1 (min, max) {
         terms = {
             term_1: term_2*(term_1 - term_3),
             term_2: term_2,
-            term_3: term_3
+            term_3: term_3,
+            question_type: rng,
         }
 
     } else if (rng === 3) {
@@ -41,12 +43,12 @@ function bedmas_level_1 (min, max) {
             term_1: term_1,
             term_2: term_2,
             term_3: term_3,
+            question_type: rng,
         }
     }
 
     return {
         question: question,
-        question_type: rng,
         terms: terms,
         answer: answer,
     }
