@@ -53,8 +53,9 @@ function addition_template (questions, level, min, max) {
         terms: terms_array,
         questions: questions_array,
         answers: solutions_array,
-        type: "addition",
+        type: 1,
         classification: classification,
+        level: level,
     };
 
 }

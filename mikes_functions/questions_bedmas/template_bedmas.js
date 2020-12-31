@@ -10,7 +10,6 @@ function bedmas_template (questions, level, min, max) {
     // level 3: 4 terms
 
     const questions_array = [];
-    const question_type_array = [];
     const terms_array = [];
     const solutions_array = [];
     var classification = 1;
@@ -21,31 +20,31 @@ function bedmas_template (questions, level, min, max) {
         
         if (level === 1) { 
 
-        const {terms, answer, question_type} = bedmas_level_1 (min, max);
+        const {terms, answer, question} = bedmas_level_1 (min, max);
 
         terms_array.push(terms);
+        questions_array.push(question);
         solutions_array.push(answer);
-        question_type_array.push(question_type);
 
         }
 
         if (level === 2) {
 
-            const {terms, answer, question_type} = bedmas_level_2 (min, max);
+            const {terms, answer, question} = bedmas_level_2 (min, max);
 
             terms_array.push(terms);
+            questions_array.push(question);
             solutions_array.push(answer);
-            question_type_array.push(question_type);
     
         }
 
         if (level === 3) {
 
-            const {terms, answer, question_type} = bedmas_level_3 (min, max);
+            const {terms, answer, question} = bedmas_level_3 (min, max);
 
             terms_array.push(terms);
+            questions_array.push(question);
             solutions_array.push(answer);
-            question_type_array.push(question_type);
         
         }
 
@@ -55,9 +54,9 @@ function bedmas_template (questions, level, min, max) {
         terms: terms_array,
         questions: questions_array,
         answers: solutions_array,
-        type: "bedmas",
+        type: 5,
         classification: classification,
-        question_type: question_type_array,
+        level: level,
     };
 
 }

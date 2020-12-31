@@ -54,8 +54,9 @@ function division_template (questions, level, min, max) {
         terms: terms_array,
         questions: questions_array,
         answers: solutions_array,
-        type: "division",
+        type: 4,
         classification: classification,
+        level: level,
     };
 
 }
