@@ -11,7 +11,9 @@ const geometric = require('../mikes_functions/questions_sequences/template_geome
 
 const functionConverter = {
    'additionTest': addition(2, 1, 1, 20),
-   'additionTest2': addition(3, 1, 1, 20),
+   'subtractionTest': subtraction(2, 1, 1, 30),
+   'multiplicationTest': multiplication(2, 1, 1, 12),
+   'divisionTest': division(2, 1, 1, 10),
    'bedmasTest': bedmas(3, 1, 1, 10),
    'additionDM': addition(30, 1, 1, 20),
    'multiplicationDM': multiplication(30, 1, 1, 12),
@@ -50,9 +52,9 @@ function generateStaticRoom (maxCapacity, roundAmount, arrayOfQuestionTypes) {
       if (!functionConverter[questionType]) { // question type doesn't exist
          console.log('error, question type does not exist');
       } else { 
-         // if (i === roundAmount - 1) { // last round (deathmatch)
-         if (i > 0) {
-            const {terms, questions, answers, type, classification} = functionConverter[questionType];
+         if (i === roundAmount - 1) { // last round (deathmatch)
+         // if (i > 0) {
+            const {terms, questions, answers, type} = functionConverter[questionType];
             rounds[listOfRounds[i]] = {
                questionType: type, // i.e addition, subtraction, etc
                deathmatchRound: true,
@@ -65,7 +67,7 @@ function generateStaticRoom (maxCapacity, roundAmount, arrayOfQuestionTypes) {
                results: [],
             }
          } else { // normal round
-            const {terms, questions, answers, type, classification} = functionConverter[questionType];
+            const {terms, questions, answers, type} = functionConverter[questionType];
             rounds[listOfRounds[i]] = {
                questionType: type, // i.e addition, subtraction, etc
                deathmatchRound: false,

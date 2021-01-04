@@ -3,7 +3,8 @@ import { useMatch } from '../../state/match.js';
 import { useDeathMatch } from '../../state/deathmatch.js';
 import shallow from 'zustand/shallow';
 import useCountdown from '../../hooks/useCountdown';
-import AdditionQuestions from '../QuestionTemplates/additionQuestions';
+import Addition from '../QuestionTemplates/addition';
+import Bedmas from '../QuestionTemplates/bedmas';
 
 // deathmatch only renders on final round
 export default function DeathMatch({ socket, room, username }) {
@@ -104,8 +105,11 @@ export default function DeathMatch({ socket, room, username }) {
       <div className='question-area'>
          <h1>Deathmatch</h1>
          <div>
-            {questionType === 'addition' &&
-               <AdditionQuestions type={questionType} terms={currentQuestion}/>
+            {questionType === 1 &&
+               <Addition terms={currentQuestion}/>
+            }
+            {questionType === 5 &&
+               <Bedmas terms={currentQuestion}/>
             }
             {!incorrectResponse &&
                <form onSubmit={handleSubmitAnswer}>

@@ -3,7 +3,11 @@ import { useMatch } from '../../state/match.js';
 import { useNormalRound } from '../../state/normalRound.js';
 import useCountdown from '../../hooks/useCountdown';
 import shallow from 'zustand/shallow';
-import AdditionQuestions from '../QuestionTemplates/additionQuestions';
+import Addition from '../QuestionTemplates/addition';
+import Subtraction from '../QuestionTemplates/subtraction';
+import Multiplication from '../QuestionTemplates/multiplication';
+import Division from '../QuestionTemplates/division';
+import Bedmas from '../QuestionTemplates/bedmas';
 
 export default function NormalRound({ socket, room, username }) {
 
@@ -91,9 +95,11 @@ export default function NormalRound({ socket, room, username }) {
          <h1>{`Round ${currentRound}`}</h1>
          {incorrectMethod === 'repeat' && 
             <div>
-               {questionType === 'addition' &&
-                  <AdditionQuestions type={questionType} terms={currentQuestion}/>
-               }
+               {questionType === 1 && <Addition terms={currentQuestion}/>}
+               {questionType === 2 && <Subtraction terms={currentQuestion}/>}
+               {questionType === 3 && <Multiplication terms={currentQuestion}/>}
+               {questionType === 4 && <Division terms={currentQuestion}/>}
+               {questionType === 5 && <Bedmas terms={currentQuestion}/>}
                {!incorrectResponse &&
                   <form onSubmit={handleSubmitAnswer}>
                      <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
@@ -110,9 +116,11 @@ export default function NormalRound({ socket, room, username }) {
          }
          {incorrectMethod === 'continue' && 
             <div>
-               {questionType === 'addition' &&
-                  <AdditionQuestions type={questionType} terms={currentQuestion}/>
-               }
+               {questionType === 1 && <Addition terms={currentQuestion}/>}
+               {questionType === 2 && <Subtraction terms={currentQuestion}/>}
+               {questionType === 3 && <Multiplication terms={currentQuestion}/>}
+               {questionType === 4 && <Division terms={currentQuestion}/>}
+               {questionType === 5 && <Bedmas terms={currentQuestion}/>}
                <form onSubmit={handleSubmitAnswer}>
                   <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
                   <input type="submit" value="Submit"/>
