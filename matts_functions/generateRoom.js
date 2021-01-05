@@ -1,4 +1,3 @@
-const e = require('express');
 const addition = require('../mikes_functions/questions_arithmetic/template_addition.js');
 const division = require('../mikes_functions/questions_arithmetic/template_division.js');
 const multiplication = require('../mikes_functions/questions_arithmetic/template_multiplication.js');
@@ -9,7 +8,7 @@ const additive = require('../mikes_functions/questions_sequences/template_additi
 const geometric = require('../mikes_functions/questions_sequences/template_geometric.js');
 // can make either a static room or random room
 
-const functionConverter = {
+const standardRounds = {
    'additionTest': addition(2, 1, 1, 20),
    'subtractionTest': subtraction(2, 1, 1, 30),
    'multiplicationTest': multiplication(2, 1, 1, 12),
@@ -33,6 +32,69 @@ const functionConverter = {
    'geometric': geometric(10),
 }
 
+const standardRoundsList = ['additionTest', 'subtractionTest', 'multiplicationTest', 'divisionTest', 'bedmasTest'];
+
+const deathmatchRounds = {
+   'additionDM': addition(50, 1, 1, 30),
+   'subtractionDM': subtraction(50, 1, 1, 30),
+   'multiplicationDM': multiplication(50, 1, 1, 12),
+   'divisionDM': division(50, 1, 1, 10)
+}
+
+const deathmatchRoundsList = ['additionDM', 'subtractionDM', 'multiplicationDM', 'divisionDM'];
+
+function generateRandomRoom (maxCapacity, roundAmount) {
+   const listOfRounds = [];
+   const rounds = {};
+
+   for (let i = 1; i <= roundAmount; i++) {
+      listOfRounds.push(`round ${i}`);
+   }
+
+   for (let i = 0; i < roundAmount; i++) { // looping through amount of rounds
+      if (i === roundAmount - 1) { // last round (deathmatch)
+         const randomDeathmatchRound = deathmatchRoundsList[getRandomInt(0, deathmatchRoundsList.length - 1)];
+         const {terms, questions, answers, type} = deathmatchRounds[randomDeathmatchRound];
+         rounds[listOfRounds[i]] = {
+            questionType: type, // i.e addition, subtraction, etc
+            deathmatchRound: true,
+            deathmatch: [],
+            incorrectMethod: 'continue', // can be continue or repeat*
+            questionsMaster: questions,
+            questions: questions,
+            terms: terms,
+            answers: answers,
+            results: [],
+         }
+      } else { // normal round
+         const randomStandardRound = standardRoundsList[getRandomInt(0, standardRoundsList.length - 1)];
+         // console.log(randomStandardRound);
+         const {terms, questions, answers, type} = standardRounds[randomStandardRound];
+         rounds[listOfRounds[i]] = {
+            questionType: type, // i.e addition, subtraction, etc
+            deathmatchRound: false,
+            deathmatch: [],
+            incorrectMethod: 'continue', // can be continue or repeat*
+            questionsMaster: questions,
+            questions: questions,
+            terms: terms,
+            answers: answers,
+            results: [],
+         }
+      }
+   }
+
+   return {
+      start: false,
+      maxCapacity: maxCapacity,
+      roundAmount: roundAmount,
+      users: [],
+      queue: [],
+      roundQueue: [],
+      rounds: rounds,
+   };
+}
+
 function generateStaticRoom (maxCapacity, roundAmount, arrayOfQuestionTypes) {
    if (arrayOfQuestionTypes.length !== roundAmount) {
       return 0; // not valid
@@ -49,12 +111,12 @@ function generateStaticRoom (maxCapacity, roundAmount, arrayOfQuestionTypes) {
    const rounds = {};
    
    arrayOfQuestionTypes.forEach((questionType, i) => { // looping through each given round
-      if (!functionConverter[questionType]) { // question type doesn't exist
+      if (!standardRounds[questionType]) { // question type doesn't exist
          console.log('error, question type does not exist');
       } else { 
          if (i === roundAmount - 1) { // last round (deathmatch)
          // if (i > 0) {
-            const {terms, questions, answers, type} = functionConverter[questionType];
+            const {terms, questions, answers, type} = standardRounds[questionType];
             rounds[listOfRounds[i]] = {
                questionType: type, // i.e addition, subtraction, etc
                deathmatchRound: true,
@@ -67,7 +129,7 @@ function generateStaticRoom (maxCapacity, roundAmount, arrayOfQuestionTypes) {
                results: [],
             }
          } else { // normal round
-            const {terms, questions, answers, type} = functionConverter[questionType];
+            const {terms, questions, answers, type} = standardRounds[questionType];
             rounds[listOfRounds[i]] = {
                questionType: type, // i.e addition, subtraction, etc
                deathmatchRound: false,
@@ -110,10 +172,10 @@ function generateDeathmatchRoom (maxCapacity, roundAmount, arrayOfQuestionTypes)
    const rounds = {};
    
    arrayOfQuestionTypes.forEach((questionType, i) => { // looping through each given round
-      if (!functionConverter[questionType]) { // question type doesn't exist
+      if (!standardRounds[questionType]) { // question type doesn't exist
          console.log('error, question type does not exist');
       } else { 
-         const {questions, answers} = functionConverter[questionType];
+         const {questions, answers} = standardRounds[questionType];
          rounds[listOfRounds[i]] = {
             questionType: questionType,
             deathmatchRound: true,
@@ -138,7 +200,12 @@ function generateDeathmatchRoom (maxCapacity, roundAmount, arrayOfQuestionTypes)
    };
 }
 
+function getRandomInt(min, max) {
+   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // console.log(generateStaticRoom(2, 2, ['addition', 'multiplication']))
 
 exports.static = generateStaticRoom;
 exports.deathmatch = generateDeathmatchRoom;
+exports.randomStandard = generateRandomRoom;

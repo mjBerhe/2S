@@ -32,7 +32,7 @@ const rooms = { // available rooms
 	'Gameroom 1': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Gameroom 2': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Testing Room 1': generateRoom.static(2, 3, ['multiplicationTest', 'divisionTest', 'additionDM']),
-	'Testing Room 2': generateRoom.deathmatch(2, 2, ['additionDM', 'multiplicationDM']),
+	'Testing Room 2': generateRoom.randomStandard(2, 5),
 }
 
 let currentUser;
@@ -338,5 +338,5 @@ nextApp.prepare().then(() => {
 
 // resetting room after a game finishes
 resetRoom = (currentRoom) => {
-	rooms[currentRoom] = generateRoom.static(2, 2, ['additionTest', 'multiplicationDM']);
+	rooms[currentRoom] = generateRoom.randomStandard(2, 5);
 }

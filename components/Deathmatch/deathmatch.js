@@ -4,6 +4,9 @@ import { useDeathMatch } from '../../state/deathmatch.js';
 import shallow from 'zustand/shallow';
 import useCountdown from '../../hooks/useCountdown';
 import Addition from '../QuestionTemplates/addition';
+import Subtraction from '../QuestionTemplates/subtraction';
+import Multiplication from '../QuestionTemplates/multiplication';
+import Division from '../QuestionTemplates/division';
 import Bedmas from '../QuestionTemplates/bedmas';
 
 // deathmatch only renders on final round
@@ -105,12 +108,11 @@ export default function DeathMatch({ socket, room, username }) {
       <div className='question-area'>
          <h1>Deathmatch</h1>
          <div>
-            {questionType === 1 &&
-               <Addition terms={currentQuestion}/>
-            }
-            {questionType === 5 &&
-               <Bedmas terms={currentQuestion}/>
-            }
+            {questionType === 1 && <Addition terms={currentQuestion}/>}
+            {questionType === 2 && <Subtraction terms={currentQuestion}/>}
+            {questionType === 3 && <Multiplication terms={currentQuestion}/>}
+            {questionType === 4 && <Division terms={currentQuestion}/>}
+            {questionType === 5 && <Bedmas terms={currentQuestion}/>}
             {!incorrectResponse &&
                <form onSubmit={handleSubmitAnswer}>
                   <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
