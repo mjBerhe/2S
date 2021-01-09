@@ -95,11 +95,11 @@ export default function NormalRound({ socket, room, username }) {
          <h1>{`Round ${currentRound}`}</h1>
          {incorrectMethod === 'repeat' && 
             <div>
-               {questionType === 1 && <Addition terms={currentQuestion}/>}
-               {questionType === 2 && <Subtraction terms={currentQuestion}/>}
-               {questionType === 3 && <Multiplication terms={currentQuestion}/>}
-               {questionType === 4 && <Division terms={currentQuestion}/>}
-               {questionType === 5 && <Bedmas terms={currentQuestion}/>}
+               {questionType.code === 1 && <Addition terms={currentQuestion}/>}
+               {questionType.code === 2 && <Subtraction terms={currentQuestion}/>}
+               {questionType.code === 3 && <Multiplication terms={currentQuestion}/>}
+               {questionType.code === 4 && <Division terms={currentQuestion}/>}
+               {questionType.code === 5 && <Bedmas terms={currentQuestion}/>}
                {!incorrectResponse &&
                   <form onSubmit={handleSubmitAnswer}>
                      <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
@@ -116,11 +116,11 @@ export default function NormalRound({ socket, room, username }) {
          }
          {incorrectMethod === 'continue' && 
             <div>
-               {questionType === 1 && <Addition terms={currentQuestion}/>}
-               {questionType === 2 && <Subtraction terms={currentQuestion}/>}
-               {questionType === 3 && <Multiplication terms={currentQuestion}/>}
-               {questionType === 4 && <Division terms={currentQuestion}/>}
-               {questionType === 5 && <Bedmas terms={currentQuestion}/>}
+               {questionType.code === 1 && <Addition terms={currentQuestion}/>}
+               {questionType.code === 2 && <Subtraction terms={currentQuestion}/>}
+               {questionType.code === 3 && <Multiplication terms={currentQuestion}/>}
+               {questionType.code === 4 && <Division terms={currentQuestion}/>}
+               {questionType.code === 5 && <Bedmas terms={currentQuestion}/>}
                <form onSubmit={handleSubmitAnswer}>
                   <input className={answerInputClass} type="text" value={currentAnswer} onChange={handleUserAnswer} autoFocus/>
                   <input type="submit" value="Submit"/>

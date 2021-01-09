@@ -43,7 +43,16 @@ const deathmatchRounds = {
 
 const deathmatchRoundsList = ['additionDM', 'subtractionDM', 'multiplicationDM', 'divisionDM'];
 
-function generateRandomRoom (maxCapacity, roundAmount) {
+const roundTypeConverter = [ // converts number to question type
+   null,
+   'Addition',
+   'Subtraction',
+   'Multiplication',
+   'Division',
+   'Bedmas',
+]
+
+function genRandomStandard (maxCapacity, roundAmount) {
    const listOfRounds = [];
    const rounds = {};
 
@@ -56,7 +65,10 @@ function generateRandomRoom (maxCapacity, roundAmount) {
          const randomDeathmatchRound = deathmatchRoundsList[getRandomInt(0, deathmatchRoundsList.length - 1)];
          const {terms, questions, answers, type} = deathmatchRounds[randomDeathmatchRound];
          rounds[listOfRounds[i]] = {
-            questionType: type, // i.e addition, subtraction, etc
+            questionType: {
+               code: type, // number (1, 2, 3, etc..)
+               name: roundTypeConverter[type], // name (addition, division, etc..)
+            },
             deathmatchRound: true,
             deathmatch: [],
             incorrectMethod: 'continue', // can be continue or repeat*
@@ -71,7 +83,10 @@ function generateRandomRoom (maxCapacity, roundAmount) {
          // console.log(randomStandardRound);
          const {terms, questions, answers, type} = standardRounds[randomStandardRound];
          rounds[listOfRounds[i]] = {
-            questionType: type, // i.e addition, subtraction, etc
+            questionType: {
+               code: type, // number (1, 2, 3, etc..)
+               name: roundTypeConverter[type], // name (addition, division, etc..)
+            },
             deathmatchRound: false,
             deathmatch: [],
             incorrectMethod: 'continue', // can be continue or repeat*
@@ -81,6 +96,44 @@ function generateRandomRoom (maxCapacity, roundAmount) {
             answers: answers,
             results: [],
          }
+      }
+   }
+
+   return {
+      start: false,
+      maxCapacity: maxCapacity,
+      roundAmount: roundAmount,
+      users: [],
+      queue: [],
+      roundQueue: [],
+      rounds: rounds,
+   };
+}
+
+function genRandomDeathmatch (maxCapacity, roundAmount) {
+   const listOfRounds = [];
+   const rounds = {};
+
+   for (let i = 1; i <= roundAmount; i++) {
+      listOfRounds.push(`round ${i}`);
+   }
+
+   for (let i = 0; i < roundAmount; i++) { // looping through amount of rounds
+      const randomDeathmatchRound = deathmatchRoundsList[getRandomInt(0, deathmatchRoundsList.length - 1)];
+      const {terms, questions, answers, type} = deathmatchRounds[randomDeathmatchRound];
+      rounds[listOfRounds[i]] = {
+         questionType: {
+            code: type, // number (1, 2, 3, etc..)
+            name: roundTypeConverter[type], // name (addition, division, etc..)
+         },
+         deathmatchRound: true,
+         deathmatch: [],
+         incorrectMethod: 'continue', // can be continue or repeat*
+         questionsMaster: questions,
+         questions: questions,
+         terms: terms,
+         answers: answers,
+         results: [],
       }
    }
 
@@ -208,4 +261,5 @@ function getRandomInt(min, max) {
 
 exports.static = generateStaticRoom;
 exports.deathmatch = generateDeathmatchRoom;
-exports.randomStandard = generateRandomRoom;
+exports.randomStandard = genRandomStandard;
+exports.randomDeathmatch = genRandomDeathmatch;

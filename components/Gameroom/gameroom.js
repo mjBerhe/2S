@@ -78,7 +78,7 @@ export default function GameRoom({ socket, room, username, leaveRoom }) {
 				<h1>{room}</h1>
 			}
 			{!queueStatus && !startStatus && !complete.status &&
-				<div className='centered-of-parent'>
+				<div className='search-game-button'>
 					<button className="button-1" onClick={handleFindGame}>
 						Look for Game
 					</button>
@@ -116,9 +116,11 @@ export default function GameRoom({ socket, room, username, leaveRoom }) {
 					)}
 				</div>
 			}
-			<button className='button-1' onClick={leaveRoom}>
-				Leave Room
-			</button>
+			<div className='leave-room-button'>
+				<button className='button-1' onClick={leaveRoom}>
+					Leave Room
+				</button>
+			</div>
 		</div>
 	)
 }

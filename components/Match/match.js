@@ -22,12 +22,12 @@ export default function Match({ socket, room, username }) {
 	}), shallow);
 
 	const { setRoundInfo, loadQuestion } = useNormalRound();
-	const roundType = useNormalRound(state => state.questionType);
-
 	const { setDMInfo, loadDMQuestion, resetDMState } = useDeathMatch();
 
+	const currentRoundType = roundsInfo[`round ${currentRound}`].questionType;
+
 	// countdown is for first round and any subsequent rounds
-	const [countdown, startCountdown] = useCountdown(3, () => {
+	const [countdown, startCountdown] = useCountdown(5, () => {
 		if (DMStatus.start) {
 			loadDMQuestion();
 		} else {
@@ -128,20 +128,23 @@ export default function Match({ socket, room, username }) {
    return (
       <div className='match-container'>
          {countdown.start && currentRound < roundLimit && currentRound === 1 &&
-				<div className='centered-of-parent'>
+				<div className='match-found-container'>
 					<h1>MATCH FOUND</h1>
 					{countdown.currentTime > 0 &&
-						<div>
+						<div className='match-countdown'>
 							<h1>Starting Round {currentRound} in: {countdown.currentTime}</h1>
-							<h1>Topic: {roundType}</h1>
+							<h2>Topic: {currentRoundType.name}</h2>
 						</div>
 					}
 				</div>
 			}
          {countdown.start && currentRound <= roundLimit && currentRound > 1 &&
             <div className='centered-of-parent'>
-               {countdown.currentTime > 0 &&
-                  <h1>Starting Round {currentRound} in: {countdown.currentTime}</h1>
+					{countdown.currentTime > 0 &&
+						<div>
+                  	<h1>Starting Round {currentRound} in: {countdown.currentTime}</h1>
+							<h2>Topic: {currentRoundType.name}</h2>
+						</div>
                }
             </div>
          }

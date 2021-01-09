@@ -4,7 +4,23 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	/* border: solid black 2px; */
+	border: solid black 2px;
+}
+
+.match-found-container {
+	display: grid;
+	height: 100%;
+	width: 100%;
+	grid-template-rows: 20% 80%;
+	align-items: center;
+	justify-content: center;
+}
+
+.match-countdown {
+	grid-row: 2/3;
+	margin: 0 0 20% 0;
+	padding: 0 0 5% 0;
+	text-align: center;
 }
 
 .round-results {

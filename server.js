@@ -19,6 +19,7 @@ const availableRooms = [ // used to identify which rooms actually exist
 	'Gameroom 2',
 	'Testing Room 1',
 	'Testing Room 2',
+	'Testing Room 3',
 ];
 
 const users = { // stores users
@@ -26,6 +27,7 @@ const users = { // stores users
 	'Gameroom 2': [],
 	'Testing Room 1': [],
 	'Testing Room 2': [],
+	'Testing Room 3': [],
 };
 
 const rooms = { // available rooms
@@ -33,6 +35,7 @@ const rooms = { // available rooms
 	'Gameroom 2': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Testing Room 1': generateRoom.static(2, 3, ['multiplicationTest', 'divisionTest', 'additionDM']),
 	'Testing Room 2': generateRoom.randomStandard(2, 5),
+	'Testing Room 3': generateRoom.randomDeathmatch(2, 5),
 }
 
 let currentUser;
