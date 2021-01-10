@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
+import shallow from 'zustand/shallow';
+import InRoom from './inRoom';
+import InQueue from './inQueue';
 import Match from '../Match/match.js';
 import { useMatch } from '../../state/match.js';
 import { roundNumber } from '../../formulas/roundNumber.js';
-import shallow from 'zustand/shallow';
 
 export default function GameRoom({ socket, room, username, leaveRoom }) {
 
@@ -74,23 +76,14 @@ export default function GameRoom({ socket, room, username, leaveRoom }) {
 
 	return (
 		<div className='gameroom-container'>
-			{!startStatus && !complete.status && 
+			{/* {!startStatus && !complete.status && 
 				<h1>{room}</h1>
-			}
+			} */}
 			{!queueStatus && !startStatus && !complete.status &&
-				<div className='search-game-button'>
-					<button className="button-1" onClick={handleFindGame}>
-						Look for Game
-					</button>
-				</div>
+				<InRoom room={room} findGame={handleFindGame} leaveRoom={leaveRoom}/>
 			}
 			{queueStatus && !startStatus &&
-				<div className='centered-of-parent'>
-					<h1>SEARCHING FOR GAME...</h1>
-					<button className='button-1' onClick={handleLeaveQueue}>
-						Leave Queue
-					</button>
-				</div>
+				<InQueue room={room} leaveQueue={handleLeaveQueue}/>
 			}
 			{!queueStatus && !complete.status && currentRound > 0 &&
 				<Match socket={socket} room={room} username={username}/>
@@ -116,11 +109,6 @@ export default function GameRoom({ socket, room, username, leaveRoom }) {
 					)}
 				</div>
 			}
-			<div className='leave-room-button'>
-				<button className='button-1' onClick={leaveRoom}>
-					Leave Room
-				</button>
-			</div>
 		</div>
 	)
 }

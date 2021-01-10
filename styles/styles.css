@@ -88,6 +88,8 @@
   -ms-grid-column: 2;
   -ms-grid-column-span: 1;
   grid-column: 2/3;
+  height: 100%;
+  width: 100%;
   background: rgba(63, 194, 238, 0.781);
 }
 
@@ -172,6 +174,18 @@
   text-align: center;
 }
 
+.inroom-container {
+  height: 100%;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 20% 74% 5%;
+      grid-template-rows: 20% 74% 5%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .search-game-button {
   -ms-grid-row: 2;
   -ms-grid-row-span: 1;
@@ -179,9 +193,39 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  margin: 0 0 15% 0;
+}
+
+.inqueue-container {
+  height: 100%;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 20% 80%;
+      grid-template-rows: 20% 80%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.searching-block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0 0 15% 0;
 }
 
 .leave-room-button {
