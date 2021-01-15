@@ -52,7 +52,10 @@ const roundTypeConverter = [ // converts number to question type
    'Bedmas',
 ]
 
-function genRandomStandard (maxCapacity, roundAmount) {
+function genRandomStandard (inputs) {
+
+   const { maxCapacity, roundAmount, eliminationGap, incorrectMethod } = inputs;
+
    const listOfRounds = [];
    const rounds = {};
 
@@ -60,18 +63,19 @@ function genRandomStandard (maxCapacity, roundAmount) {
       listOfRounds.push(`round ${i}`);
    }
 
-   for (let i = 0; i < roundAmount; i++) { // looping through amount of rounds
+   for (let i = 0; i < roundAmount; i++) { // looping through each round
       if (i === roundAmount - 1) { // last round (deathmatch)
          const randomDeathmatchRound = deathmatchRoundsList[getRandomInt(0, deathmatchRoundsList.length - 1)];
          const {terms, questions, answers, type} = deathmatchRounds[randomDeathmatchRound];
-         rounds[listOfRounds[i]] = {
+         rounds[listOfRounds[i]] = { // creating the round object
             questionType: {
                code: type, // number (1, 2, 3, etc..)
                name: roundTypeConverter[type], // name (addition, division, etc..)
             },
             deathmatchRound: true,
             deathmatch: [],
-            incorrectMethod: 'continue', // can be continue or repeat*
+            eliminationGap: eliminationGap,
+            incorrectMethod: incorrectMethod, // can be continue or repeat*
             questionsMaster: questions,
             questions: questions,
             terms: terms,
@@ -80,7 +84,6 @@ function genRandomStandard (maxCapacity, roundAmount) {
          }
       } else { // normal round
          const randomStandardRound = standardRoundsList[getRandomInt(0, standardRoundsList.length - 1)];
-         // console.log(randomStandardRound);
          const {terms, questions, answers, type} = standardRounds[randomStandardRound];
          rounds[listOfRounds[i]] = {
             questionType: {
@@ -89,7 +92,8 @@ function genRandomStandard (maxCapacity, roundAmount) {
             },
             deathmatchRound: false,
             deathmatch: [],
-            incorrectMethod: 'continue', // can be continue or repeat*
+            eliminationGap: eliminationGap,
+            incorrectMethod: incorrectMethod, // can be continue or repeat*
             questionsMaster: questions,
             questions: questions,
             terms: terms,

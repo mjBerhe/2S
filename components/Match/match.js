@@ -27,7 +27,7 @@ export default function Match({ socket, room, username }) {
 	const currentRoundType = roundsInfo[`round ${currentRound}`].questionType;
 
 	// countdown is for first round and any subsequent rounds
-	const [countdown, startCountdown] = useCountdown(5, () => {
+	const [countdown, startCountdown] = useCountdown(3, () => {
 		if (DMStatus.start) {
 			loadDMQuestion();
 		} else {

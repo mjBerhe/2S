@@ -38,7 +38,7 @@ const prepMatch = (roomsObject, room) => {
 	for (let i = 0; i < roomsObject[room].maxCapacity; i++) {
 		roomsObject[room].users.push(roomsObject[room].queue.shift());
 	}
-	console.log(roomsObject);
+	// console.log(roomsObject);
 }
 
 // resetting room after a game finishes

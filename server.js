@@ -34,7 +34,12 @@ const rooms = { // available rooms
 	'Gameroom 1': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Gameroom 2': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
 	'Testing Room 1': generateRoom.static(2, 3, ['multiplicationTest', 'divisionTest', 'additionDM']),
-	'Testing Room 2': generateRoom.randomStandard(2, 5),
+	'Testing Room 2': generateRoom.randomStandard({
+		maxCapacity: 2,
+		roundAmount: 2,
+		eliminationGap: 2,
+		incorrectMethod: 'repeat',
+	}),
 	'Testing Room 3': generateRoom.randomDeathmatch(2, 5),
 }
 
@@ -57,26 +62,31 @@ nextApp.prepare().then(() => {
 		socket.on('joinRoom', data => {
 			// if room and new user is valid, join room
 			if (availableRooms.includes(data.room) && data.username.id) {
-				socket.join(data.room);
-				users[data.room] = match.addUser(users[data.room], data.room, data.username);
-				console.log(users[data.room]);
+				socket.join(data.room, (err) => {
+					if (err) {
+						console.log(`Error, couldn't join ${data.room}`);
+						socket.emit('invalidRoom', `Error, couldn't join ${data.room}`);
+					} else {
+						users[data.room] = match.addUser(users[data.room], data.room, data.username);
+						console.log(users[data.room]);
 
-				gamelobby.to(data.room).emit('userConnected', {
-					msg: `${data.username.name} has joined ${data.room}`,
-					room: data.room,
-					username: data.username,
-				})
+						gamelobby.to(data.room).emit('userConnected', {
+							msg: `${data.username.name} has joined ${data.room}`,
+							room: data.room,
+							username: data.username,
+						});
 
-				socket.emit('sendUserList', users);
+						socket.emit('sendUserList', users);
 
-				currentUser = {
-					username: {
-						name: data.username.name,
-						id: data.username.id,
-					},
-					room: data.room,
-				}
-
+						currentUser = {
+							username: {
+								name: data.username.name,
+								id: data.username.id,
+							},
+							room: data.room,
+						}
+					}
+				});
 			} else {
 				socket.emit('invalidRoom', `Error, no room named ${data.room}`);
 			}
@@ -203,6 +213,7 @@ nextApp.prepare().then(() => {
 		socket.on('dmQuestion', data => {
 			const deathmatch = rooms[data.room].rounds[`round ${data.currentRound}`].deathmatch;
 			const results = rooms[data.room].rounds[`round ${data.currentRound}`].results;
+			const elimGap = rooms[data.room].rounds[`round ${data.currentRound}`].eliminationGap;
 
 			// when recieving a question via deathmatch, record it
 			deathmatch.forEach((user, i) => { // finds user by data.id
@@ -227,7 +238,7 @@ nextApp.prepare().then(() => {
 				}
 			});
 
-			const eliminatedUser = match.checkDeathMatch(deathmatch, 3);
+			const eliminatedUser = match.checkDeathMatch(deathmatch, elimGap);
 			// if a user was eliminated in deathmatch
 			if (eliminatedUser) {
 				// recording eliminated users results
