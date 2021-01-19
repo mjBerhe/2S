@@ -8,6 +8,7 @@ import GameRoom from '../components/Gameroom/gameroom.js';
 import QuestionsList from '../components/QuestionsList/questionsList.js';
 import Header from '../components/Header/header.js';
 import Footer from '../components/Footer/footer.js';
+import create from 'zustand';
 
 // const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
 // const gamelobby_ENDPOINT = "https://2slow.vercel.app/gamelobby";
@@ -25,6 +26,16 @@ export default function GameLobby() {
 		id: null
 	});
 	const [currentRoom, setCurrentRoom] = useState('');
+
+	const [creatingRoom, setCreatingRoom] = useState(false);
+
+	const [listOfRooms, setListOfRooms] = useState([
+		'Gameroom 1',
+		'Gameroom 2',
+		'Testing Room 1',
+		'Testing Room 2',
+		'Testing Room 3'
+	]);
 
 	// socket events
 	useEffect(() => {
@@ -95,6 +106,11 @@ export default function GameLobby() {
 		resetDMState();
 	}
 
+	const toggleCreateRoom = () => {
+		setCreatingRoom(!creatingRoom);
+		console.log(creatingRoom);
+	}
+
 	return (
 		<div className="gamelobby-page-container">
 			<Head>
@@ -112,23 +128,25 @@ export default function GameLobby() {
 						<div className='title-container'>
 							<h1>2Slow</h1>
 						</div>
-						<div className='room-select'>
+						<div className='room-select-interface'>
 							<input type="text" onChange={handleUsername} value={username.name} placeholder='Nickname'/>
-							<button className='button-1' onClick={handleJoinRoom} value={'Gameroom 1'}>
-								Gameroom 1
+							<button className='button-1' onClick={toggleCreateRoom}>
+								Create Room
 							</button>
-							<button className='button-1' onClick={handleJoinRoom} value={'Gameroom 2'}>
-								Gameroom 2
-							</button>
-							<button className='button-1' onClick={handleJoinRoom} value={'Testing Room 1'}>
-								Testing Room 1
-							</button>
-							<button className='button-1' onClick={handleJoinRoom} value={'Testing Room 2'}>
-								Testing Room 2
-							</button>
-							<button className='button-1' onClick={handleJoinRoom} value={'Testing Room 3'}>
-								Testing Room 3
-							</button>
+							{!creatingRoom && 
+								<div className='available-rooms'>
+									{listOfRooms.map(roomName => 
+										<button className='button-1' onClick={handleJoinRoom} value={roomName} key={roomName}>
+											{roomName}
+										</button>
+									)}
+								</div>
+							}
+							{creatingRoom &&
+								<div className='create-room'>
+									Testing
+								</div>
+							}
 						</div>
 					</div>
 				}
