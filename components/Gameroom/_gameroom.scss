@@ -37,35 +37,85 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	border: 1px solid green;
+	// border: 1px solid green;
 	height: 100%;
 	width: 100%;
 	input {
 		margin-bottom: 10px;
 		padding-left: 7px;
-		height: 30px;
+		height: 35px;
 		width: 200px;
-		border: 2px solid black;
+		border: 1px solid black;
 		border-radius: 5px;
 	}
 	button {
 		margin: 5px;
 		padding: 3px;
-		width: 150px;
+		height: 30px;
+		width: 140px;
+		border: 1px solid black;
+		border-radius: 5px;
+	}
+	select {
+		width: 50px;
 	}
 }
 
-.available-rooms {
+.available-rooms { // default shows all available rooms
 	display: flex;
 	flex-direction: column;
-	
-}
-
-.create-room {
-	border: 1px solid black;
-	width: 100%;
 	height: 100%;
 }
+
+.create-room { // form to create a new room
+	border: 2px solid yellow;
+	width: 100%;
+	height: 100%;
+	form {
+		width: 100%;
+		height: 100%;
+		display: grid;
+		grid-template-rows: repeat(5, minmax(60px, 20%));
+		grid-template-columns: 50% 50%;
+		justify-content: center;
+		align-items: center;
+		label {
+			border: 1px solid black;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+	}
+}
+
+.create-room-name {
+	grid-row: 1/2;
+	grid-column: 1/3;
+}
+
+.create-room-submit {
+	grid-row: 5/6;
+	grid-column: 1/2;
+	display: flex;
+	justify-content: center;
+}
+
+.create-room-cancel {
+	grid-row: 5/6;
+	grid-column: 2/3;
+	display: flex;
+	justify-content: center;
+}
+
+
+
+
+
+
+
+
 
 .gameroom-container {
 	border: solid yellow 2px;

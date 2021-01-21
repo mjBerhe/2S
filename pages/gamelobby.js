@@ -130,11 +130,11 @@ export default function GameLobby() {
 						</div>
 						<div className='room-select-interface'>
 							<input type="text" onChange={handleUsername} value={username.name} placeholder='Nickname'/>
-							<button className='button-1' onClick={toggleCreateRoom}>
-								Create Room
-							</button>
 							{!creatingRoom && 
 								<div className='available-rooms'>
+									<button className='button-1' onClick={toggleCreateRoom}>
+										Create Room
+									</button>
 									{listOfRooms.map(roomName => 
 										<button className='button-1' onClick={handleJoinRoom} value={roomName} key={roomName}>
 											{roomName}
@@ -144,7 +144,54 @@ export default function GameLobby() {
 							}
 							{creatingRoom &&
 								<div className='create-room'>
-									Testing
+									<form>
+										<label className='create-room-name'> 
+											Room Name
+											<input type="text" name='room-name'/>
+										</label>
+										<label>
+											Max users
+											<select name='max-users'>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</label>
+										<label>
+											Number of Rounds
+											<select name="amount-rounds">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+												<option value="6">6</option>
+												<option value="7">7</option>
+												<option value="8">8</option>
+												<option value="9">9</option>
+												<option value="10">10</option>
+											</select>
+										</label>
+										<label>
+											Incorrect Method
+											<select className='select-1' name="incorrect-method">
+												<option value="repeat">Repeat</option>
+												<option value="continue">Continue</option>
+											</select>
+										</label>
+										<div className='create-room-submit'>
+											<button type="submit" className='button-1' value='Create Room'>
+												Create Room
+											</button>
+										</div>
+										<div className='create-room-cancel'>
+											<button className='button-1' onClick={toggleCreateRoom}>
+												Cancel Room
+											</button>
+										</div>
+									</form>
 								</div>
 							}
 						</div>

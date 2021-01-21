@@ -76,9 +76,6 @@ export default function GameRoom({ socket, room, username, leaveRoom }) {
 
 	return (
 		<div className='gameroom-container'>
-			{/* {!startStatus && !complete.status && 
-				<h1>{room}</h1>
-			} */}
 			{!queueStatus && !startStatus && !complete.status &&
 				<InRoom room={room} findGame={handleFindGame} leaveRoom={leaveRoom}/>
 			}
