@@ -249,6 +249,10 @@
           justify-content: center;
 }
 
+.incorrect-select select {
+  width: 100px;
+}
+
 .gameroom-container {
   border: solid yellow 2px;
   display: -webkit-box;

@@ -111,6 +111,33 @@ export default function GameLobby() {
 		console.log(creatingRoom);
 	}
 
+	const [formInfo, setFormInfo] = useState({
+		roomName: '',
+		maxUsers: 0,
+		amountOfRounds: 0,
+		incorrectMethod: '',
+		dmEliminationGap: 0,
+	});
+
+	const handleFormChange = (e) => {
+		const formName = e.target.name;
+		const formValue = e.target.value;
+
+		if (formName && formValue) {
+			setFormInfo(prevForm => ({
+				...prevForm,
+				[formName]: formValue,
+			}));
+		}
+	}
+
+	const confirmCreateRoom = (e) => {
+		e.preventDefault();
+		if (formInfo.roomName && formInfo.maxUsers && formInfo.amountOfRounds && formInfo.dmEliminationGap && formInfo.incorrectMethod) {
+			console.log(formInfo);
+		}
+	}
+
 	return (
 		<div className="gamelobby-page-container">
 			<Head>
@@ -147,11 +174,11 @@ export default function GameLobby() {
 									<form>
 										<label className='create-room-name'> 
 											Room Name
-											<input type="text" name='room-name'/>
+											<input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange}/>
 										</label>
 										<label>
 											Max users
-											<select name='max-users'>
+											<select name='maxUsers' value={formInfo.maxUsers} onChange={handleFormChange}>
 												<option value="1">1</option>
 												<option value="2">2</option>
 												<option value="3">3</option>
@@ -161,7 +188,7 @@ export default function GameLobby() {
 										</label>
 										<label>
 											Number of Rounds
-											<select name="amount-rounds">
+											<select name="amountOfRounds" value={formInfo.amountOfRounds} onChange={handleFormChange}>
 												<option value="1">1</option>
 												<option value="2">2</option>
 												<option value="3">3</option>
@@ -174,15 +201,25 @@ export default function GameLobby() {
 												<option value="10">10</option>
 											</select>
 										</label>
-										<label>
+										<label className='incorrect-select'>
 											Incorrect Method
-											<select className='select-1' name="incorrect-method">
+											<select name="incorrectMethod" value={formInfo.incorrectMethod} onChange={handleFormChange}>
 												<option value="repeat">Repeat</option>
 												<option value="continue">Continue</option>
 											</select>
 										</label>
+										<label className='elimination-gap-select'>
+											DM Elimination Gap
+											<select name="dmEliminationGap" value={formInfo.dmEliminationGap} onChange={handleFormChange}>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</label>
 										<div className='create-room-submit'>
-											<button type="submit" className='button-1' value='Create Room'>
+											<button type="submit" className='button-1' onClick={confirmCreateRoom}>
 												Create Room
 											</button>
 										</div>
