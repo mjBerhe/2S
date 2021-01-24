@@ -17,7 +17,7 @@ const gamelobbySocket = io(gamelobby_ENDPOINT);
 
 export default function GameLobby() {
 
-	const { users, addUser, removeUser, updateUsersList } = useUsers();
+	const { users, addRoom, addUser, removeUser, updateUsersList } = useUsers();
 	const { resetMatch } = useMatch();
 	const { resetDMState } = useDeathMatch();
 
@@ -67,12 +67,19 @@ export default function GameLobby() {
 			updateUsersList(userList);
 		});
 
+		gamelobbySocket.on('addRoom', data => {
+			console.log(data.msg);
+			addRoom(data.roomName);
+			setListOfRooms(prevRooms => ([...prevRooms, data.roomName]));
+		});
+
 		return () => {
 			gamelobbySocket.off('welcome');
 			gamelobbySocket.off('error');
 			gamelobbySocket.off('userConnected');
 			gamelobbySocket.off('removeUser');
 			gamelobbySocket.off('sendUserList');
+			gamelobbySocket.off('addRoom');
 		}
 
 	}, []);
@@ -108,33 +115,41 @@ export default function GameLobby() {
 
 	const toggleCreateRoom = () => {
 		setCreatingRoom(!creatingRoom);
-		console.log(creatingRoom);
+		// console.log(creatingRoom);
 	}
 
 	const [formInfo, setFormInfo] = useState({
 		roomName: '',
-		maxUsers: 0,
-		amountOfRounds: 0,
-		incorrectMethod: '',
-		dmEliminationGap: 0,
+		maxCapacity: 1,
+		amountOfRounds: 1,
+		incorrectMethod: 'continue',
+		dmEliminationGap: 1,
 	});
 
 	const handleFormChange = (e) => {
 		const formName = e.target.name;
 		const formValue = e.target.value;
 
-		if (formName && formValue) {
-			setFormInfo(prevForm => ({
-				...prevForm,
-				[formName]: formValue,
-			}));
-		}
+		setFormInfo(prevForm => ({
+			...prevForm,
+			[formName]: formValue,
+		}));
 	}
 
 	const confirmCreateRoom = (e) => {
 		e.preventDefault();
-		if (formInfo.roomName && formInfo.maxUsers && formInfo.amountOfRounds && formInfo.dmEliminationGap && formInfo.incorrectMethod) {
-			console.log(formInfo);
+		if (formInfo.roomName && formInfo.maxCapacity && formInfo.amountOfRounds && formInfo.dmEliminationGap && formInfo.incorrectMethod) {
+			console.log(`form is fully complete: ${formInfo}`);
+			gamelobbySocket.emit('createRoom', {
+				username: username,
+				roomName: formInfo.roomName,
+				maxCapacity: formInfo.maxCapacity,
+				amountOfRounds: formInfo.amountOfRounds,
+				incorrectMethod: formInfo.incorrectMethod,
+				dmEliminationGap: formInfo.dmEliminationGap,
+			});
+		} else {
+			console.log('form is not complete')
 		}
 	}
 
@@ -156,14 +171,16 @@ export default function GameLobby() {
 							<h1>2Slow</h1>
 						</div>
 						<div className='room-select-interface'>
-							<input type="text" onChange={handleUsername} value={username.name} placeholder='Nickname'/>
+							<div className='username-container'>
+								<input type="text" onChange={handleUsername} value={username.name} placeholder='Nickname'/>
+							</div>
 							{!creatingRoom && 
 								<div className='available-rooms'>
-									<button className='button-1' onClick={toggleCreateRoom}>
+									<button onClick={toggleCreateRoom}>
 										Create Room
 									</button>
 									{listOfRooms.map(roomName => 
-										<button className='button-1' onClick={handleJoinRoom} value={roomName} key={roomName}>
+										<button onClick={handleJoinRoom} value={roomName} key={roomName}>
 											{roomName}
 										</button>
 									)}
@@ -174,11 +191,11 @@ export default function GameLobby() {
 									<form>
 										<label className='create-room-name'> 
 											Room Name
-											<input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange}/>
+											<input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange} autoComplete='off'/>
 										</label>
 										<label>
-											Max users
-											<select name='maxUsers' value={formInfo.maxUsers} onChange={handleFormChange}>
+											Max Number of Users
+											<select name='maxCapacity' value={formInfo.maxCapacity} onChange={handleFormChange}>
 												<option value="1">1</option>
 												<option value="2">2</option>
 												<option value="3">3</option>
@@ -204,8 +221,8 @@ export default function GameLobby() {
 										<label className='incorrect-select'>
 											Incorrect Method
 											<select name="incorrectMethod" value={formInfo.incorrectMethod} onChange={handleFormChange}>
-												<option value="repeat">Repeat</option>
 												<option value="continue">Continue</option>
+												<option value="repeat">Repeat</option>
 											</select>
 										</label>
 										<label className='elimination-gap-select'>
@@ -219,12 +236,12 @@ export default function GameLobby() {
 											</select>
 										</label>
 										<div className='create-room-submit'>
-											<button type="submit" className='button-1' onClick={confirmCreateRoom}>
+											<button type="submit" onClick={confirmCreateRoom}>
 												Create Room
 											</button>
 										</div>
 										<div className='create-room-cancel'>
-											<button className='button-1' onClick={toggleCreateRoom}>
+											<button onClick={toggleCreateRoom}>
 												Cancel Room
 											</button>
 										</div>

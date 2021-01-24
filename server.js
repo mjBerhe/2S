@@ -51,13 +51,37 @@ nextApp.prepare().then(() => {
 		return nextHandler(req, res);
 	});
 
-	const gamelobby = io.of('/gamelobby');
+	const gamelobby = io.of('/gamelobby'); 
 	// const chatlobby = io.of('/chatlobby'); need to make new connection socket for chatlobby later
+
+	// use gamelobby when talking to everyone on /gamelobby
+	// use socket when talking to this specific connection
 
 	// initializing socket when a user goes on /gamelobby
 	gamelobby.on('connection', socket => {
 		console.log('a user has connected to /gamelobby');
 		socket.emit('welcome', 'welcome to /gamelobby');
+
+		socket.on('createRoom', data => {
+			console.log(`${data.username.name} has requested to create a room: ${data}`);
+			
+			rooms[data.roomName.toString()] = generateRoom.randomStandard({
+				maxCapacity: parseInt(data.maxCapacity, 10),
+				roundAmount: parseInt(data.amountOfRounds, 10),
+				eliminationGap: parseInt(data.dmEliminationGap, 10),
+				incorrectMethod: data.incorrectMethod,
+			});
+
+			availableRooms.push(data.roomName);
+			users[data.roomName] = [];
+
+			console.log(rooms);
+
+			gamelobby.emit('addRoom', {
+				roomName: data.roomName,
+				msg: `${data.roomName} has been created`,
+			});
+		});
 
 		socket.on('joinRoom', data => {
 			// if room and new user is valid, join room
@@ -135,7 +159,6 @@ nextApp.prepare().then(() => {
 				console.log(`${data.username.name} tried to join the queue, QUEUE FULL`)
 			}
 		});
-
 
 		socket.on('leaveQueue', data => {
 			if (rooms[data.room]) {

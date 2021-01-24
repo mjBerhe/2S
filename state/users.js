@@ -8,6 +8,15 @@ export const [useUsers] = create((set, get) => ({
 		'Testing Room 2': [],
 		'Testing Room 3': [],
 	},
+	addRoom: (roomName) => {
+		const users = get().users;
+		set(prevState => ({
+			users: {
+				...prevState.users,
+				[roomName]: [],
+			}
+		}));
+	},
 	addUser: (room, username) => {
 		set(prevState => ({
 			users: {

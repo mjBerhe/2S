@@ -9,8 +9,6 @@
 	grid-column: 2/3;
 	height: 100%;
 	width: 100%;
-	// display: flex;
-	// justify-content: center;
 	background: rgba(63, 194, 238, 0.781);
 }
 
@@ -18,7 +16,6 @@
 	border: 1px solid red;
 	height: 100%;
 	width: 100%;
-	// @include flexColumn();
 	display: grid;
 	grid-template-columns: 100%;
 	grid-template-rows: 40% 60%;
@@ -34,14 +31,14 @@
 }
 
 .room-select-interface {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
 	// border: 1px solid green;
 	height: 100%;
 	width: 100%;
+	display: grid;
+	grid-template-rows: 10% 90%;
+	grid-template-columns: 100%;
 	input {
-		margin-bottom: 10px;
+		margin: 5px;
 		padding-left: 7px;
 		height: 35px;
 		width: 200px;
@@ -61,26 +58,36 @@
 	}
 }
 
+.username-container {
+	grid-row: 1/2;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .available-rooms { // default shows all available rooms
+	grid-row: 2/3;
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	align-items: center;
 }
 
 .create-room { // form to create a new room
-	border: 2px solid yellow;
+	grid-row: 2/3;
+	// border: 2px solid yellow;
 	width: 100%;
 	height: 100%;
+	margin: 0 0 30px 0;
 	form {
 		width: 100%;
 		height: 100%;
 		display: grid;
-		grid-template-rows: repeat(5, minmax(60px, 20%));
+		grid-template-rows: repeat(4, minmax(70px, 25%));
 		grid-template-columns: 50% 50%;
 		justify-content: center;
 		align-items: center;
 		label {
-			border: 1px solid black;
+			// border: 1px solid black;
 			height: 100%;
 			display: flex;
 			flex-direction: column;
@@ -96,14 +103,14 @@
 }
 
 .create-room-submit {
-	grid-row: 5/6;
+	grid-row: 4/5;
 	grid-column: 1/2;
 	display: flex;
 	justify-content: center;
 }
 
 .create-room-cancel {
-	grid-row: 5/6;
+	grid-row: 4/5;
 	grid-column: 2/3;
 	display: flex;
 	justify-content: center;
