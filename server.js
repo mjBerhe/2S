@@ -15,32 +15,28 @@ const generateRoom = require('./matts_functions/generateRoom.js');
 const match =  require('./matts_functions/matchHelpers.js');
 
 const availableRooms = [ // used to identify which rooms actually exist
-	'Gameroom 1',
-	'Gameroom 2',
 	'Testing Room 1',
 	'Testing Room 2',
-	'Testing Room 3',
 ];
 
 const users = { // stores users
-	'Gameroom 1': [],
-	'Gameroom 2': [],
 	'Testing Room 1': [],
 	'Testing Room 2': [],
-	'Testing Room 3': [],
 };
 
 const rooms = { // available rooms
-	'Gameroom 1': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
-	'Gameroom 2': generateRoom.static(2, 5, ['addition1', 'subtraction1', 'division1', 'bedmas1', 'multiplicationDM']),
-	'Testing Room 1': generateRoom.static(2, 3, ['multiplicationTest', 'divisionTest', 'additionDM']),
-	'Testing Room 2': generateRoom.randomStandard({
+	'Testing Room 1': generateRoom.randomStandard({
 		maxCapacity: 2,
 		roundAmount: 2,
 		eliminationGap: 2,
 		incorrectMethod: 'repeat',
 	}),
-	'Testing Room 3': generateRoom.randomDeathmatch(2, 5),
+	'Testing Room 2': generateRoom.randomDeathmatch({
+		maxCapacity: 2,
+		roundAmount: 3,
+		eliminationGap: 3,
+		incorrectMethod: 'continue',
+	}),
 }
 
 let currentUser;
@@ -60,7 +56,10 @@ nextApp.prepare().then(() => {
 	// initializing socket when a user goes on /gamelobby
 	gamelobby.on('connection', socket => {
 		console.log('a user has connected to /gamelobby');
-		socket.emit('welcome', 'welcome to /gamelobby');
+		socket.emit('welcome', {
+			msg: 'welcome to /gamelobby',
+			availableRooms: availableRooms,
+		});
 
 		socket.on('createRoom', data => {
 			console.log(`${data.username.name} has requested to create a room: ${data}`);
@@ -78,6 +77,8 @@ nextApp.prepare().then(() => {
 			console.log(rooms);
 
 			gamelobby.emit('addRoom', {
+				hostName: data.username.name,
+				hostID: data.username.id,
 				roomName: data.roomName,
 				msg: `${data.roomName} has been created`,
 			});

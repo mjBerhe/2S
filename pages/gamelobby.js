@@ -4,11 +4,11 @@ import io from 'socket.io-client';
 import { useUsers } from '../state/users.js';
 import { useMatch } from '../state/match.js';
 import { useDeathMatch } from '../state/deathmatch.js';
+
 import GameRoom from '../components/Gameroom/gameroom.js';
 import QuestionsList from '../components/QuestionsList/questionsList.js';
 import Header from '../components/Header/header.js';
 import Footer from '../components/Footer/footer.js';
-import create from 'zustand';
 
 // const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
 // const gamelobby_ENDPOINT = "https://2slow.vercel.app/gamelobby";
@@ -29,19 +29,14 @@ export default function GameLobby() {
 
 	const [creatingRoom, setCreatingRoom] = useState(false);
 
-	const [listOfRooms, setListOfRooms] = useState([
-		'Gameroom 1',
-		'Gameroom 2',
-		'Testing Room 1',
-		'Testing Room 2',
-		'Testing Room 3'
-	]);
+	const [listOfRooms, setListOfRooms] = useState([]);
 
 	// socket events
 	useEffect(() => {
 		// welcome message on connection to socket
-		gamelobbySocket.on('welcome', msg => {
-			console.log(msg)
+		gamelobbySocket.on('welcome', data => {
+			console.log(data.msg);
+			setListOfRooms(data.availableRooms);
 		});
 
 		// error message
@@ -71,6 +66,17 @@ export default function GameLobby() {
 			console.log(data.msg);
 			addRoom(data.roomName);
 			setListOfRooms(prevRooms => ([...prevRooms, data.roomName]));
+
+			if (data.hostID === gamelobbySocket.id) {
+				console.log('you are the host sir');
+				gamelobbySocket.emit('joinRoom', {
+					room: data.roomName,
+					username: username,
+				});
+				setCurrentRoom(data.roomName);
+			} else {
+				console.log(`you are not the host, hostID: ${data.hostID}, your id: ${username.id}`)
+			}
 		});
 
 		return () => {
@@ -83,6 +89,21 @@ export default function GameLobby() {
 		}
 
 	}, []);
+
+	useEffect(() => {
+		console.log(username)
+	}, [username])
+
+	useEffect(() => {
+		listOfRooms.forEach(roomName => {
+			if (users[roomName]) {
+				// console.log(`users array for ${roomName} already exists`);
+			} else {
+				addRoom(roomName);
+				// console.log(`users array created for ${roomName}`);
+			}
+		});
+	}, [listOfRooms])
 	
 	const handleUsername = (e) => {
 		e.preventDefault();
@@ -115,7 +136,6 @@ export default function GameLobby() {
 
 	const toggleCreateRoom = () => {
 		setCreatingRoom(!creatingRoom);
-		// console.log(creatingRoom);
 	}
 
 	const [formInfo, setFormInfo] = useState({
@@ -148,6 +168,8 @@ export default function GameLobby() {
 				incorrectMethod: formInfo.incorrectMethod,
 				dmEliminationGap: formInfo.dmEliminationGap,
 			});
+
+			setCreatingRoom(false);
 		} else {
 			console.log('form is not complete')
 		}

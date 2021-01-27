@@ -114,7 +114,10 @@ function genRandomStandard (inputs) {
    };
 }
 
-function genRandomDeathmatch (maxCapacity, roundAmount) {
+function genRandomDeathmatch (inputs) {
+
+   const { maxCapacity, roundAmount, eliminationGap, incorrectMethod } = inputs;
+
    const listOfRounds = [];
    const rounds = {};
 
@@ -132,7 +135,8 @@ function genRandomDeathmatch (maxCapacity, roundAmount) {
          },
          deathmatchRound: true,
          deathmatch: [],
-         incorrectMethod: 'continue', // can be continue or repeat*
+         eliminationGap: eliminationGap,
+         incorrectMethod: incorrectMethod, // can be continue or repeat*
          questionsMaster: questions,
          questions: questions,
          terms: terms,
