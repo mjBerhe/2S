@@ -54,7 +54,7 @@ const roundTypeConverter = [ // converts number to question type
 
 function genRandomStandard (inputs) {
 
-   const { maxCapacity, roundAmount, eliminationGap, incorrectMethod } = inputs;
+   const { maxCapacity, roundAmount, eliminationGap, incorrectMethod, customRoom } = inputs;
 
    const listOfRounds = [];
    const rounds = {};
@@ -107,6 +107,7 @@ function genRandomStandard (inputs) {
       start: false,
       maxCapacity: maxCapacity,
       roundAmount: roundAmount,
+      customRoom: customRoom,
       users: [],
       queue: [],
       roundQueue: [],
@@ -116,7 +117,7 @@ function genRandomStandard (inputs) {
 
 function genRandomDeathmatch (inputs) {
 
-   const { maxCapacity, roundAmount, eliminationGap, incorrectMethod } = inputs;
+   const { maxCapacity, roundAmount, eliminationGap, incorrectMethod, customRoom } = inputs;
 
    const listOfRounds = [];
    const rounds = {};
@@ -149,6 +150,7 @@ function genRandomDeathmatch (inputs) {
       start: false,
       maxCapacity: maxCapacity,
       roundAmount: roundAmount,
+      customRoom: customRoom,
       users: [],
       queue: [],
       roundQueue: [],

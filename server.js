@@ -30,12 +30,14 @@ const rooms = { // available rooms
 		roundAmount: 2,
 		eliminationGap: 2,
 		incorrectMethod: 'repeat',
+		customRoom: false,
 	}),
 	'Testing Room 2': generateRoom.randomDeathmatch({
 		maxCapacity: 2,
 		roundAmount: 3,
 		eliminationGap: 3,
 		incorrectMethod: 'continue',
+		customRoom: false,
 	}),
 }
 
@@ -69,14 +71,14 @@ nextApp.prepare().then(() => {
 				roundAmount: parseInt(data.amountOfRounds, 10),
 				eliminationGap: parseInt(data.dmEliminationGap, 10),
 				incorrectMethod: data.incorrectMethod,
+				customRoom: true,
 			});
 
 			availableRooms.push(data.roomName);
 			users[data.roomName] = [];
 
-			console.log(rooms);
-
 			gamelobby.emit('addRoom', {
+				customRoom: true,
 				hostName: data.username.name,
 				hostID: data.username.id,
 				roomName: data.roomName,
@@ -99,6 +101,7 @@ nextApp.prepare().then(() => {
 							msg: `${data.username.name} has joined ${data.room}`,
 							room: data.room,
 							username: data.username,
+							customRoom: rooms[data.room].customRoom,
 						});
 
 						socket.emit('sendUserList', users);
@@ -117,10 +120,10 @@ nextApp.prepare().then(() => {
 			}
 		});
 
-		// socket.on('msgSent', data => {
-		// 	gamelobby.to(data.room).emit('msgSent', data);
-		// 	console.log(data);
-		// });
+		socket.on('msgSent', data => {
+			gamelobby.to(data.room).emit('msgSent', data);
+			console.log(data);
+		});
 
 		socket.on('joinQueue', data => {
 			// send a message if there is a current game ongoing in room

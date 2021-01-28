@@ -5,7 +5,9 @@ import { useUsers } from '../state/users.js';
 import { useMatch } from '../state/match.js';
 import { useDeathMatch } from '../state/deathmatch.js';
 
+import CreateRoom from '../components/Gameroom/createRoom.js';
 import GameRoom from '../components/Gameroom/gameroom.js';
+import CustomRoom from '../components/CustomRoom/customRoom.js';
 import QuestionsList from '../components/QuestionsList/questionsList.js';
 import Header from '../components/Header/header.js';
 import Footer from '../components/Footer/footer.js';
@@ -27,9 +29,12 @@ export default function GameLobby() {
 	});
 	const [currentRoom, setCurrentRoom] = useState('');
 
+	const [listOfRooms, setListOfRooms] = useState([]);
+
+	// to determine if showing form creation or not
 	const [creatingRoom, setCreatingRoom] = useState(false);
 
-	const [listOfRooms, setListOfRooms] = useState([]);
+	const [customRoom, setCustomRoom] = useState(false);
 
 	// socket events
 	useEffect(() => {
@@ -48,6 +53,12 @@ export default function GameLobby() {
 		gamelobbySocket.on('userConnected', data => {
 			// add logic to check if that user isnt already connected to the room using ids
 			addUser(data.room, data.username);
+			if (data.customRoom) { // joining a custom made room
+				setCustomRoom(true);
+				console.log('this is a custom made room')
+			} else { // joining a premade room
+				setCustomRoom(false);
+			}
 			console.log(data.msg);
 		});
 
@@ -67,11 +78,15 @@ export default function GameLobby() {
 			addRoom(data.roomName);
 			setListOfRooms(prevRooms => ([...prevRooms, data.roomName]));
 
+			// if this is the host of the new room added
 			if (data.hostID === gamelobbySocket.id) {
 				console.log('you are the host sir');
-				gamelobbySocket.emit('joinRoom', {
+				gamelobbySocket.emit('joinRoom', { // automatically join this room after creation
 					room: data.roomName,
-					username: username,
+					username: {
+						name: localStorage.getItem('name'),
+						id: gamelobbySocket.id,
+					},
 				});
 				setCurrentRoom(data.roomName);
 			} else {
@@ -90,11 +105,7 @@ export default function GameLobby() {
 
 	}, []);
 
-	useEffect(() => {
-		console.log(username)
-	}, [username])
-
-	useEffect(() => {
+	useEffect(() => { // adding rooms (users object) whenever there is a change
 		listOfRooms.forEach(roomName => {
 			if (users[roomName]) {
 				// console.log(`users array for ${roomName} already exists`);
@@ -111,6 +122,7 @@ export default function GameLobby() {
 			name: e.target.value,
 			id: gamelobbySocket.id,
 		});
+		localStorage.setItem('name', e.target.value);
 	}
 
 	const handleJoinRoom = (e) => {
@@ -136,43 +148,6 @@ export default function GameLobby() {
 
 	const toggleCreateRoom = () => {
 		setCreatingRoom(!creatingRoom);
-	}
-
-	const [formInfo, setFormInfo] = useState({
-		roomName: '',
-		maxCapacity: 1,
-		amountOfRounds: 1,
-		incorrectMethod: 'continue',
-		dmEliminationGap: 1,
-	});
-
-	const handleFormChange = (e) => {
-		const formName = e.target.name;
-		const formValue = e.target.value;
-
-		setFormInfo(prevForm => ({
-			...prevForm,
-			[formName]: formValue,
-		}));
-	}
-
-	const confirmCreateRoom = (e) => {
-		e.preventDefault();
-		if (formInfo.roomName && formInfo.maxCapacity && formInfo.amountOfRounds && formInfo.dmEliminationGap && formInfo.incorrectMethod) {
-			console.log(`form is fully complete: ${formInfo}`);
-			gamelobbySocket.emit('createRoom', {
-				username: username,
-				roomName: formInfo.roomName,
-				maxCapacity: formInfo.maxCapacity,
-				amountOfRounds: formInfo.amountOfRounds,
-				incorrectMethod: formInfo.incorrectMethod,
-				dmEliminationGap: formInfo.dmEliminationGap,
-			});
-
-			setCreatingRoom(false);
-		} else {
-			console.log('form is not complete')
-		}
 	}
 
 	return (
@@ -209,72 +184,16 @@ export default function GameLobby() {
 								</div>
 							}
 							{creatingRoom &&
-								<div className='create-room'>
-									<form>
-										<label className='create-room-name'> 
-											Room Name
-											<input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange} autoComplete='off'/>
-										</label>
-										<label>
-											Max Number of Users
-											<select name='maxCapacity' value={formInfo.maxCapacity} onChange={handleFormChange}>
-												<option value="1">1</option>
-												<option value="2">2</option>
-												<option value="3">3</option>
-												<option value="4">4</option>
-												<option value="5">5</option>
-											</select>
-										</label>
-										<label>
-											Number of Rounds
-											<select name="amountOfRounds" value={formInfo.amountOfRounds} onChange={handleFormChange}>
-												<option value="1">1</option>
-												<option value="2">2</option>
-												<option value="3">3</option>
-												<option value="4">4</option>
-												<option value="5">5</option>
-												<option value="6">6</option>
-												<option value="7">7</option>
-												<option value="8">8</option>
-												<option value="9">9</option>
-												<option value="10">10</option>
-											</select>
-										</label>
-										<label className='incorrect-select'>
-											Incorrect Method
-											<select name="incorrectMethod" value={formInfo.incorrectMethod} onChange={handleFormChange}>
-												<option value="continue">Continue</option>
-												<option value="repeat">Repeat</option>
-											</select>
-										</label>
-										<label className='elimination-gap-select'>
-											DM Elimination Gap
-											<select name="dmEliminationGap" value={formInfo.dmEliminationGap} onChange={handleFormChange}>
-												<option value="1">1</option>
-												<option value="2">2</option>
-												<option value="3">3</option>
-												<option value="4">4</option>
-												<option value="5">5</option>
-											</select>
-										</label>
-										<div className='create-room-submit'>
-											<button type="submit" onClick={confirmCreateRoom}>
-												Create Room
-											</button>
-										</div>
-										<div className='create-room-cancel'>
-											<button onClick={toggleCreateRoom}>
-												Cancel Room
-											</button>
-										</div>
-									</form>
-								</div>
+								<CreateRoom socket={gamelobbySocket} username={username} toggleRoom={toggleCreateRoom} setCustomRoom={setCustomRoom}/>
 							}
 						</div>
 					</div>
 				}
-				{currentRoom &&
+				{currentRoom && !customRoom &&
 					<GameRoom socket={gamelobbySocket} room={currentRoom} username={username} leaveRoom={handleLeaveRoom}/>
+				}
+				{currentRoom && customRoom &&
+					<CustomRoom socket={gamelobbySocket} room={currentRoom} username={username} leaveRoom={handleLeaveRoom}/>
 				}
 			</div>
 
