@@ -348,6 +348,7 @@ nextApp.prepare().then(() => {
 				console.log(users[currentUser.room]);
 
 				gamelobby.to(currentUser.room).emit('removeUser', {
+					msg: `${currentUser.username.name} has left ${currentUser.room}`,
 					username: currentUser.username,
 					room: currentUser.room,
 				});

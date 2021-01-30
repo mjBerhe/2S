@@ -4,8 +4,8 @@ import ChatBox from '../chatbox.js';
 export default function CustomRoom({ socket, room, username, handleLeaveRoom }) {
 
    return (
-      <div>
-         Custom Room
+      <div className='customroom-container'>
+         <h1>{room}</h1>
          <ChatBox socket={socket} room={room} username={username.name}/>
       </div>
    )

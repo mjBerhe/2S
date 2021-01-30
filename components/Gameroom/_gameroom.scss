@@ -131,13 +131,13 @@
 
 .gameroom-container {
 	border: solid yellow 2px;
+	height: 100%;
+	min-height: 85%;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	height: 100%;
-	min-height: 85%;
-	width: 100%;
    overflow: auto;
    h1 {
 	   text-align: center;
@@ -145,7 +145,6 @@
 }
 
 .inroom-container {
-	// border: 1px solid red;
 	height: 100%;
 	width: 100%;
 	display: grid;

@@ -2,6 +2,7 @@
 @import '../components/Footer/_footer.scss';
 @import '../components/QuestionsList/_questionsList.scss';
 @import '../components/Gameroom/_gameroom.scss';
+@import '../components/CustomRoom/customroom';
 @import '../components/Match/_match.scss';
 @import '../components/NormalRound/_normalRound.scss';
 @import '../components/Deathmatch/_deathmatch.scss';
@@ -75,17 +76,4 @@ a {
 
 .select-1 {
 	width: 100px;
-}
-
-.chatbox {
-	display: flex;
-	flex-direction: column;
-	/*justify-content: center;*/
-	/*align-items: center;*/
-	padding-left: 5px;
-	border: solid black 2px;
-	width: 40vw;
-	height: 50vh;
-	overflow: scroll;
-	background: white;
 }

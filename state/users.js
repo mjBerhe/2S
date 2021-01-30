@@ -1,8 +1,10 @@
 import create from 'zustand';
 
 export const [useUsers] = create((set, get) => ({
-	users: {},
-	addRoom: (roomName) => {
+	users: {
+
+	},
+	addRoomUsers: (roomName) => {
 		set(prevState => ({
 			users: {
 				...prevState.users,

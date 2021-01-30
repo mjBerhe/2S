@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import io from 'socket.io-client';
 import { useUsers } from '../state/users.js';
+import { useChatBox } from '../state/chatBox.js';
 import { useMatch } from '../state/match.js';
 import { useDeathMatch } from '../state/deathmatch.js';
 
@@ -19,7 +20,8 @@ const gamelobbySocket = io(gamelobby_ENDPOINT);
 
 export default function GameLobby() {
 
-	const { users, addRoom, addUser, removeUser, updateUsersList } = useUsers();
+	const { users, addRoomUsers, addUser, removeUser, updateUsersList } = useUsers();
+	const { addRoomChat, addNotification } = useChatBox();
 	const { resetMatch } = useMatch();
 	const { resetDMState } = useDeathMatch();
 
@@ -51,21 +53,21 @@ export default function GameLobby() {
 
 		// when someone joins a room
 		gamelobbySocket.on('userConnected', data => {
-			// add logic to check if that user isnt already connected to the room using ids
+			// must add logic to check if that user isnt already connected to the room using ids
 			addUser(data.room, data.username);
 			if (data.customRoom) { // joining a custom made room
 				setCustomRoom(true);
+				addNotification(data.msg, data.room);
 				console.log('this is a custom made room')
 			} else { // joining a premade room
 				setCustomRoom(false);
 			}
-			console.log(data.msg);
 		});
 
 		// when someone leaves a room
 		gamelobbySocket.on('removeUser', data => {
 			removeUser(data.room, data.username);
-			console.log(data.msg);
+			addNotification(data.msg, data.room);
 		});
 
 		// to update all users whenever someone joins/leaves a room
@@ -75,7 +77,8 @@ export default function GameLobby() {
 
 		gamelobbySocket.on('addRoom', data => {
 			console.log(data.msg);
-			addRoom(data.roomName);
+			addRoomUsers(data.roomName);
+			addRoomChat(data.roomName);
 			setListOfRooms(prevRooms => ([...prevRooms, data.roomName]));
 
 			// if this is the host of the new room added
@@ -110,7 +113,7 @@ export default function GameLobby() {
 			if (users[roomName]) {
 				// console.log(`users array for ${roomName} already exists`);
 			} else {
-				addRoom(roomName);
+				addRoomUsers(roomName);
 				// console.log(`users array created for ${roomName}`);
 			}
 		});
