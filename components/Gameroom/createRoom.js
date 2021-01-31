@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function CreateRoom({ socket, username, toggleRoom, setCustomRoom }) {
+export default function CreateRoom({ socket, username, toggleRoom }) {
 
    const [formInfo, setFormInfo] = useState({
 		roomName: '',

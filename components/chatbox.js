@@ -7,7 +7,6 @@ export default function ChatBox({ socket, room, username }) {
 	const chatBox = useChatBox(state => state.rooms[room]);
 
 	const [message, setMessage] = useState('');
-	// const [chatBox, setChatBox] = useState([]);
 
 	// constantly fire whenever someone is typing a message
 	const handleMessageChange = (e) => {
@@ -24,25 +23,11 @@ export default function ChatBox({ socket, room, username }) {
 			room: room,
 		})
 
-		// clears after each message is sent
-		setMessage('');
+		setMessage(''); // clears after each message is sent
 	}
 
-	// useEffect(() => {
-	// 	// for recieving messages from the server
-	// 	socket.on('msgSent', data => {
-	// 		setChatBox(prevChatBox => ([
-	// 			...prevChatBox,
-	// 			{
-	// 				username: data.username,
-	// 				message: data.message,
-	// 			}
-	// 		]))
-	// 	})
-
-	// }, [])
-
 	useEffect(() => {
+		// recieving messages from the server
 		socket.on('msgSent', data => {
 			addMessage(data.message, data.username, room);
 		});
@@ -52,16 +37,14 @@ export default function ChatBox({ socket, room, username }) {
 		}
 	}, []);
 
-
-	// for scrolling to the bottom of the chatbox
-	const divRef = useRef(null);
+	const divRef = useRef(null); // for scrolling to the bottom of the chatbox
 
 	useEffect(() => {
 		divRef.current.scrollIntoView({ behaviour: 'smooth' });
 	})
 
 	return (
-		<div>
+		<div className='chatbox-container'>
 			<div className='chatbox'>
 				{chatBox &&
 					chatBox.map((message, index) => 
@@ -71,9 +54,9 @@ export default function ChatBox({ socket, room, username }) {
 				<div ref={divRef}></div>
 			</div>
 
-			<form onSubmit={handleMessageSubmit}>
+			<form onSubmit={handleMessageSubmit} className='chatbox-form'>
 				<input type="text" value={message} onChange={handleMessageChange} placeholder='Type a message...' autoFocus/>
-				<button type="submit" value="Submit"/>
+				<button type="submit" value="Submit">Submit</button>
 			</form>
 		</div>
 	)

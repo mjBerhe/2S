@@ -384,13 +384,36 @@
 .customroom-container button {
   margin: 5px;
   padding: 3px;
-  height: 30px;
+  height: 35px;
   width: 100px;
   border: 1px solid black;
   border-radius: 5px;
 }
 
+.chatbox-container {
+  border: 2px solid yellow;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 33% 33% 33%;
+      grid-template-columns: 33% 33% 33%;
+  -ms-grid-rows: 90% 10%;
+      grid-template-rows: 90% 10%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .chatbox {
+  border: solid black 2px;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 3;
+  grid-column: 1/4;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1/2;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -398,14 +421,35 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  /*justify-content: center;*/
-  /*align-items: center;*/
   padding-left: 5px;
-  border: solid black 2px;
-  width: 40vw;
-  height: 50vh;
+  width: 80%;
+  min-height: 350px;
+  height: 100%;
   overflow: auto;
   background: white;
+}
+
+.chatbox-form {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 3;
+  grid-column: 1/4;
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 1;
+  grid-row: 2/3;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.chatbox-form button {
+  width: 100px;
 }
 
 .match-container {

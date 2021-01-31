@@ -66,6 +66,7 @@ nextApp.prepare().then(() => {
 		socket.on('createRoom', data => {
 			console.log(`${data.username.name} has requested to create a room: ${data}`);
 			
+			// creating new room
 			rooms[data.roomName.toString()] = generateRoom.randomStandard({
 				maxCapacity: parseInt(data.maxCapacity, 10),
 				roundAmount: parseInt(data.amountOfRounds, 10),

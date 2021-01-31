@@ -27,7 +27,8 @@ export default function GameLobby() {
 
 	const [username, setUsername] = useState({
 		name: '',
-		id: null
+		id: null,
+		host: false,
 	});
 	const [currentRoom, setCurrentRoom] = useState('');
 
@@ -36,6 +37,7 @@ export default function GameLobby() {
 	// to determine if showing form creation or not
 	const [creatingRoom, setCreatingRoom] = useState(false);
 
+	// to determine if inside a custom made room or premade room
 	const [customRoom, setCustomRoom] = useState(false);
 
 	// socket events
@@ -83,8 +85,8 @@ export default function GameLobby() {
 
 			// if this is the host of the new room added
 			if (data.hostID === gamelobbySocket.id) {
-				console.log('you are the host sir');
-				gamelobbySocket.emit('joinRoom', { // automatically join this room after creation
+				// automatically join this room after creation
+				gamelobbySocket.emit('joinRoom', {
 					room: data.roomName,
 					username: {
 						name: localStorage.getItem('name'),
@@ -92,8 +94,11 @@ export default function GameLobby() {
 					},
 				});
 				setCurrentRoom(data.roomName);
-			} else {
-				console.log(`you are not the host, hostID: ${data.hostID}, your id: ${username.id}`)
+				
+				setUsername(prevUsername => ({ // setting user as host
+					...prevUsername,
+					host: true,
+				}));
 			}
 		});
 
@@ -187,7 +192,7 @@ export default function GameLobby() {
 								</div>
 							}
 							{creatingRoom &&
-								<CreateRoom socket={gamelobbySocket} username={username} toggleRoom={toggleCreateRoom} setCustomRoom={setCustomRoom}/>
+								<CreateRoom socket={gamelobbySocket} username={username} toggleRoom={toggleCreateRoom}/>
 							}
 						</div>
 					</div>
