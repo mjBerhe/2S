@@ -59,8 +59,8 @@ export default function GameLobby() {
 			addUser(data.room, data.username);
 			if (data.customRoom) { // joining a custom made room
 				setCustomRoom(true);
+				addRoomChat(data.room); // add room in the chat section
 				addNotification(data.msg, data.room);
-				console.log('this is a custom made room')
 			} else { // joining a premade room
 				setCustomRoom(false);
 			}
@@ -79,8 +79,7 @@ export default function GameLobby() {
 
 		gamelobbySocket.on('addRoom', data => {
 			console.log(data.msg);
-			addRoomUsers(data.roomName);
-			addRoomChat(data.roomName);
+			addRoomUsers(data.roomName); // add room to the users section
 			setListOfRooms(prevRooms => ([...prevRooms, data.roomName]));
 
 			// if this is the host of the new room added
@@ -93,6 +92,7 @@ export default function GameLobby() {
 						id: gamelobbySocket.id,
 					},
 				});
+				addRoomChat(data.roomName); // add room to the chat section
 				setCurrentRoom(data.roomName);
 				
 				setUsername(prevUsername => ({ // setting user as host

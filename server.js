@@ -134,7 +134,7 @@ nextApp.prepare().then(() => {
 					msg: 'Ongoing game in current room, try again later',
 				});
 			// there is space available in the queue
-			} else if (rooms[data.room].queue.length < rooms[data.room].maxCapacity - 1) {
+			} else if (rooms[data.room].queue.length < rooms[data.room].maxCapacity) {
 				// user is already ready (this is incase something goes wrong)
 				if (match.findUser(rooms[data.room].queue, data.username)) {
 					console.log(`${data.username.name} is already ready`);
@@ -167,7 +167,22 @@ nextApp.prepare().then(() => {
 					});
 				} else console.log(`${data.username.name} is already unready`);
 			}
-		})
+		});
+
+		socket.on('startCustomMatch', data => {
+			// checking if people ready meet the constraints of the room (not over max, and over 1)
+			if (rooms[data.room].queue.length <= rooms[data.room].maxCapacity && rooms[data.room].queue.length > 0) {
+				// start the match
+				rooms[data.room].start = true;
+				match.prepMatch(rooms, data.room);
+
+				gamelobby.to(data.room).emit('prepMatch', {
+					players: rooms[data.room].users,
+					rounds: rooms[data.room].rounds,
+					roundAmount: rooms[data.room].roundAmount,
+				});
+			}
+		});
 		
 
 		socket.on('joinQueue', data => {
