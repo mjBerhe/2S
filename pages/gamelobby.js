@@ -208,7 +208,7 @@ export default function GameLobby() {
 			<div className="users-container">
 				{currentRoom && 
 					<div>
-						<h2>Current users in room:</h2>
+						<h2>Current Users</h2>
 						{users[currentRoom].map((user) => <h3 key={user.id}>{user.name}</h3>)}
 					</div>
 				}

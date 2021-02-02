@@ -1,10 +1,18 @@
+@mixin flexCenter() {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .customroom-container {
    border: 2px solid purple;
    height: 100%;
-   width: 100%;
-   h1 {
-      text-align: center;
-   }
+	width: 100%;
+	display: grid;
+	grid-template-rows: 10% 70% 20%;
+	grid-template-columns: 100%;
+	justify-content: center;
+	align-items: center;
    input {
 		margin: 5px;
 		padding-left: 7px;
@@ -23,10 +31,23 @@
 	}
 }
 
+.customroom-title {
+	// border: 1px solid black;
+	height: 100%;
+	width: 100%;
+	grid-row: 1/2;
+	grid-column: 1/2;
+	@include flexCenter();
+}
+
 .chatbox-container {
-	border: 2px solid yellow;
+	// border: 2px solid yellow;
+	height: 100%;
+	width: 100%;
+	grid-row: 2/3;
+	grid-column: 1/2;
 	display: grid;
-	grid-template-columns: 33% 33% 33%;
+	grid-template-columns: 100%;
 	grid-template-rows: 90% 10%;
 	justify-content: center;
 	align-items: center;
@@ -34,16 +55,15 @@
 
 .chatbox {
 	border: solid black 2px;
-	grid-column: 1/4;
+	width: 80%;
+	min-height: 300px;
+	height: 100%;
+	grid-column: 1/2;
 	grid-row: 1/2;
 	display: flex;
 	flex-direction: column;
-	// justify-content: center;
-	// align-items: center;
-	padding-left: 5px;
-	width: 80%;
-	min-height: 350px;
-	height: 100%;
+	padding: 5px;
+	margin: 0 10% 0 10%;
 	overflow: auto;
 	background: white;
 }
@@ -52,10 +72,28 @@
 	grid-column: 1/4;
 	grid-row: 2/3;
 	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	@include flexCenter();
 	button {
 		width: 100px;
 	}
+}
+
+.customroom-buttons {
+	// border: 1px solid black;
+	height: 100%; 
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	button {
+		width: 150px;
+	}
+}
+
+.button-ready {
+	background-color: rgb(54, 228, 68);
+}
+
+.button-unready {
+	background-color: red;
 }

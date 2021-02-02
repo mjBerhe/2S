@@ -1,3 +1,12 @@
+// usersArray is filled with objects with a property of id
+// username is an object with a property of id
+const findUser = (usersArray, username) => {
+	const index = usersArray.findIndex(user => user.id === username.id);
+	if (index > -1) {
+		return true;
+	} else return false;
+}
+
 // returns the new userArray after adding the user
 const addUser = (userArray, room, username) => {
 	// need to fix validation for checking is user already exits in the room
@@ -15,11 +24,11 @@ const addUser = (userArray, room, username) => {
 const removeUser = (usersArray, username, location) => {
 	const index = usersArray.findIndex(user => user.id === username.id);
 
-	if (index > -1) {
+	if (index > -1) { // user was found
 		usersArray.splice(index, 1);
 		console.log(`${username.name} disconnected from the ${location}`);
 		return usersArray;
-	} else {
+	} else { // user was not found
 		console.log(`Error removing ${username.name} from the ${location}`);
 		return usersArray;
 	}
@@ -28,8 +37,8 @@ const removeUser = (usersArray, username, location) => {
 // return the queue array after adding the user
 const joinQueue = (queueArray, room, username) => {
 	queueArray.push(username);
-	console.log(`${username.name} has joined the queue in ${room}`);
-   console.log(`Users in queue in ${room}: ${queueArray}`);
+	console.log(`${username.name} has joined the queue in room: ${room}`);
+   console.log(queueArray);
    return queueArray;
 }
 
@@ -61,6 +70,7 @@ const checkDeathMatch = (deathmatch, elimGap) => {
 	} else return null;
 }
 
+exports.findUser = findUser;
 exports.addUser = addUser;
 exports.removeUser = removeUser;
 exports.joinQueue = joinQueue;

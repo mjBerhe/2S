@@ -15,22 +15,28 @@ export const [useChatBox] = create((set, get) => ({
       }
    },
    addMessage: (message, username, roomName) => {
-      set(prevRoomChat => ({
-         rooms: {
-            [roomName]: [...prevRoomChat.rooms[roomName], {
-               message: message,
-               username: username,
-            }]
-         }
-      }));
+      const roomChat = get().rooms[roomName];
+      if (roomChat) { // must check if a previous chat exists
+         set(() => ({
+            rooms: {
+               [roomName]: [...roomChat, {
+                  message: message,
+                  username: username,
+               }]
+            }
+         }));
+      }
    },
    addNotification: (message, roomName) => {
-      set(prevRoomChat => ({
-         rooms: {
-            [roomName]: [...prevRoomChat.rooms[roomName], {
-               message: message
-            }]
-         }
-      }));
+      const roomChat = get().rooms[roomName];
+      if (roomChat) { // must check if a previous chat exists
+         set(() => ({
+            rooms: {
+               [roomName]: [...roomChat, {
+                  message: message
+               }]
+            }
+         }));
+      }
    }
 }))

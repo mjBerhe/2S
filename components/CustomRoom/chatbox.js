@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useChatBox } from '../state/chatBox.js';
+import { useChatBox } from '../../state/chatBox.js';
 
 export default function ChatBox({ socket, room, username }) {
 

@@ -89,6 +89,7 @@
   -ms-grid-column-span: 1;
   grid-column: 2/3;
   height: 100%;
+  max-height: 90vh;
   width: 100%;
   background: rgba(63, 194, 238, 0.781);
 }
@@ -366,10 +367,18 @@
   border: 2px solid purple;
   height: 100%;
   width: 100%;
-}
-
-.customroom-container h1 {
-  text-align: center;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 10% 70% 20%;
+      grid-template-rows: 10% 70% 20%;
+  -ms-grid-columns: 100%;
+      grid-template-columns: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .customroom-container input {
@@ -390,12 +399,39 @@
   border-radius: 5px;
 }
 
+.customroom-title {
+  height: 100%;
+  width: 100%;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1/2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .chatbox-container {
-  border: 2px solid yellow;
+  height: 100%;
+  width: 100%;
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 1;
+  grid-row: 2/3;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 33% 33% 33%;
-      grid-template-columns: 33% 33% 33%;
+  -ms-grid-columns: 100%;
+      grid-template-columns: 100%;
   -ms-grid-rows: 90% 10%;
       grid-template-rows: 90% 10%;
   -webkit-box-pack: center;
@@ -408,9 +444,12 @@
 
 .chatbox {
   border: solid black 2px;
+  width: 80%;
+  min-height: 300px;
+  height: 100%;
   -ms-grid-column: 1;
-  -ms-grid-column-span: 3;
-  grid-column: 1/4;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
   -ms-grid-row: 1;
   -ms-grid-row-span: 1;
   grid-row: 1/2;
@@ -421,10 +460,8 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  padding-left: 5px;
-  width: 80%;
-  min-height: 350px;
-  height: 100%;
+  padding: 5px;
+  margin: 0 10% 0 10%;
   overflow: auto;
   background: white;
 }
@@ -450,6 +487,32 @@
 
 .chatbox-form button {
   width: 100px;
+}
+
+.customroom-buttons {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.customroom-buttons button {
+  width: 150px;
+}
+
+.button-ready {
+  background-color: #36e444;
+}
+
+.button-unready {
+  background-color: red;
 }
 
 .match-container {

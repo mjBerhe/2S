@@ -99,7 +99,7 @@ nextApp.prepare().then(() => {
 						console.log(users[data.room]);
 
 						gamelobby.to(data.room).emit('userConnected', {
-							msg: `${data.username.name} has joined ${data.room}`,
+							msg: `${data.username.name} has joined the room`,
 							room: data.room,
 							username: data.username,
 							customRoom: rooms[data.room].customRoom,
@@ -125,6 +125,50 @@ nextApp.prepare().then(() => {
 			gamelobby.to(data.room).emit('msgSent', data);
 			console.log(data);
 		});
+
+		socket.on('readyCustomMatch', data => {
+			// if there is already a game ongoing 
+			if (rooms[data.room].users.length > 0) {
+				gamelobby.to(data.room).emit('gameOngoing', {
+					username: data.username,
+					msg: 'Ongoing game in current room, try again later',
+				});
+			// there is space available in the queue
+			} else if (rooms[data.room].queue.length < rooms[data.room].maxCapacity - 1) {
+				// user is already ready (this is incase something goes wrong)
+				if (match.findUser(rooms[data.room].queue, data.username)) {
+					console.log(`${data.username.name} is already ready`);
+				} else { // user is now ready
+					rooms[data.room].queue = match.joinQueue(rooms[data.room].queue, data.room, data.username);
+					gamelobby.to(data.room).emit('confirmReady', {
+						username: data.username,
+						room: data.room,
+						msg: `${data.username.name} is ready`
+					});
+				}
+			} else console.log('there must be a glitch');
+		});
+
+		socket.on('unreadyCustomMatch', data => {
+			// if there is already a game ongoing
+			if (rooms[data.room].users.length > 0) {
+				gamelobby.to(data.room).emit('gameOngoing', {
+					username: data.username,
+					msg: 'Ongoing game in current room, try again later',
+				});
+			} else {
+				// if user is now NOT ready
+				if (match.findUser(rooms[data.room].queue, data.username)) {
+					rooms[data.room].queue = match.removeUser(rooms[data.room].queue, data.username, 'queue');
+					gamelobby.to(data.room).emit('confirmUnready', {
+						username: data.username,
+						room: data.room,
+						msg: `${data.username.name} is not ready`,
+					});
+				} else console.log(`${data.username.name} is already unready`);
+			}
+		})
+		
 
 		socket.on('joinQueue', data => {
 			// send a message if there is a current game ongoing in room
@@ -315,7 +359,7 @@ nextApp.prepare().then(() => {
 			console.log(users[data.room]);
 
 			gamelobby.to(data.room).emit('removeUser', {
-				msg: `${data.username.name} has left ${data.room}`,
+				msg: `${data.username.name} has left the room`,
 				username: data.username,
 				room: data.room,
 			});
@@ -349,7 +393,7 @@ nextApp.prepare().then(() => {
 				console.log(users[currentUser.room]);
 
 				gamelobby.to(currentUser.room).emit('removeUser', {
-					msg: `${currentUser.username.name} has left ${currentUser.room}`,
+					msg: `${currentUser.username.name} has left the room`,
 					username: currentUser.username,
 					room: currentUser.room,
 				});
