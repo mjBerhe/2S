@@ -171,8 +171,8 @@ export default function GameLobby() {
 
 			<div className="center-container">
 				{!currentRoom && 
-					<div className="room-container">
-						<div className='title-container'>
+					<div className="room-select-container">
+						<div className='room-select-title'>
 							<h1>2Slow</h1>
 						</div>
 						<div className='room-select-interface'>

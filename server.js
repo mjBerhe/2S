@@ -171,7 +171,7 @@ nextApp.prepare().then(() => {
 
 		socket.on('startCustomMatch', data => {
 			// checking if people ready meet the constraints of the room (not over max, and over 1)
-			if (rooms[data.room].queue.length <= rooms[data.room].maxCapacity && rooms[data.room].queue.length > 0) {
+			if (rooms[data.room].queue.length <= rooms[data.room].maxCapacity && rooms[data.room].queue.length > 1) {
 				// start the match
 				rooms[data.room].start = true;
 				match.prepMatch(rooms, data.room);
@@ -181,6 +181,12 @@ nextApp.prepare().then(() => {
 					rounds: rooms[data.room].rounds,
 					roundAmount: rooms[data.room].roundAmount,
 				});
+			} else if (rooms[data.room].queue.length > rooms[data.room].maxCapacity) {
+				console.log('Error, player count exceeds room limit');
+			} else if (rooms[data.room].queue.length < 2) {
+				console.log('Error, not enough players to start match');
+			} else {
+				console.log('Error, there must be a glitch');
 			}
 		});
 		

@@ -45,12 +45,11 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
          <form>
             <label className='create-room-name'> 
                Room Name
-               <input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange} autoComplete='off'/>
+               <input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange} autoComplete='off' autoFocus={true}/>
             </label>
             <label>
                Max Number of Users
                <select name='maxCapacity' value={formInfo.maxCapacity} onChange={handleFormChange}>
-                  <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
                   <option value="4">4</option>
@@ -60,7 +59,6 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
             <label>
                Number of Rounds
                <select name="amountOfRounds" value={formInfo.amountOfRounds} onChange={handleFormChange}>
-                  <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
                   <option value="4">4</option>
