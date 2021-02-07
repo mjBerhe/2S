@@ -169,7 +169,7 @@ export default function GameLobby() {
 			<Header/>
 			<QuestionsList/>
 
-			<div className="center-container">
+			<div className="room-container">
 				{!currentRoom && 
 					<div className="room-select-container">
 						<div className='room-select-title'>

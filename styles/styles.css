@@ -84,22 +84,22 @@
   /* justify-content: center; */
 }
 
-.center-container {
-  border: 2px solid black;
-  background: rgba(63, 194, 238, 0.781);
-  border-radius: 10px;
+.room-container {
   -ms-grid-column: 2;
   -ms-grid-column-span: 1;
   grid-column: 2/3;
   height: 100%;
   max-height: 90vh;
   width: 100%;
+  border: 2px solid black;
+  border-radius: 10px;
+  background: rgba(63, 194, 238, 0.781);
 }
 
 .room-select-container {
-  border-radius: 10px;
   height: 100%;
   width: 100%;
+  border-radius: 10px;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 100%;
@@ -109,29 +109,24 @@
 }
 
 .room-select-title {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.room-select-title h1 {
-  font-size: 50px;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1/2;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -ms-grid-column-align: center;
+      justify-self: center;
 }
 
 .room-select-interface {
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 1;
+  grid-row: 2/3;
   height: 100%;
   width: 100%;
   display: -ms-grid;
   display: grid;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
   -ms-grid-rows: 15% 85%;
       grid-template-rows: 15% 85%;
   -ms-grid-columns: 100%;
@@ -164,15 +159,11 @@
   -ms-grid-row: 1;
   -ms-grid-row-span: 1;
   grid-row: 1/2;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -ms-grid-column-align: center;
+      justify-self: center;
 }
 
 .available-rooms {
@@ -762,6 +753,10 @@
   padding: 0;
   margin: 0;
   font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+  font-size: 50px;
 }
 
 h3 {

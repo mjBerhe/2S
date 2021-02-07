@@ -5,106 +5,105 @@
 	justify-content: center;
 }
 
-.center-container {
-	border: 2px solid black;
-	background: rgba(63, 194, 238, 0.781);
-	border-radius: 10px;
+@mixin centeredGridItem() {
+	align-self: center;
+	justify-self: center;
+}
+
+.room-container {
 	grid-column: 2/3;
 	height: 100%;
 	max-height: 90vh;
 	width: 100%;
+	border: 2px solid black;
+	border-radius: 10px;
+	background: rgba(63, 194, 238, 0.781);
 }
 
 .room-select-container {
-	border-radius: 10px;
 	height: 100%;
 	width: 100%;
+	border-radius: 10px;
 	display: grid;
 	grid-template-columns: 100%;
 	grid-template-rows: 30% 70%;
 }
 
-.room-select-title { // first 30%
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	h1 {
-		font-size: 50px;
+	.room-select-title { // first 30%
+		grid-row: 1/2;
+		@include centeredGridItem();
 	}
-}
 
-.room-select-interface { // other 70%
-	// border: 1px solid green;
-	height: 100%;
-	width: 100%;
-	display: grid;
-	justify-content: center;
-	grid-template-rows: 15% 85%;
-	grid-template-columns: 100%;
-	input {
-		margin: 5px;
-		padding-left: 7px;
-		height: 35px;
-		width: 200px;
-		border: 1px solid black;
-		border-radius: 5px;
-	}
-	button {
-		margin: 5px;
-		padding: 3px;
-		height: 30px;
-		width: 140px;
-		border: 1px solid black;
-		border-radius: 5px;
-	}
-	select {
-		width: 50px;
-	}
-}
-
-.username-container {
-	grid-row: 1/2;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.available-rooms { // default shows all available rooms
-	grid-row: 2/3;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-.create-room { // form to create a new room
-	grid-row: 2/3;
-	grid-column: 1/2;
-	// border: 2px solid yellow;
-	width: 70%;
-	height: 100%;
-	justify-self: center;
-	padding: 0 0 5% 0;
-	form {
-		border: 1px solid black;
-		border-radius: 10px;
-		background: lightgray;
-		width: 100%;
+	.room-select-interface { // other 70%
+		// border: 1px solid green;
+		grid-row: 2/3;
 		height: 100%;
+		width: 100%;
 		display: grid;
-		grid-template-rows: repeat(4, minmax(70px, 25%));
-		grid-template-columns: 50% 50%;
-		align-items: center;
-		padding: 0% 0% 0% 0%;
-		label {
-			// border: 1px solid black;
-			height: 100%;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
+		grid-template-rows: 15% 85%;
+		grid-template-columns: 100%;
+		input {
+			margin: 5px;
+			padding-left: 7px;
+			height: 35px;
+			width: 200px;
+			border: 1px solid black;
+			border-radius: 5px;
+		}
+		button {
+			margin: 5px;
+			padding: 3px;
+			height: 30px;
+			width: 140px;
+			border: 1px solid black;
+			border-radius: 5px;
+		}
+		select {
+			width: 50px;
 		}
 	}
-}
+
+		.username-container {
+			grid-row: 1/2;
+			@include centeredGridItem();
+		}
+
+		.available-rooms { // default shows all available rooms
+			grid-row: 2/3;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.create-room { // form to create a new room
+			grid-row: 2/3;
+			grid-column: 1/2;
+			// border: 2px solid yellow;
+			width: 70%;
+			height: 100%;
+			justify-self: center;
+			padding: 0 0 5% 0;
+			form {
+				border: 1px solid black;
+				border-radius: 10px;
+				background: lightgray;
+				width: 100%;
+				height: 100%;
+				display: grid;
+				grid-template-rows: repeat(4, minmax(70px, 25%));
+				grid-template-columns: 50% 50%;
+				align-items: center;
+				padding: 0% 0% 0% 0%;
+				label {
+					// border: 1px solid black;
+					height: 100%;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+				}
+			}
+		}
 
 .create-room-name {
 	grid-row: 1/2;
