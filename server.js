@@ -145,6 +145,10 @@ nextApp.prepare().then(() => {
 						room: data.room,
 						msg: `${data.username.name} is ready`
 					});
+					gamelobby.to(data.room).emit('customRoomUsers', {
+						room: data.room,
+						usersReady: rooms[data.room].queue,
+					});
 				}
 			} else console.log('there must be a glitch');
 		});
@@ -164,6 +168,10 @@ nextApp.prepare().then(() => {
 						username: data.username,
 						room: data.room,
 						msg: `${data.username.name} is not ready`,
+					});
+					gamelobby.to(data.room).emit('customRoomUsers', {
+						room: data.room,
+						usersReady: rooms[data.room].queue,
 					});
 				} else console.log(`${data.username.name} is already unready`);
 			}

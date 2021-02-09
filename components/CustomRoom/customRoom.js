@@ -5,9 +5,11 @@ import Match from '../Match/match.js';
 import CompletedStats from '../Stats/completedStats.js';
 import { useChatBox } from '../../state/chatBox.js';
 import { useMatch } from '../../state/match.js';
+import { useUsers } from '../../state/users.js';
 
 export default function CustomRoom({ socket, room, username, leaveRoom }) {
 
+   const users = useUsers(state => state.users[room]);
    const { addNotification } = useChatBox();
    const { prepMatch, incCurrentRound } = useMatch();
    const { currentRound, complete } = useMatch(state => ({
@@ -17,6 +19,7 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
 
    const [isReady, setIsReady] = useState(false);
    const [buttonClass, setButtonClass] = useState('button-unready');
+   const [readyUsersList, setReadyUsersList] = useState([]);
 
    const handleStartGame = () => {
       if (username.host) {
@@ -33,6 +36,14 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
       // only non host players can ready (host is always ready)
       if (!username.host) {
          setIsReady(!isReady);
+      }
+   }
+
+   const checkIfReady = (userID) => {
+      for (let i = 0; i < readyUsersList.length; i++) {
+         if (readyUsersList[i].id === userID) {
+            return true;
+         }
       }
    }
 
@@ -78,6 +89,10 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
          addNotification(data.msg, data.room);
       });
 
+      socket.on('customRoomUsers', data => {
+         setReadyUsersList(data.usersReady);
+      });
+
       // game is starting
 		socket.on('prepMatch', data => {
          // checking if you are part of this match
@@ -94,6 +109,7 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
          socket.off('gameOngoing');
          socket.off('confirmReady');
          socket.off('confirmUnready');
+         socket.off('customRoomUsers');
          socket.off('prepMatch');
       }
    }, []);
@@ -104,6 +120,12 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
             <div className='customroom-lobby'>
                <div className='customroom-title'>
                   <h1>{room}</h1>
+               </div>
+               <div className='users-room-container'>
+                  {users.map(user => 
+                     checkIfReady(user.id) ? <h3 key={user.id}>{user.name} ready</h3>
+                        : <h3 key={user.id}>{user.name} not ready</h3>
+                  )}
                </div>
                <ChatBox socket={socket} room={room} username={username.name}/>
                <div className='customroom-buttons'>

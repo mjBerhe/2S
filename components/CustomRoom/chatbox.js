@@ -49,7 +49,7 @@ export default function ChatBox({ socket, room, username }) {
 				{chatBox &&
 					chatBox.map((message, index) => 
 						message.username ? <h3 key={index}>{message.username}: {message.message}</h3>
-						: <h3 key={index}>{message.message}</h3> )
+						: <h2 key={index}>{message.message}</h2> )
 				}
 				<div ref={divRef}></div>
 			</div>

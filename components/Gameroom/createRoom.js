@@ -4,8 +4,8 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
 
    const [formInfo, setFormInfo] = useState({
 		roomName: '',
-		maxCapacity: 1,
-		amountOfRounds: 1,
+		maxCapacity: 2,
+		amountOfRounds: 2,
 		incorrectMethod: 'continue',
 		dmEliminationGap: 1,
    });
