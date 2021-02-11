@@ -43,21 +43,23 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
    return (
       <div className='create-room'>
          <form>
-            <label className='create-room-name'> 
-               Room Name
-               <input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange} autoComplete='off' autoFocus={true}/>
-            </label>
-            <label>
-               Max Number of Users
+            <div className='create-room-name'> 
+               <input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange} autoComplete='off' autoFocus={true} placeholder='Room Name'/>
+            </div>
+            <div className='create-room-cancel'>
+               <input type='image' src='/Misc/black-x.png' onClick={toggleRoom}/>
+            </div>
+            <div className='create-room-form1'>
+               <h4>Max Number of Users</h4>
                <select name='maxCapacity' value={formInfo.maxCapacity} onChange={handleFormChange}>
                   <option value="2">2</option>
                   <option value="3">3</option>
                   <option value="4">4</option>
                   <option value="5">5</option>
                </select>
-            </label>
-            <label>
-               Number of Rounds
+            </div>
+            <div className='create-room-form2'>
+               <h4>Number of Rounds</h4>
                <select name="amountOfRounds" value={formInfo.amountOfRounds} onChange={handleFormChange}>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -69,16 +71,16 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
                   <option value="9">9</option>
                   <option value="10">10</option>
                </select>
-            </label>
-            <label className='incorrect-select'>
-               Incorrect Method
+            </div>
+            <div className='create-room-form3'>
+               <h4>Incorrect Method</h4>
                <select name="incorrectMethod" value={formInfo.incorrectMethod} onChange={handleFormChange}>
                   <option value="continue">Continue</option>
                   <option value="repeat">Repeat</option>
                </select>
-            </label>
-            <label className='elimination-gap-select'>
-               DM Elimination Gap
+            </div>
+            <div className='create-room-form4'>
+               <h4>DM Elimination Gap</h4>
                <select name="dmEliminationGap" value={formInfo.dmEliminationGap} onChange={handleFormChange}>
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -86,15 +88,10 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
                   <option value="4">4</option>
                   <option value="5">5</option>
                </select>
-            </label>
+            </div>
             <div className='create-room-submit'>
                <button type="submit" onClick={confirmCreateRoom}>
                   Create Room
-               </button>
-            </div>
-            <div className='create-room-cancel'>
-               <button onClick={toggleRoom}>
-                  Cancel Room
                </button>
             </div>
          </form>

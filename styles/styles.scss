@@ -1,11 +1,14 @@
 @import '../components/Header/_header.scss';
 @import '../components/Footer/_footer.scss';
 @import '../components/QuestionsList/_questionsList.scss';
-@import '../components/Gameroom/_gameroom.scss';
 @import '../components/CustomRoom/customroom';
 @import '../components/Match/_match.scss';
 @import '../components/NormalRound/_normalRound.scss';
 @import '../components/Deathmatch/_deathmatch.scss';
+@import './gamelobby.scss';
+
+$green-color: rgb(54, 228, 68);
+$red-color: red;
 
 * {
 	box-sizing: border-box;

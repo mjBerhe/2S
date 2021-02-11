@@ -177,7 +177,7 @@ export default function GameLobby() {
 						</div>
 						<div className='room-select-interface'>
 							<div className='username-container'>
-								<input type="text" onChange={handleUsername} value={username.name} placeholder='Nickname'/>
+								<input type="text" onChange={handleUsername} value={username.name} placeholder='Nickname' autoFocus={true}/>
 							</div>
 							{!creatingRoom && 
 								<div className='available-rooms'>

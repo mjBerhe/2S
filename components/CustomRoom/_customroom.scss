@@ -9,6 +9,9 @@
 	justify-self: center;
 }
 
+$green-color: rgb(54, 228, 68);
+$red-color: red;
+
 .customroom-container {
 	// border: 2px solid purple;
 	width: 100%;
@@ -46,6 +49,21 @@
 	grid-row: 1/2;
 	grid-column: 1/2;
 	@include centeredGridItem();
+}
+
+.customroom-leave {
+	grid-row: 1/2;
+	grid-column: 1/2;
+	display: flex;
+   justify-content: flex-end;
+   input[type=image] {
+      border: none;
+      height: 15px;
+      width: 25px;
+      &:focus {
+         outline: none;
+      }
+   }
 }
 
 .users-room-container {
@@ -129,9 +147,12 @@
 }
 
 .button-ready {
-	background-color: rgb(54, 228, 68);
+	// background-color: $green-color;
+	border: 2px solid $green-color;
 }
 
 .button-unready {
-	background-color: red;
+	background-color: $red-color;
+	width: 150px;
+	border: yellow;
 }

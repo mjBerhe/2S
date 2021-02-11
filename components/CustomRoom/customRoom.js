@@ -121,6 +121,9 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
                <div className='customroom-title'>
                   <h1>{room}</h1>
                </div>
+               <div className='customroom-leave'>
+                  <input type="image" src='./Misc/white-x.png' onClick={leaveRoom}/>
+               </div>
                <div className='users-room-container'>
                   {users.map(user => 
                      checkIfReady(user.id) ? <h3 key={user.id}>{user.name} ready</h3>
