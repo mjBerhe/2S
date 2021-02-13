@@ -12,9 +12,9 @@ export default function MyApp() {
             <h1>
                Join the <Link href="/gamelobby"><a>game lobby</a></Link>
             </h1>
-            <h1>
+            {/* <h1>
                Join the <Link href="/chatlobby"><a>chat lobby</a></Link>
-            </h1>
+            </h1> */}
          </div>
       </div>
    )

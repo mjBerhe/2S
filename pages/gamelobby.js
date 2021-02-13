@@ -30,6 +30,7 @@ export default function GameLobby() {
 		id: null,
 		host: false,
 	});
+	// to determine which component to display to the user
 	const [currentRoom, setCurrentRoom] = useState('');
 
 	const [listOfRooms, setListOfRooms] = useState([]);
@@ -53,9 +54,17 @@ export default function GameLobby() {
 			console.log(msg);
 		});
 
-		// when someone joins a room
-		gamelobbySocket.on('userConnected', data => {
+		gamelobbySocket.on('roomFull', data => {
+			console.log(data.id, username.id)
+			if (data.id === gamelobbySocket.id) {
+				console.log(data.msg);
+			}
+		})
+
+		// when someone joins a room (confirmed through server)
+		gamelobbySocket.on('userJoinedRoom', data => {
 			// must add logic to check if that user isnt already connected to the room using ids
+			setCurrentRoom(data.room);
 			addUser(data.room, data.username);
 			if (data.customRoom) { // joining a custom made room
 				setCustomRoom(true);
@@ -105,7 +114,8 @@ export default function GameLobby() {
 		return () => {
 			gamelobbySocket.off('welcome');
 			gamelobbySocket.off('error');
-			gamelobbySocket.off('userConnected');
+			gamelobbySocket.off('roomFull');
+			gamelobbySocket.off('userJoinedRoom');
 			gamelobbySocket.off('removeUser');
 			gamelobbySocket.off('sendUserList');
 			gamelobbySocket.off('addRoom');
@@ -139,7 +149,6 @@ export default function GameLobby() {
 			room: e.target.value,
 			username: username,
 		});
-		setCurrentRoom(e.target.value);
 	}
 
 	const handleLeaveRoom = (e) => {

@@ -24,7 +24,7 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
 	const confirmCreateRoom = (e) => {
 		e.preventDefault();
 		if (formInfo.roomName && formInfo.maxCapacity && formInfo.amountOfRounds && formInfo.dmEliminationGap && formInfo.incorrectMethod) {
-			console.log(`form is fully complete: ${formInfo}`);
+			console.log('room successfully created');
 			socket.emit('createRoom', {
 				username: username,
 				roomName: formInfo.roomName,

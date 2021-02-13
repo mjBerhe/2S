@@ -88,34 +88,45 @@ nextApp.prepare().then(() => {
 		});
 
 		socket.on('joinRoom', data => {
-			// if room and new user is valid, join room
+			// checking if room and user is valid
 			if (availableRooms.includes(data.room) && data.username.id) {
-				socket.join(data.room, (err) => {
-					if (err) {
-						console.log(`Error, couldn't join ${data.room}`);
-						socket.emit('invalidRoom', `Error, couldn't join ${data.room}`);
-					} else {
-						users[data.room] = match.addUser(users[data.room], data.room, data.username);
-						console.log(users[data.room]);
-
-						gamelobby.to(data.room).emit('userConnected', {
-							msg: `${data.username.name} has joined the room`,
-							room: data.room,
-							username: data.username,
-							customRoom: rooms[data.room].customRoom,
-						});
-
-						socket.emit('sendUserList', users);
-
-						currentUser = {
-							username: {
-								name: data.username.name,
-								id: data.username.id,
-							},
-							room: data.room,
+				// checking if current room is full
+				if (users[data.room].length >= rooms[data.room].maxCapacity) {
+					console.log(`${data.username.name} could not join ${data.room} (FULL)`)
+					socket.emit('roomFull', {
+						id: data.username.id,
+						room: data.room,
+						msg: `Could not join, ${data.room} is currently full`,
+					});
+				// there is available space in the room
+				} else {
+					socket.join(data.room, (err) => {
+						if (err) {
+							console.log(`Error, couldn't join ${data.room}`);
+							socket.emit('invalidRoom', `Error, couldn't join ${data.room}`);
+						} else {
+							users[data.room] = match.addUser(users[data.room], data.room, data.username);
+							console.log(users[data.room]);
+	
+							gamelobby.to(data.room).emit('userJoinedRoom', {
+								msg: `${data.username.name} has joined the room`,
+								room: data.room,
+								username: data.username,
+								customRoom: rooms[data.room].customRoom,
+							});
+	
+							socket.emit('sendUserList', users);
+	
+							currentUser = {
+								username: {
+									name: data.username.name,
+									id: data.username.id,
+								},
+								room: data.room,
+							}
 						}
-					}
-				});
+					});
+				}
 			} else {
 				socket.emit('invalidRoom', `Error, no room named ${data.room}`);
 			}
