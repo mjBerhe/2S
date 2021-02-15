@@ -45,13 +45,15 @@ export default function ChatBox({ socket, room, username }) {
 
 	return (
 		<div className='chatbox-container'>
-			<div className='chatbox'>
-				{chatBox &&
-					chatBox.map((message, index) => 
-						message.username ? <h3 key={index}>{message.username}: {message.message}</h3>
-						: <h2 key={index}>{message.message}</h2> )
-				}
-				<div ref={divRef}></div>
+			<div className='chatbox-outer'>
+				<div className='chatbox-inner'>
+					{chatBox &&
+						chatBox.map((message, index) => 
+							message.username ? <h3 key={index}>{message.username}: {message.message}</h3>
+							: <h2 key={index}>{message.message}</h2> )
+					}
+					<div ref={divRef}></div>
+				</div>
 			</div>
 
 			<form onSubmit={handleMessageSubmit} className='chatbox-form'>

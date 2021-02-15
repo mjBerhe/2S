@@ -124,7 +124,7 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
                <div className='customroom-leave'>
                   <input type="image" src='./Misc/purple-x.png' onClick={leaveRoom}/>
                </div>
-               <div className='users-room-container'>
+               <div className='users-list-container'>
                   {users.map(user => 
                      checkIfReady(user.id) ? 
                      <div key={user.id} className='user-ready-container'>
@@ -132,13 +132,13 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
                      </div>
                         : 
                      <div key={user.id} className='user-unready-container'>
-                        <h3>{user.name}</h3> <h4>Not Ready</h4>
+                        <h3>{user.name}</h3> <h4>Ready</h4>
                      </div>
                   )}
                </div>
                <ChatBox socket={socket} room={room} username={username.name}/>
                <div className='customroom-buttons'>
-                  <button onClick={handleStartGame}>
+                  <button className='button-start-game' onClick={handleStartGame}>
                      Start Game
                   </button>
                   <button className={buttonClass} onClick={handleReadyUp}>
