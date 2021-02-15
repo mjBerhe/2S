@@ -15,16 +15,20 @@
 
 $green-color: rgb(54, 228, 68);
 $red-color: red;
+$main-color: rgb(86, 16, 143);
+// $main-color: rgb(49, 88, 216);
 
 .room-container {
 	grid-column: 2/3;
-	height: 100%;
 	max-height: 90vh;
 	min-height: 500px;
 	width: 100%;
-	border: 2px solid black;
+	min-width: 35rem;
+	margin-top: 1rem;
+	border: 2px solid $main-color;
 	border-radius: 10px;
-	background: rgba(63, 194, 238, 0.781);
+	// background: rgba(63, 194, 238, 0.781);
+	background: white;
 }
 
 .room-select-container {
@@ -39,6 +43,7 @@ $red-color: red;
 .room-select-title { // first 30%
 	grid-row: 1/2;
 	@include centeredGridItem();
+	color: $main-color;
 }
 
 .room-select-interface { // other 70%
@@ -49,35 +54,48 @@ $red-color: red;
 	display: grid;
 	grid-template-rows: 15% 85%;
 	grid-template-columns: 100%;
-	input {
-		margin: 5px;
-		padding-left: 7px;
-		height: 35px;
-		width: 200px;
-		border: 1px solid black;
-		border-radius: 5px;
-	}
-	select {
-		width: 50px;
-	}
 }
 
 .username-container {
 	grid-row: 1/2;
 	@include centeredGridItem();
+	input[type=text] {
+		padding-left: .6rem;
+		height: 2rem;
+		width: 13rem;
+		border: 1px solid $main-color;
+		border-radius: .4rem;
+		font-size: .9rem;
+		&:focus {
+			outline: none;
+			border: 2px solid $main-color;
+		}
+		&:hover {
+			border: 2px solid $main-color;
+		}
+	}
 }
 
-.available-rooms { // default shows all available rooms
+.available-rooms { 
 	grid-row: 2/3;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	button {
-		margin: 5px;
-		padding: 3px;
-		height: 30px;
-		width: 140px;
-		border: 1px solid black;
-		border-radius: 5px;
+		margin: 0.4rem;
+		height: 2rem;
+		width: 9rem;
+		border: 1px solid $main-color;
+		border-radius: .4rem;
+		background: white;
+		color: black;
+		&:focus {
+			outline: none;
+			border: 2px solid $main-color;
+		}
+		&:hover {
+			background-color: rgb(214, 209, 209);
+			// border: 2px solid $main-color;
+		}
 	}
 }

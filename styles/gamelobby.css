@@ -293,7 +293,7 @@
   width: 100%;
   border: 2px solid black;
   border-radius: 10px;
-  background: rgba(63, 194, 238, 0.781);
+  background: black;
 }
 
 .room-select-container {

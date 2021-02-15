@@ -3,11 +3,8 @@
 	grid-row: 1/2;
 	display: grid;
 	grid-template-columns: minmax(33%, 34%) minmax(33%, 34%) minmax(33%, 34%);
-   // background: teal;
-   img {
-      width: 40px;
-      margin: 5px;
-   }
+   background: rgb(41, 39, 39);
+	border-bottom: 2px solid black;
 }
 
 .header-column1 {
@@ -18,7 +15,7 @@
 }
 
 .header-link {
-	color: black;
+	color: white;
 	text-decoration: none;
 }
 

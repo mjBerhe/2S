@@ -41,16 +41,16 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
 	}
 
    return (
-      <div className='create-room'>
+      <div className='create-room-container'>
          <form>
             <div className='create-room-name'> 
                <input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange} autoComplete='off' autoFocus={true} placeholder='Room Name'/>
             </div>
             <div className='create-room-cancel'>
-               <input type='image' src='/Misc/black-x.png' onClick={toggleRoom}/>
+               <input type='image' src='/Misc/purple-x.png' onClick={toggleRoom}/>
             </div>
             <div className='create-room-form1'>
-               <h4>Max Number of Users</h4>
+               <h3>Max Number of Users</h3>
                <select name='maxCapacity' value={formInfo.maxCapacity} onChange={handleFormChange}>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -59,7 +59,7 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
                </select>
             </div>
             <div className='create-room-form2'>
-               <h4>Number of Rounds</h4>
+               <h3>Number of Rounds</h3>
                <select name="amountOfRounds" value={formInfo.amountOfRounds} onChange={handleFormChange}>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -73,14 +73,14 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
                </select>
             </div>
             <div className='create-room-form3'>
-               <h4>Incorrect Method</h4>
+               <h3>Incorrect Method</h3>
                <select name="incorrectMethod" value={formInfo.incorrectMethod} onChange={handleFormChange}>
                   <option value="continue">Continue</option>
                   <option value="repeat">Repeat</option>
                </select>
             </div>
             <div className='create-room-form4'>
-               <h4>DM Elimination Gap</h4>
+               <h3>DM Elimination Gap</h3>
                <select name="dmEliminationGap" value={formInfo.dmEliminationGap} onChange={handleFormChange}>
                   <option value="1">1</option>
                   <option value="2">2</option>
