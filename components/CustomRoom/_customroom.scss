@@ -81,13 +81,13 @@ $main-color2: rgb(109, 22, 180);
 	background: rgb(41, 39, 39);
 	border: 2px solid $main-color;
 	border-radius: .8rem;
+	h3 {
+		color: white;
+	}
 }
 
 .user-ready-container {
 	@include userListItem();
-	h3 {
-		color: white;
-	}
 	h4 {
 		color: $green-color;
 	}
@@ -95,9 +95,6 @@ $main-color2: rgb(109, 22, 180);
 
 .user-unready-container {
 	@include userListItem();
-	h3 {
-		color: white;
-	}
 	h4 {
 		color: $red-color;
 	}

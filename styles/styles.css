@@ -748,6 +748,10 @@
   border-radius: .8rem;
 }
 
+.users-list-container h3 {
+  color: white;
+}
+
 .user-ready-container {
   border: 2px solid white;
   border-radius: .7rem;
@@ -764,10 +768,6 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-}
-
-.user-ready-container h3 {
-  color: white;
 }
 
 .user-ready-container h4 {
@@ -790,10 +790,6 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-}
-
-.user-unready-container h3 {
-  color: white;
 }
 
 .user-unready-container h4 {

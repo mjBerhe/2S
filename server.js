@@ -80,9 +80,10 @@ nextApp.prepare().then(() => {
 
 			gamelobby.emit('addRoom', {
 				customRoom: true,
+				roomName: data.roomName,
 				hostName: data.username.name,
 				hostID: data.username.id,
-				roomName: data.roomName,
+				maxCapacity: data.maxCapacity,
 				msg: `${data.roomName} has been created`,
 			});
 		});

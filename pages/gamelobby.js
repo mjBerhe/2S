@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import io from 'socket.io-client';
 import { useUsers } from '../state/users.js';
+import { useCustomRoom } from '../state/customRoom.js';
 import { useChatBox } from '../state/chatBox.js';
 import { useMatch } from '../state/match.js';
 import { useDeathMatch } from '../state/deathmatch.js';
@@ -21,6 +22,7 @@ const gamelobbySocket = io(gamelobby_ENDPOINT);
 export default function GameLobby() {
 
 	const { users, addRoomUsers, addUser, removeUser, updateUsersList } = useUsers();
+	const { addCustomRoom } = useCustomRoom();
 	const { addRoomChat, addNotification } = useChatBox();
 	const { resetMatch } = useMatch();
 	const { resetDMState } = useDeathMatch();
@@ -87,9 +89,12 @@ export default function GameLobby() {
 		});
 
 		gamelobbySocket.on('addRoom', data => {
-			console.log(data.msg);
+			// console.log(data.msg);
+
 			addRoomUsers(data.roomName); // add room to the users section
 			setListOfRooms(prevRooms => ([...prevRooms, data.roomName]));
+
+			addCustomRoom(data.roomName, data.hostName, data.hostID, data.maxCapacity);
 
 			// if this is the host of the new room added
 			if (data.hostID === gamelobbySocket.id) {
@@ -104,6 +109,10 @@ export default function GameLobby() {
 				addRoomChat(data.roomName); // add room to the chat section
 				setCurrentRoom(data.roomName);
 				
+
+
+				// want to change this
+				// want to make host relevant in customRoom state
 				setUsername(prevUsername => ({ // setting user as host
 					...prevUsername,
 					host: true,

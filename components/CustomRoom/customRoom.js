@@ -6,10 +6,12 @@ import CompletedStats from '../Stats/completedStats.js';
 import { useChatBox } from '../../state/chatBox.js';
 import { useMatch } from '../../state/match.js';
 import { useUsers } from '../../state/users.js';
+import { useCustomRoom } from '../../state/customRoom.js';
 
 export default function CustomRoom({ socket, room, username, leaveRoom }) {
 
    const users = useUsers(state => state.users[room]);
+   const customRoom = useCustomRoom(state => state.rooms[room]);
    const { addNotification } = useChatBox();
    const { prepMatch, incCurrentRound } = useMatch();
    const { currentRound, complete } = useMatch(state => ({
@@ -134,7 +136,11 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
                      <div key={user.id} className='user-unready-container'>
                         <h3>{user.name}</h3> <h4>Ready</h4>
                      </div>
+                     
                   )}
+                  <div>
+                     <h3>{users.length}/{customRoom.maxCapacity}</h3>
+                  </div>
                </div>
                <ChatBox socket={socket} room={room} username={username.name}/>
                <div className='customroom-buttons'>

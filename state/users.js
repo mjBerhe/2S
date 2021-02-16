@@ -1,5 +1,9 @@
 import create from 'zustand';
 
+// used to track all users in all rooms
+// each property represents a room
+// which points to an array of each use in said room
+
 export const [useUsers] = create((set, get) => ({
 	users: {
 
