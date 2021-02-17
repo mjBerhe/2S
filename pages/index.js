@@ -10,7 +10,9 @@ export default function MyApp() {
          </Head>
          <div>
             <h1>
-               Join the <Link href="/gamelobby"><a>game lobby</a></Link>
+               Join the <Link href="/gamelobby">
+                  <a className='link-text'>Game Lobby</a>
+               </Link>
             </h1>
             {/* <h1>
                Join the <Link href="/chatlobby"><a>chat lobby</a></Link>

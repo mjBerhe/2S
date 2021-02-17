@@ -20,7 +20,7 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
    }), shallow);
 
    const [isReady, setIsReady] = useState(false);
-   const [buttonClass, setButtonClass] = useState('button-unready');
+   const [buttonClass, setButtonClass] = useState('button-customroom button-unready');
    const [readyUsersList, setReadyUsersList] = useState([]);
 
    const handleStartGame = () => {
@@ -52,20 +52,20 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
    useEffect(() => {
       // if not host and is ready
       if (isReady && !username.host) {
-         setButtonClass('button-ready');
+         setButtonClass('button-customroom button-ready');
          socket.emit('readyCustomMatch', {
             room: room,
             username: username,
          });
       // if not host and is NOT ready
       } else if (!isReady && !username.host) {
-         setButtonClass('button-unready');
+         setButtonClass('button-customroom button-unready');
          socket.emit('unreadyCustomMatch', {
             room: room,
             username: username,
          }) 
       } else if (username.host) {
-         setButtonClass('button-ready');
+         setButtonClass('button-customroom button-ready');
          socket.emit('readyCustomMatch', {
             room: room,
             username: username,
@@ -127,6 +127,9 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
                   <input type="image" src='./Misc/purple-x.png' onClick={leaveRoom}/>
                </div>
                <div className='users-list-container'>
+                  <div className='customroom-capacity'>
+                     <h3>{users.length}/{customRoom ? customRoom.maxCapacity : 0}</h3>
+                  </div>
                   {users.map(user => 
                      checkIfReady(user.id) ? 
                      <div key={user.id} className='user-ready-container'>
@@ -138,13 +141,10 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
                      </div>
                      
                   )}
-                  <div>
-                     <h3>{users.length}/{customRoom.maxCapacity}</h3>
-                  </div>
                </div>
                <ChatBox socket={socket} room={room} username={username.name}/>
                <div className='customroom-buttons'>
-                  <button className='button-start-game' onClick={handleStartGame}>
+                  <button className='button-customroom button-start-game' onClick={handleStartGame}>
                      Start Game
                   </button>
                   <button className={buttonClass} onClick={handleReadyUp}>

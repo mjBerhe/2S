@@ -8,6 +8,8 @@
 
 $green-color: rgb(54, 228, 68);
 $red-color: red;
+$main-color: rgb(86, 16, 143);
+$main-color2: rgb(109, 22, 180);
 
 * {
 	box-sizing: border-box;
@@ -81,7 +83,7 @@ a {
 }
 
 /* ======================
-			BUTTONS
+			BUTTONS & STUFF
    ======================  */
 
 .button-1 {
@@ -91,4 +93,29 @@ a {
 
 .select-1 {
 	width: 100px;
+}
+
+.link-text {
+	text-decoration: none;
+	color: $main-color2;
+	position: relative;
+}
+
+.link-text::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: .2rem;
+	background: currentColor;
+
+	transform: scaleX(0);
+	transform-origin: right;
+	transition: transform 250ms ease-in;
+}
+
+.link-text:hover::after {
+	transform: scaleX(1);
+	transform-origin: left;
 }

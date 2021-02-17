@@ -56,9 +56,12 @@ export default function ChatBox({ socket, room, username }) {
 				</div>
 			</div>
 
-			<form onSubmit={handleMessageSubmit} className='chatbox-form'>
+			<form className='chatbox-form'>
 				<input type="text" value={message} onChange={handleMessageChange} placeholder='Type a message...' autoFocus/>
-				<button type="submit" value="Submit">Submit</button>
+				<div className='chatbox-submit'>
+               <input type="image" src='./Misc/white-enter.png' onClick={handleMessageSubmit}/>
+            </div>
+				{/* <button type="submit" value="Submit">Submit</button> */}
 			</form>
 		</div>
 	)

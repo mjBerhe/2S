@@ -71,7 +71,8 @@ export default function GameLobby() {
 			if (data.customRoom) { // joining a custom made room
 				setCustomRoom(true);
 				addRoomChat(data.room); // add room in the chat section
-				addNotification(data.msg, data.room);
+				addNotification(data.msg, data.room); // send notification to the chat
+				addCustomRoom(data.roomName, data.hostName, data.hostID, data.maxCapacity);
 			} else { // joining a premade room
 				setCustomRoom(false);
 			}
@@ -199,11 +200,11 @@ export default function GameLobby() {
 							</div>
 							{!creatingRoom && 
 								<div className='available-rooms'>
-									<button onClick={toggleCreateRoom}>
+									<button className='join-room-button' onClick={toggleCreateRoom}>
 										Create Room
 									</button>
 									{listOfRooms.map(roomName => 
-										<button onClick={handleJoinRoom} value={roomName} key={roomName}>
+										<button className='join-room-button' onClick={handleJoinRoom} value={roomName} key={roomName}>
 											{roomName}
 										</button>
 									)}
