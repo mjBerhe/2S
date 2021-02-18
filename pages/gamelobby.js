@@ -216,8 +216,13 @@ export default function GameLobby() {
 										Create Room
 									</button>
 									{listOfRooms.map(roomName => 
-										<button className='join-room-button' onClick={handleJoinRoom} value={roomName} key={roomName}>
-											{roomName} {users[roomName] && customRooms[roomName] ? `${users[roomName].length}/${customRooms[roomName].maxCapacity}` : null}
+										<button className='join-room-button room-button' onClick={handleJoinRoom} value={roomName} key={roomName}>
+											<h4>{roomName}</h4> 
+											<h4>{users[roomName] ?
+											customRooms[roomName] ? `${users[roomName].length}/${customRooms[roomName].maxCapacity}`
+												: `${users[roomName].length}/2`
+												: null}
+											</h4>
 										</button>
 									)}
 								</div>

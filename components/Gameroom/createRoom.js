@@ -44,7 +44,7 @@ export default function CreateRoom({ socket, username, toggleRoom }) {
       <div className='create-room-container'>
          <form>
             <div className='create-room-name'> 
-               <input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange} autoComplete='off' autoFocus={true} placeholder='Room Name'/>
+               <input type="text" name='roomName' value={formInfo.roomName} onChange={handleFormChange} autoComplete='off' autoFocus={true} placeholder='Room Name' maxLength='16'/>
             </div>
             <div className='create-room-cancel'>
                <input type='image' src='/Misc/purple-x.png' onClick={toggleRoom}/>

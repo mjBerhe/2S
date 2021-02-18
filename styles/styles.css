@@ -1013,6 +1013,10 @@
   z-index: -1;
 }
 
+.button-start-game {
+  color: black;
+}
+
 .button-ready::after {
   background: red;
   -webkit-transform-origin: right;
@@ -1146,18 +1150,38 @@
 
 .join-room-button {
   height: 2rem;
-  width: 9rem;
+  width: 11rem;
   margin: 0.4rem;
   border: 1px solid #56108f;
   border-radius: .4rem;
   background: white;
   color: black;
   position: relative;
+  font-size: .825rem;
 }
 
 .join-room-button:focus {
   outline: none;
   border: 2px solid #56108f;
+}
+
+.room-button {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 83% 17%;
+      grid-template-columns: 83% 17%;
+  -ms-grid-rows: 100%;
+      grid-template-rows: 100%;
+}
+
+.room-button h4 {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -ms-grid-column-align: center;
+      justify-self: center;
+  font-size: .85rem;
+  max-width: 9rem;
 }
 
 .join-room-button::after {

@@ -89,16 +89,33 @@ $main-color: rgb(86, 16, 143);
 
 .join-room-button {
 	height: 2rem;
-	width: 9rem;
+	width: 11rem;
 	margin: 0.4rem;
 	border: 1px solid $main-color;
 	border-radius: .4rem;
 	background: white;
 	color: black;
 	position: relative;
+	font-size: .825rem;
 	&:focus {
 		outline: none;
 		border: 2px solid $main-color;
+	}
+}
+
+.room-button {
+	// display: flex;
+	// justify-content: space-between;
+	// align-items: center;
+	// padding: 0 .5rem;
+	display: grid;
+	grid-template-columns: 83% 17%;
+	grid-template-rows: 100%;
+	h4 {
+		@include centeredGridItem();
+		font-size: .85rem;
+		max-width: 9rem;
+		// width: 50%;
 	}
 }
 
