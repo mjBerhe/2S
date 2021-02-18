@@ -41,6 +41,10 @@ const rooms = { // available rooms
 	}),
 }
 
+const customRoomsInfo = {
+	// where custom rooms are added
+}
+
 let currentUser;
 
 nextApp.prepare().then(() => {
@@ -50,17 +54,22 @@ nextApp.prepare().then(() => {
 	});
 
 	const gamelobby = io.of('/gamelobby'); 
-	// const chatlobby = io.of('/chatlobby'); need to make new connection socket for chatlobby later
 
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// use gamelobby when talking to everyone on /gamelobby
-	// use socket when talking to this specific connection
+	// use gamelobby.to(roomName) when talking to a specific roomName
+	// use socket when talking to this specific connection 
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// initializing socket when a user goes on /gamelobby
 	gamelobby.on('connection', socket => {
 		console.log('a user has connected to /gamelobby');
+
 		socket.emit('welcome', {
 			msg: 'welcome to /gamelobby',
 			availableRooms: availableRooms,
+			customRooms: customRoomsInfo,
+			usersList: users,
 		});
 
 		socket.on('createRoom', data => {
@@ -75,6 +84,14 @@ nextApp.prepare().then(() => {
 				customRoom: true,
 			});
 
+			// adding custom room info
+			customRoomsInfo[data.roomName] = {
+				roomName: data.roomName,
+				maxCapacity: data.maxCapacity,
+				hostID: data.username.id,
+				hostName: data.username.name,
+			}
+
 			availableRooms.push(data.roomName);
 			users[data.roomName] = [];
 
@@ -86,6 +103,8 @@ nextApp.prepare().then(() => {
 				maxCapacity: data.maxCapacity,
 				msg: `${data.roomName} has been created`,
 			});
+
+			gamelobby.emit('sendCustomRooms', customRoomsInfo);
 		});
 
 		socket.on('joinRoom', data => {
@@ -109,15 +128,29 @@ nextApp.prepare().then(() => {
 							users[data.room] = match.addUser(users[data.room], data.room, data.username);
 							console.log(users[data.room]);
 	
-							gamelobby.to(data.room).emit('userJoinedRoom', {
-								msg: `${data.username.name} has joined the room`,
-								room: data.room,
-								username: data.username,
-								customRoom: rooms[data.room].customRoom,
-							});
+							// checking if joining a custom room
+							if (rooms[data.room].customRoom) {
+								gamelobby.to(data.room).emit('userJoinedRoom', {
+									msg: `${data.username.name} has joined the room`,
+									room: data.room,
+									username: data.username,
+									hostName: customRoomsInfo[data.room].hostName,
+									hostID: customRoomsInfo[data.room].hostID,
+									maxCapacity: customRoomsInfo[data.room].maxCapacity,
+									customRoom: rooms[data.room].customRoom,
+								});
+							} else { // joining a premade room
+								gamelobby.to(data.room).emit('userJoinedRoom', {
+									msg: `${data.username.name} has joined the room`,
+									room: data.room,
+									username: data.username,
+									customRoom: rooms[data.room].customRoom,
+								});
+							}
 	
-							socket.emit('sendUserList', users);
+							gamelobby.emit('sendUserList', users);
 	
+							// need to fix this
 							currentUser = {
 								username: {
 									name: data.username.name,
@@ -405,7 +438,7 @@ nextApp.prepare().then(() => {
 				room: data.room,
 			});
 
-			socket.emit('sendUserList', users);
+			gamelobby.emit('sendUserList', users);
 
 			if (rooms[data.room]) {
 				// checking if disconnecting user was in a queue, and to remove them if true
@@ -439,7 +472,7 @@ nextApp.prepare().then(() => {
 					room: currentUser.room,
 				});
 
-				socket.emit('sendUserList', users);
+				gamelobby.emit('sendUserList', users);
 
 				if (rooms[currentUser.room]) {
 					// checking if disconnecting user was in a queue, and to remove them if true

@@ -15,5 +15,10 @@ export const [useCustomRoom] = create((set, get) => ({
             }
          }
       }));
+   },
+   updateCustomRooms: (customRooms) => {
+      set(() => ({
+         rooms: customRooms, 
+      }))
    }
 }))

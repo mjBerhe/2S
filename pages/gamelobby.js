@@ -22,10 +22,12 @@ const gamelobbySocket = io(gamelobby_ENDPOINT);
 export default function GameLobby() {
 
 	const { users, addRoomUsers, addUser, removeUser, updateUsersList } = useUsers();
-	const { addCustomRoom } = useCustomRoom();
+	const { addCustomRoom, updateCustomRooms } = useCustomRoom();
 	const { addRoomChat, addNotification } = useChatBox();
 	const { resetMatch } = useMatch();
 	const { resetDMState } = useDeathMatch();
+
+	const customRooms = useCustomRoom(state => state.rooms);
 
 	const [username, setUsername] = useState({
 		name: '',
@@ -48,7 +50,9 @@ export default function GameLobby() {
 		// welcome message on connection to socket
 		gamelobbySocket.on('welcome', data => {
 			console.log(data.msg);
-			setListOfRooms(data.availableRooms);
+			setListOfRooms(data.availableRooms); // sets available rooms that already exist
+			updateCustomRooms(data.customRooms); // sets custom rooms info
+			updateUsersList(data.usersList); // sets users
 		});
 
 		// error message
@@ -56,6 +60,7 @@ export default function GameLobby() {
 			console.log(msg);
 		});
 
+		// rooms is full
 		gamelobbySocket.on('roomFull', data => {
 			console.log(data.id, username.id)
 			if (data.id === gamelobbySocket.id) {
@@ -72,7 +77,7 @@ export default function GameLobby() {
 				setCustomRoom(true);
 				addRoomChat(data.room); // add room in the chat section
 				addNotification(data.msg, data.room); // send notification to the chat
-				addCustomRoom(data.roomName, data.hostName, data.hostID, data.maxCapacity);
+				addCustomRoom(data.room, data.hostName, data.hostID, data.maxCapacity);
 			} else { // joining a premade room
 				setCustomRoom(false);
 			}
@@ -87,6 +92,7 @@ export default function GameLobby() {
 		// to update all users whenever someone joins/leaves a room
 		gamelobbySocket.on('sendUserList', userList => {
 			updateUsersList(userList);
+			console.log('recieving updated usersList');
 		});
 
 		gamelobbySocket.on('addRoom', data => {
@@ -121,6 +127,11 @@ export default function GameLobby() {
 			}
 		});
 
+		// to update all users whenever someone joins/leaves a room
+		gamelobbySocket.on('sendCustomRooms', customRoomsInfo => {
+			updateCustomRooms(customRoomsInfo);
+		});
+
 		return () => {
 			gamelobbySocket.off('welcome');
 			gamelobbySocket.off('error');
@@ -129,6 +140,7 @@ export default function GameLobby() {
 			gamelobbySocket.off('removeUser');
 			gamelobbySocket.off('sendUserList');
 			gamelobbySocket.off('addRoom');
+			gamelobbySocket.off('sendCustomRooms');
 		}
 
 	}, []);
@@ -205,7 +217,7 @@ export default function GameLobby() {
 									</button>
 									{listOfRooms.map(roomName => 
 										<button className='join-room-button' onClick={handleJoinRoom} value={roomName} key={roomName}>
-											{roomName}
+											{roomName} {users[roomName] && customRooms[roomName] ? `${users[roomName].length}/${customRooms[roomName].maxCapacity}` : null}
 										</button>
 									)}
 								</div>
@@ -225,12 +237,12 @@ export default function GameLobby() {
 			</div>
 
 			<div className="users-container">
-				{currentRoom && 
+				{/* {currentRoom && 
 					<div>
 						<h2>Current Users</h2>
 						{users[currentRoom].map((user) => <h3 key={user.id}>{user.name}</h3>)}
 					</div>
-				}
+				} */}
 			</div>
 
 			<Footer/>

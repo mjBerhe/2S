@@ -261,6 +261,10 @@ $main-color2: rgb(109, 22, 180);
 }
 
 .button-start-game {
+	color: black;
+	// want to make an effect where it will
+	// be green if the game is ready to start
+	// or red if not everyone is ready
 }
 
 .button-ready::after {
