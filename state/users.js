@@ -24,9 +24,9 @@ export const [useUsers] = create((set, get) => ({
 			}
 		}));
 	},
-	removeUser: (room, username) => {
+	removeUser: (room, userID) => {
 		const users = get().users;
-		const index = users[room].findIndex(user => user.id === username.id);
+		const index = users[room].findIndex(user => user.id === userID);
 		set(prevState => ({
 			users: {
 				...prevState.users,

@@ -45,8 +45,6 @@ const customRoomsInfo = {
 	// where custom rooms are added
 }
 
-let currentUser;
-
 nextApp.prepare().then(() => {
 
 	app.get('*', (req, res) => {
@@ -73,7 +71,7 @@ nextApp.prepare().then(() => {
 		});
 
 		socket.on('createRoom', data => {
-			console.log(`${data.username.name} has requested to create a room: ${data}`);
+			socket.tempName = data.username.name;
 			
 			// creating new room
 			rooms[data.roomName.toString()] = generateRoom.randomStandard({
@@ -110,59 +108,71 @@ nextApp.prepare().then(() => {
 		socket.on('joinRoom', data => {
 			// checking if room and user is valid
 			if (availableRooms.includes(data.room) && data.username.id) {
+				socket.tempName = data.username.name;
+
 				// checking if current room is full
 				if (users[data.room].length >= rooms[data.room].maxCapacity) {
-					console.log(`${data.username.name} could not join ${data.room} (FULL)`)
+					console.log(`${socket.tempName} could not join ${data.room} (FULL)`)
 					socket.emit('roomFull', {
 						id: data.username.id,
 						room: data.room,
-						msg: `Could not join, ${data.room} is currently full`,
+						msg: `${socket.tempName} could not join ${data.room} (FULL)`,
 					});
 				// there is available space in the room
 				} else {
 					socket.join(data.room, (err) => {
 						if (err) {
-							console.log(`Error, couldn't join ${data.room}`);
-							socket.emit('invalidRoom', `Error, couldn't join ${data.room}`);
-						} else {
+							console.log(`ERROR: socket couldn't join ${data.room}`);
+							socket.emit('invalidRoom', {
+								id: data.username.id,
+								room: data.room,
+								msg: `ERROR: socket couldn't join ${data.room}`,
+							});
+						} else { // successfully joined the room
 							users[data.room] = match.addUser(users[data.room], data.room, data.username);
 							console.log(users[data.room]);
 	
 							// checking if joining a custom room
 							if (rooms[data.room].customRoom) {
+								// sending confirmation that the user has successfully joined
 								gamelobby.to(data.room).emit('userJoinedRoom', {
-									msg: `${data.username.name} has joined the room`,
+									msg: `${socket.tempName} has joined the room`,
 									room: data.room,
+									id: data.username.id,
 									username: data.username,
 									hostName: customRoomsInfo[data.room].hostName,
 									hostID: customRoomsInfo[data.room].hostID,
 									maxCapacity: customRoomsInfo[data.room].maxCapacity,
-									customRoom: rooms[data.room].customRoom,
+									customRoom: rooms[data.room].customRoom || true,
+								});
+
+								// sending info on who is currently ready/unready
+								gamelobby.to(data.room).emit('customRoomUsers', {
+									room: data.room,
+									usersReady: rooms[data.room].queue,
 								});
 							} else { // joining a premade room
 								gamelobby.to(data.room).emit('userJoinedRoom', {
-									msg: `${data.username.name} has joined the room`,
+									msg: `${socket.tempName} has joined the room`,
 									room: data.room,
+									id: data.username.id,
 									username: data.username,
-									customRoom: rooms[data.room].customRoom,
+									customRoom: rooms[data.room].customRoom || false,
 								});
 							}
 	
+							// sending updated list of all users
 							gamelobby.emit('sendUserList', users);
-	
-							// need to fix this
-							currentUser = {
-								username: {
-									name: data.username.name,
-									id: data.username.id,
-								},
-								room: data.room,
-							}
 						}
 					});
 				}
 			} else {
-				socket.emit('invalidRoom', `Error, no room named ${data.room}`);
+				console.log("ERROR: room isn't available OR invalid nickname");
+				socket.emit('invalidRoom', {
+					id: data.username.id,
+					room: data.room,
+					msg: "ERROR: room isn't available OR invalid nickname",
+				});
 			}
 		});
 
@@ -184,12 +194,14 @@ nextApp.prepare().then(() => {
 				if (match.findUser(rooms[data.room].queue, data.username)) {
 					console.log(`${data.username.name} is already ready`);
 				} else { // user is now ready
+					// maybe add async await here??
 					rooms[data.room].queue = match.joinQueue(rooms[data.room].queue, data.room, data.username);
 					gamelobby.to(data.room).emit('confirmReady', {
 						username: data.username,
 						room: data.room,
 						msg: `${data.username.name} is ready`
 					});
+					// sending info on who is currently ready/unready
 					gamelobby.to(data.room).emit('customRoomUsers', {
 						room: data.room,
 						usersReady: rooms[data.room].queue,
@@ -208,12 +220,14 @@ nextApp.prepare().then(() => {
 			} else {
 				// if user is now NOT ready
 				if (match.findUser(rooms[data.room].queue, data.username)) {
-					rooms[data.room].queue = match.removeUser(rooms[data.room].queue, data.username, 'queue');
+					// maybe add async/await here??
+					rooms[data.room].queue = match.removeUser(rooms[data.room].queue, data.username.id, 'queue');
 					gamelobby.to(data.room).emit('confirmUnready', {
 						username: data.username,
 						room: data.room,
 						msg: `${data.username.name} is not ready`,
 					});
+					// sending info on who is currently ready/unready
 					gamelobby.to(data.room).emit('customRoomUsers', {
 						room: data.room,
 						usersReady: rooms[data.room].queue,
@@ -287,7 +301,7 @@ nextApp.prepare().then(() => {
 			if (rooms[data.room]) {
 				rooms[data.room].queue.forEach(user => {
 					if (user.id === data.username.id) {
-						rooms[data.room].queue = match.removeUser(rooms[data.room].queue, data.username, 'queue');
+						rooms[data.room].queue = match.removeUser(rooms[data.room].queue, data.username.id, 'queue');
 						console.log(rooms[data.room].queue);
 					}
 				});
@@ -428,69 +442,89 @@ nextApp.prepare().then(() => {
 
 		// kick out user from room when they leave a room via button
 		socket.on('disconnectUser', data => {
-			socket.leave(data.room);
-			users[data.room] = match.removeUser(users[data.room], data.username, 'room');
-			console.log(users[data.room]);
+			socket.leave(data.room, (err) => {
+				if (err) {
+					console.log(`ERROR: socket did not disconnect from ${data.room} properly`);
+				} else {
+					// removing user from server side
+					users[data.room] = match.removeUser(users[data.room], data.id, 'room');
+					console.log(users[data.room]);
 
-			gamelobby.to(data.room).emit('removeUser', {
-				msg: `${data.username.name} has left the room`,
-				username: data.username,
-				room: data.room,
-			});
+					// sending updated users list
+					gamelobby.emit('sendUserList', users);
 
-			gamelobby.emit('sendUserList', users);
+					// telling client to remove the user from the room
+					gamelobby.to(data.room).emit('userLeftRoom', {
+						msg: `${data.name} has left the room`,
+						id: data.id,
+						name: data.name,
+						room: data.room,
+					});
 
-			if (rooms[data.room]) {
-				// checking if disconnecting user was in a queue, and to remove them if true
-				rooms[data.room].queue.forEach(user => {
-					if (user.id === data.username.id) {
-						rooms[data.room].queue = match.removeUser(rooms[data.room].queue, data.username, 'queue');
-						console.log(rooms[data.room].queue);
+					if (rooms[data.room]) {
+						// checking if disconnecting user was in a queue, and to remove them if true
+						rooms[data.room].queue.forEach(user => {
+							if (user.id === data.id) {
+								rooms[data.room].queue = match.removeUser(rooms[data.room].queue, data.id, 'queue');
+								console.log(rooms[data.room].queue);
+							}
+						});
+						// checking if disconnecting user was in a game, and to remove them if true
+						rooms[data.room].users.forEach(user => {
+							if (user.id === data.id) {
+								rooms[data.room].users = match.removeUser(rooms[data.room].users, data.id, 'game');
+								console.log(rooms[data.room].users);
+							}
+						});
 					}
-				});
-				// checking if disconnecting user was in a room, and to remove them if true
-				rooms[data.room].users.forEach(user => {
-					if (user.id === data.username.id) {
-						rooms[data.room].users = match.removeUser(rooms[data.room].users, data.username, 'game');
-						console.log(rooms[data.room].users);
+				}
+			});	
+		});
+		
+		// fired BEFORE the client disconnects, but hasnt left its rooms yet
+		socket.on('disconnecting', (reason) => {
+			const listOfClientRooms = Object.keys(socket.rooms);
+
+			listOfClientRooms.forEach(room => {
+				if (availableRooms.includes(room)) {
+					// removing user from server side
+					users[room] = match.removeUser(users[room], socket.id, 'room');
+					console.log(users[room]);
+
+					// sending updated users list
+					gamelobby.emit('sendUserList', users);
+
+					// telling client to remove the user from the room
+					gamelobby.to(room).emit('userLeftRoom', {
+						msg: `${socket.tempName} has left the room`,
+						id: socket.id,
+						name: socket.tempName,
+						room: room,
+					});
+
+					if (rooms[room]) {
+						// checking if disconnecting user was in a queue, and to remove them if true
+						rooms[room].queue.forEach(user => {
+							if (user.id === socket.id) {
+								rooms[room].queue = match.removeUser(rooms[room].queue, socket.id, 'queue');
+								console.log(rooms[room].queue);
+							}
+						});
+						// checking if disconnecting user was in a game, and to remove them if true
+						rooms[room].users.forEach(user => {
+							if (user.id === socket.id) {
+								rooms[room].users = match.removeUser(rooms[room].users, socket.id, 'game');
+								console.log(rooms[room].users);
+							}
+						});
 					}
-				});
-			}
-			
+				}
+			})
 		});
 
-		// need to kick out user from rooms if they disconnect from socket in anyway possible
-		socket.on('disconnect', () => {
-			if (currentUser) {
-				socket.leave(currentUser.room);
-				users[currentUser.room] = match.removeUser(users[currentUser.room], currentUser.username, 'room');
-				console.log(users[currentUser.room]);
-
-				gamelobby.to(currentUser.room).emit('removeUser', {
-					msg: `${currentUser.username.name} has left the room`,
-					username: currentUser.username,
-					room: currentUser.room,
-				});
-
-				gamelobby.emit('sendUserList', users);
-
-				if (rooms[currentUser.room]) {
-					// checking if disconnecting user was in a queue, and to remove them if true
-					rooms[currentUser.room].queue.forEach(user => {
-						if (user.id === currentUser.username.id) {
-							rooms[currentUser.room].queue = match.removeUser(rooms[currentUser.room].queue, currentUser.username, 'queue');
-							console.log(rooms[currentUser.room].queue);
-						}
-					});
-					// checking if disconnecting user was in a room, and to remove them if true
-					rooms[currentUser.room].users.forEach(user => {
-						if (user.id === currentUser.username.id) {
-							rooms[currentUser.room].users = match.removeUser(rooms[currentUser.room].users, currentUser.username, 'game');
-							console.log(rooms[currentUser.room].users);
-						}
-					});
-				}
-			}
+		// fires AFTER the client leaves all rooms
+		socket.on('disconnect', (reason) => {
+			// may want to add some cleanup here when user disconnects
 		});
 	});
 

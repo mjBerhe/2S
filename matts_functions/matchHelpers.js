@@ -21,15 +21,15 @@ const addUser = (userArray, room, username) => {
 }
 
 // returns the new userArray after removing the user
-const removeUser = (usersArray, username, location) => {
-	const index = usersArray.findIndex(user => user.id === username.id);
+const removeUser = (usersArray, userID, location) => {
+	const index = usersArray.findIndex(user => user.id === userID);
 
 	if (index > -1) { // user was found
 		usersArray.splice(index, 1);
-		console.log(`${username.name} disconnected from the ${location}`);
+		console.log(`${userID} disconnected from the ${location}`);
 		return usersArray;
 	} else { // user was not found
-		console.log(`Error removing ${username.name} from the ${location}`);
+		console.log(`Error removing ${userID} from the ${location}`);
 		return usersArray;
 	}
 }

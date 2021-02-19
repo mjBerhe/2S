@@ -19,12 +19,13 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
       complete: state.completed,
    }), shallow);
 
+   const [isHost, setIsHost] = useState(false);
    const [isReady, setIsReady] = useState(false);
    const [buttonClass, setButtonClass] = useState('button-customroom button-unready');
    const [readyUsersList, setReadyUsersList] = useState([]);
 
    const handleStartGame = () => {
-      if (username.host) {
+      if (isHost) {
          socket.emit('startCustomMatch', {
             room: room,
             username: username,
@@ -36,7 +37,7 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
 
    const handleReadyUp = () => {
       // only non host players can ready (host is always ready)
-      if (!username.host) {
+      if (!isHost) {
          setIsReady(!isReady);
       }
    }
@@ -49,29 +50,37 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
       }
    }
 
+   // to set the host of the current room
+   useEffect(() => {
+      if (socket.id === customRoom.hostID) {
+         setIsHost(true);
+      } else setIsHost(false);
+   }, [customRoom])
+
+   // sending info to server whenever someone is ready/unready
    useEffect(() => {
       // if not host and is ready
-      if (isReady && !username.host) {
+      if (isReady && !isHost) {
          setButtonClass('button-customroom button-ready');
          socket.emit('readyCustomMatch', {
             room: room,
             username: username,
          });
       // if not host and is NOT ready
-      } else if (!isReady && !username.host) {
+      } else if (!isReady && !isHost) {
          setButtonClass('button-customroom button-unready');
          socket.emit('unreadyCustomMatch', {
             room: room,
             username: username,
          }) 
-      } else if (username.host) {
+      } else if (isHost) {
          setButtonClass('button-customroom button-ready');
          socket.emit('readyCustomMatch', {
             room: room,
             username: username,
          });
       }
-   }, [isReady]);
+   }, [isReady, isHost]);
 
    useEffect(() => {
       // ongoing game is occuring
@@ -91,6 +100,7 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
          addNotification(data.msg, data.room);
       });
 
+      // recieving custom room info (whos ready/unready)
       socket.on('customRoomUsers', data => {
          setReadyUsersList(data.usersReady);
       });
@@ -138,8 +148,7 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
                         : 
                      <div key={user.id} className='user-unready-container'>
                         <h3>{user.name}</h3> <h4>Ready</h4>
-                     </div>
-                     
+                     </div> 
                   )}
                </div>
                <ChatBox socket={socket} room={room} username={username.name}/>

@@ -55,17 +55,14 @@ export default function GameLobby() {
 			updateUsersList(data.usersList); // sets users
 		});
 
-		// error message
-		gamelobbySocket.on('invalidRoom', msg => {
-			console.log(msg);
+		// error joining the room
+		gamelobbySocket.on('invalidRoom', data => {
+			console.log(data.msg);
 		});
 
 		// rooms is full
 		gamelobbySocket.on('roomFull', data => {
-			console.log(data.id, username.id)
-			if (data.id === gamelobbySocket.id) {
-				console.log(data.msg);
-			}
+			console.log(data.msg);
 		})
 
 		// when someone joins a room (confirmed through server)
@@ -73,19 +70,21 @@ export default function GameLobby() {
 			// must add logic to check if that user isnt already connected to the room using ids
 			setCurrentRoom(data.room);
 			addUser(data.room, data.username);
+
 			if (data.customRoom) { // joining a custom made room
 				setCustomRoom(true);
+
 				addRoomChat(data.room); // add room in the chat section
-				addNotification(data.msg, data.room); // send notification to the chat
-				addCustomRoom(data.room, data.hostName, data.hostID, data.maxCapacity);
+				addNotification(data.msg, data.room); // send notification to the room
+				addCustomRoom(data.room, data.hostName, data.hostID, data.maxCapacity); // add custom room
 			} else { // joining a premade room
 				setCustomRoom(false);
 			}
 		});
 
 		// when someone leaves a room
-		gamelobbySocket.on('removeUser', data => {
-			removeUser(data.room, data.username);
+		gamelobbySocket.on('userLeftRoom', data => {
+			removeUser(data.room, data.id);
 			addNotification(data.msg, data.room);
 		});
 
@@ -115,19 +114,10 @@ export default function GameLobby() {
 				});
 				addRoomChat(data.roomName); // add room to the chat section
 				setCurrentRoom(data.roomName);
-				
-
-
-				// want to change this
-				// want to make host relevant in customRoom state
-				setUsername(prevUsername => ({ // setting user as host
-					...prevUsername,
-					host: true,
-				}));
 			}
 		});
 
-		// to update all users whenever someone joins/leaves a room
+		// to update all users whenever someone joins/leaves a custom room
 		gamelobbySocket.on('sendCustomRooms', customRoomsInfo => {
 			updateCustomRooms(customRoomsInfo);
 		});
@@ -137,7 +127,7 @@ export default function GameLobby() {
 			gamelobbySocket.off('error');
 			gamelobbySocket.off('roomFull');
 			gamelobbySocket.off('userJoinedRoom');
-			gamelobbySocket.off('removeUser');
+			gamelobbySocket.off('userLeftRoom');
 			gamelobbySocket.off('sendUserList');
 			gamelobbySocket.off('addRoom');
 			gamelobbySocket.off('sendCustomRooms');
@@ -177,7 +167,8 @@ export default function GameLobby() {
 		e.preventDefault();
 		gamelobbySocket.emit('disconnectUser', {
 			room: currentRoom,
-			username: username,
+			name: username.name,
+			id: username.id,
 		});
 		setCurrentRoom('');
 		
