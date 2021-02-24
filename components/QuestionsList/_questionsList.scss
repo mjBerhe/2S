@@ -1,4 +1,4 @@
-.questionsList-container {
+.questions-list-container {
 	grid-column: 1/2;
 	padding: 5px;
 	display: flex;
@@ -6,4 +6,7 @@
 	align-items: center;
 	/* justify-content: center; */
 	// background: yellow;
+	h2, h3 {
+		color: white;
+	}
 }

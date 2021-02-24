@@ -19,7 +19,7 @@ export default function QuestionsList() {
    }
 
    return (
-      <div className='questionsList-container'>
+      <div className='questions-list-container'>
          {startStatus && !roundStatus.start && roundStatus.showStats &&
             <div className='centered-flex-column'>
                {roundsInfo[`round ${currentRound}`].questionsMaster.map((question, i) =>

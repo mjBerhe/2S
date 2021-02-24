@@ -30,20 +30,66 @@ export default function GameLobby() {
 	const customRooms = useCustomRoom(state => state.rooms);
 
 	const [username, setUsername] = useState({
-		name: '',
-		id: null,
-		host: false,
+		name: gamelobbySocket.tempName ? gamelobbySocket.tempName : '',
+		id: gamelobbySocket.id ? gamelobbySocket.id : null,
 	});
+
 	// to determine which component to display to the user
 	const [currentRoom, setCurrentRoom] = useState('');
 
+	// to determine if inside a custom made room or premade room
+	const [customRoom, setCustomRoom] = useState(false);
+
+	// temporary list of available room names
 	const [listOfRooms, setListOfRooms] = useState([]);
 
 	// to determine if showing form creation or not
 	const [creatingRoom, setCreatingRoom] = useState(false);
 
-	// to determine if inside a custom made room or premade room
-	const [customRoom, setCustomRoom] = useState(false);
+	const [joiningRoom, setJoiningRoom] = useState(false);
+
+	const handleUsername = (e) => {
+		e.preventDefault();
+		setUsername({
+			name: e.target.value,
+			id: gamelobbySocket.id,
+		});
+		if (e.target.value) {
+			gamelobbySocket.tempName = e.target.value;
+		}
+	}
+
+	const handleJoinRoom = (e) => {
+		e.preventDefault();
+		gamelobbySocket.emit('joinRoom', {
+			room: e.target.value,
+			username: {
+				id: gamelobbySocket.id,
+				name: gamelobbySocket.tempName,
+			},
+		});
+	}
+
+	const handleLeaveRoom = (e) => {
+		e.preventDefault();
+		gamelobbySocket.emit('disconnectUser', {
+			room: currentRoom,
+			name: gamelobbySocket.tempName,
+			id: gamelobbySocket.id,
+		});
+		setCurrentRoom('');
+		
+		resetMatch();
+		resetDMState();
+	}
+
+	const toggleCreatingRoom = () => {
+		setCreatingRoom(!creatingRoom);
+	}
+
+	const toggleJoiningRoom = () => {
+		setJoiningRoom(!joiningRoom);
+	}
 
 	// socket events
 	useEffect(() => {
@@ -91,12 +137,9 @@ export default function GameLobby() {
 		// to update all users whenever someone joins/leaves a room
 		gamelobbySocket.on('sendUserList', userList => {
 			updateUsersList(userList);
-			console.log('recieving updated usersList');
 		});
 
 		gamelobbySocket.on('addRoom', data => {
-			// console.log(data.msg);
-
 			addRoomUsers(data.roomName); // add room to the users section
 			setListOfRooms(prevRooms => ([...prevRooms, data.roomName]));
 
@@ -108,7 +151,7 @@ export default function GameLobby() {
 				gamelobbySocket.emit('joinRoom', {
 					room: data.roomName,
 					username: {
-						name: localStorage.getItem('name'),
+						name: gamelobbySocket.tempName,
 						id: gamelobbySocket.id,
 					},
 				});
@@ -144,41 +187,7 @@ export default function GameLobby() {
 				// console.log(`users array created for ${roomName}`);
 			}
 		});
-	}, [listOfRooms])
-	
-	const handleUsername = (e) => {
-		e.preventDefault();
-		setUsername({
-			name: e.target.value,
-			id: gamelobbySocket.id,
-		});
-		localStorage.setItem('name', e.target.value);
-	}
-
-	const handleJoinRoom = (e) => {
-		e.preventDefault();
-		gamelobbySocket.emit('joinRoom', {
-			room: e.target.value,
-			username: username,
-		});
-	}
-
-	const handleLeaveRoom = (e) => {
-		e.preventDefault();
-		gamelobbySocket.emit('disconnectUser', {
-			room: currentRoom,
-			name: username.name,
-			id: username.id,
-		});
-		setCurrentRoom('');
-		
-		resetMatch();
-		resetDMState();
-	}
-
-	const toggleCreateRoom = () => {
-		setCreatingRoom(!creatingRoom);
-	}
+	}, [listOfRooms]);
 
 	return (
 		<div className="gamelobby-page-container">
@@ -199,14 +208,17 @@ export default function GameLobby() {
 						</div>
 						<div className='room-select-interface'>
 							<div className='username-container'>
-								<input type="text" onChange={handleUsername} value={username.name} placeholder='Nickname' autoFocus={true}/>
+								<input type="text" onChange={handleUsername} value={gamelobbySocket.tempName} placeholder='Nickname' autoFocus={true}/>
 							</div>
 							{!creatingRoom && 
 								<div className='available-rooms'>
-									<button className='join-room-button' onClick={toggleCreateRoom}>
+									<button className='join-room-button' onClick={toggleCreatingRoom}>
 										Create Room
 									</button>
-									{listOfRooms.map(roomName => 
+									<button className='join-room-button' onClick={toggleJoiningRoom}>
+										Join Room
+									</button>
+									{joiningRoom && listOfRooms.map(roomName => 
 										<button className='join-room-button room-button' onClick={handleJoinRoom} value={roomName} key={roomName}>
 											<h4>{roomName}</h4> 
 											<h4>{users[roomName] ?
@@ -219,7 +231,7 @@ export default function GameLobby() {
 								</div>
 							}
 							{creatingRoom &&
-								<CreateRoom socket={gamelobbySocket} username={username} toggleRoom={toggleCreateRoom}/>
+								<CreateRoom socket={gamelobbySocket} username={username} toggleRoom={toggleCreatingRoom}/>
 							}
 						</div>
 					</div>

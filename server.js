@@ -57,7 +57,7 @@ nextApp.prepare().then(() => {
 	// use gamelobby when talking to everyone on /gamelobby
 	// use gamelobby.to(roomName) when talking to a specific roomName
 	// use socket when talking to this specific connection 
-	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
 	// initializing socket when a user goes on /gamelobby
 	gamelobby.on('connection', socket => {
