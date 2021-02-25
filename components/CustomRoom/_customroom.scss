@@ -1,3 +1,5 @@
+@import './chatbox';
+
 @mixin flexCenter() {
 	display: flex;
 	justify-content: center;
@@ -81,7 +83,7 @@ $main-color2: rgb(109, 22, 180);
 	background: rgb(41, 39, 39);
 	border: 2px solid $main-color;
 	border-radius: .8rem;
-	h3 {
+	h4 {
 		color: white;
 	}
 }
@@ -98,128 +100,17 @@ $main-color2: rgb(109, 22, 180);
 
 .user-ready-container {
 	@include userListItem();
-	h4 {
+	strong{
 		color: $green-color;
+		font-weight: normal;
 	}
 }
 
 .user-unready-container {
 	@include userListItem();
-	h4 {
+	strong {
 		color: $red-color;
-	}
-}
-
-.chatbox-container {
-	grid-row: 2/3;
-	grid-column: 2/3;
-	@include centeredGridItem();
-	height: 100%;
-	width: 90%;
-	display: grid;
-	grid-template-columns: 100%;
-	grid-template-rows: 90% 10%;
-	// border: 2px solid red;
-}
-
-// purpose is to have the scroll on the
-// inner div to not overlap on border
-
-.chatbox-outer {
-	grid-column: 1/2;
-	grid-row: 1/2;
-	width: 100%;
-	height: 100%;
-	border: 2px solid $main-color;
-	border-radius: .8rem;
-	overflow: hidden;
-}
-
-.chatbox-inner {
-	height: 100%;
-	width: 100%;
-	min-height: 100px;
-	padding: .3rem;
-	display: flex;
-	flex-direction: column;
-	overflow: auto;
-	background: white;
-	h2, h3 {
-		// border: 1px solid black;
-		color: black;
-		padding: 3px 10px 3px 10px;
-		margin: 2px;
-	}
-	h2 {
-		font-weight: bold;
-		font-size: 20px;
-		border-radius: 5px;
-		background: rgb(192, 188, 188);
-	}
-	h3 {
 		font-weight: normal;
-		font-size: 18px;
-	}
-}
-
-.chatbox-form {
-	grid-column: 1/2;
-	grid-row: 2/3;
-	width: 100%;
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
-	input[type=text] {
-		height: 2rem;
-		width: 100%;
-		margin-right: 1rem;
-		padding-left: .4rem;
-		border: 1px solid $main-color;
-		border-radius: .4rem;
-		font-size: .8rem;
-		&:focus {
-			outline: none;
-			border: 2px solid $main-color;
-		}
-      &:hover {
-         border: 2px solid $main-color;
-      }
-	}
-	button {
-		height: 2rem;
-		width: 6rem;
-		background-color: $main-color;
-		color: white;
-		border: none;
-		border-radius: .9rem;
-		&:focus {
-         outline: none;
-      }
-      &:hover {
-         background-color:$main-color2;
-      }
-	}
-}
-
-.chatbox-submit {
-	height: 2rem;
-	width: 15%;
-	max-width: 4.5rem;
-	min-width: 3rem;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-radius: .4rem;
-	background-color: $main-color;
-	&:hover {
-		background-color:$main-color2;
-	}
-	input[type=image] {
-		height: 1rem;
-		width: 1.7rem;
-		&:focus {
-			outline: none;
-		}
 	}
 }
 

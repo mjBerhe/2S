@@ -655,160 +655,6 @@
   width: 13px;
 }
 
-.customroom-container {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
-
-.customroom-lobby {
-  height: 100%;
-  width: 100%;
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-rows: 10% 60% 30%;
-      grid-template-rows: 10% 60% 30%;
-  -ms-grid-columns: 40% 60%;
-      grid-template-columns: 40% 60%;
-}
-
-.customroom-title {
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 1;
-  grid-row: 1/2;
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 2;
-  grid-column: 1/3;
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
-  -ms-grid-column-align: center;
-      justify-self: center;
-  color: #56108f;
-}
-
-.customroom-leave {
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 1;
-  grid-row: 1/2;
-  -ms-grid-column: 2;
-  -ms-grid-column-span: 1;
-  grid-column: 2/3;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-}
-
-.customroom-leave input[type=image] {
-  border: none;
-  height: 10px;
-  width: 10px;
-  margin: 0.5rem 0.5rem;
-}
-
-.customroom-leave input[type=image]:focus {
-  outline: none;
-}
-
-.customroom-leave input[type=image]:hover {
-  height: 13px;
-  width: 13px;
-}
-
-.users-list-container {
-  -ms-grid-row: 2;
-  -ms-grid-row-span: 1;
-  grid-row: 2/3;
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 1;
-  grid-column: 1/2;
-  width: 90%;
-  max-width: 20rem;
-  height: 100%;
-  -ms-flex-item-align: center;
-      align-self: center;
-  justify-self: center;
-  padding: 0.2rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
-  -ms-flex-line-pack: start;
-      align-content: flex-start;
-  background: #292727;
-  border: 2px solid #56108f;
-  border-radius: .8rem;
-}
-
-.users-list-container h3 {
-  color: white;
-}
-
-.customroom-capacity {
-  margin-bottom: .5rem;
-  width: 100%;
-  height: auto;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.user-ready-container {
-  border: 2px solid white;
-  border-radius: .7rem;
-  margin: .3rem;
-  padding: .3rem;
-  height: 2.5rem;
-  width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.user-ready-container h4 {
-  color: #36e444;
-}
-
-.user-unready-container {
-  border: 2px solid white;
-  border-radius: .7rem;
-  margin: .3rem;
-  padding: .3rem;
-  height: 2.5rem;
-  width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.user-unready-container h4 {
-  color: red;
-}
-
 .chatbox-container {
   -ms-grid-row: 2;
   -ms-grid-row-span: 1;
@@ -962,6 +808,162 @@
 
 .chatbox-submit input[type=image]:focus {
   outline: none;
+}
+
+.customroom-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.customroom-lobby {
+  height: 100%;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 10% 60% 30%;
+      grid-template-rows: 10% 60% 30%;
+  -ms-grid-columns: 40% 60%;
+      grid-template-columns: 40% 60%;
+}
+
+.customroom-title {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1/2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-column: 1/3;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -ms-grid-column-align: center;
+      justify-self: center;
+  color: #56108f;
+}
+
+.customroom-leave {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1/2;
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 1;
+  grid-column: 2/3;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.customroom-leave input[type=image] {
+  border: none;
+  height: 10px;
+  width: 10px;
+  margin: 0.5rem 0.5rem;
+}
+
+.customroom-leave input[type=image]:focus {
+  outline: none;
+}
+
+.customroom-leave input[type=image]:hover {
+  height: 13px;
+  width: 13px;
+}
+
+.users-list-container {
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 1;
+  grid-row: 2/3;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+  width: 90%;
+  max-width: 20rem;
+  height: 100%;
+  -ms-flex-item-align: center;
+      align-self: center;
+  justify-self: center;
+  padding: 0.2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+  -ms-flex-line-pack: start;
+      align-content: flex-start;
+  background: #292727;
+  border: 2px solid #56108f;
+  border-radius: .8rem;
+}
+
+.users-list-container h4 {
+  color: white;
+}
+
+.customroom-capacity {
+  margin-bottom: .5rem;
+  width: 100%;
+  height: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.user-ready-container {
+  border: 2px solid white;
+  border-radius: .7rem;
+  margin: .3rem;
+  padding: .3rem;
+  height: 2.5rem;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.user-ready-container strong {
+  color: #36e444;
+  font-weight: normal;
+}
+
+.user-unready-container {
+  border: 2px solid white;
+  border-radius: .7rem;
+  margin: .3rem;
+  padding: .3rem;
+  height: 2.5rem;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.user-unready-container strong {
+  color: red;
+  font-weight: normal;
 }
 
 .customroom-buttons {
@@ -1149,7 +1151,7 @@
           align-items: center;
 }
 
-.join-room-button {
+.lobby-room-button {
   height: 2rem;
   width: 11rem;
   margin: 0.4rem;
@@ -1162,7 +1164,7 @@
   z-index: 0;
 }
 
-.join-room-button:focus {
+.lobby-room-button:focus {
   outline: none;
   border: 2px solid #56108f;
 }
@@ -1186,36 +1188,54 @@
   max-width: 9rem;
 }
 
-.join-room-button::after {
+.lobby-room-button::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
   height: 100%;
-  border-radius: .3rem;
+  border-radius: .25rem;
   background: #56108f;
   z-index: -1;
   -webkit-transform: scaleX(0);
           transform: scaleX(0);
   -webkit-transform-origin: right;
           transform-origin: right;
-  -webkit-transition: -webkit-transform 200ms ease-in;
-  transition: -webkit-transform 200ms ease-in;
-  transition: transform 200ms ease-in;
-  transition: transform 200ms ease-in, -webkit-transform 200ms ease-in;
+  -webkit-transition: -webkit-transform 100ms ease-in;
+  transition: -webkit-transform 100ms ease-in;
+  transition: transform 100ms ease-in;
+  transition: transform 100ms ease-in, -webkit-transform 100ms ease-in;
 }
 
-.join-room-button:hover::after {
+.lobby-room-button:hover::after {
   -webkit-transform: scaleX(1);
           transform: scaleX(1);
   -webkit-transform-origin: left;
           transform-origin: left;
   color: white;
+  border-radius: .2rem;
 }
 
-.join-room-button:hover {
+.lobby-room-button:hover {
   color: white;
+}
+
+.lobby-room-button2 {
+  height: 2rem;
+  width: 11rem;
+  margin: 0.4rem;
+  border: 1px solid #56108f;
+  border-radius: .4rem;
+  background: #56108f;
+  color: white;
+  position: relative;
+  font-size: .825rem;
+}
+
+.lobby-room-button2:focus {
+  outline: none;
+  border: 2px solid #56108f;
 }
 
 * {

@@ -87,7 +87,7 @@ $main-color: rgb(86, 16, 143);
 	align-items: center;
 }
 
-.join-room-button {
+.lobby-room-button {
 	height: 2rem;
 	width: 11rem;
 	margin: 0.4rem;
@@ -116,29 +116,46 @@ $main-color: rgb(86, 16, 143);
 	}
 }
 
-.join-room-button::after {
+.lobby-room-button::after {
 	content: "";
 	position: absolute;
 	left: 0;
 	bottom: 0;
 	width: 100%;
 	height: 100%;
-	border-radius: .3rem;
+	border-radius: .25rem;
 	// background: rgba(0, 0, 0, .3);
 	background: $main-color;
 	z-index: -1;
 
 	transform: scaleX(0);
 	transform-origin: right;
-	transition: transform 200ms ease-in;
+	transition: transform 100ms ease-in;
 }
 
-.join-room-button:hover::after {
+.lobby-room-button:hover::after {
 	transform: scaleX(1);
 	transform-origin: left;
 	color: white;
+	border-radius: .2rem;
 }
 
-.join-room-button:hover {
+.lobby-room-button:hover {
 	color: white;
+}
+
+.lobby-room-button2 {
+	height: 2rem;
+	width: 11rem;
+	margin: 0.4rem;
+	border: 1px solid $main-color;
+	border-radius: .4rem;
+	background: $main-color;
+	color: white;
+	position: relative;
+	font-size: .825rem;
+	&:focus {
+		outline: none;
+		border: 2px solid $main-color;
+	}
 }

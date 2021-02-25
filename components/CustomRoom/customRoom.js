@@ -50,6 +50,14 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
       }
    }
 
+   const emptySlots = () => {
+      const emptyUsers = []
+      for (let i = users.length; i < customRoom.maxCapacity; i++) {
+         emptyUsers.push(<div key={i} className='user-ready-container'></div>)
+      }
+      return emptyUsers;
+   }
+
    // to set the host of the current room
    useEffect(() => {
       if (socket.id === customRoom.hostID) {
@@ -138,18 +146,19 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
                </div>
                <div className='users-list-container'>
                   <div className='customroom-capacity'>
-                     <h3>{users.length}/{customRoom ? customRoom.maxCapacity : 0}</h3>
+                     <h4>{users.length}/{customRoom ? customRoom.maxCapacity : 0}</h4>
                   </div>
                   {users.map(user => 
                      checkIfReady(user.id) ? 
                      <div key={user.id} className='user-ready-container'>
-                        <h3>{user.name}</h3> <h4>Ready</h4>
+                        <h4>{user.name}</h4> <strong>Ready</strong>
                      </div>
                         : 
                      <div key={user.id} className='user-unready-container'>
-                        <h3>{user.name}</h3> <h4>Ready</h4>
+                        <h4>{user.name}</h4> <strong>Ready</strong>
                      </div> 
                   )}
+                  {emptySlots()}
                </div>
                <ChatBox socket={socket} room={room} username={username.name}/>
                <div className='customroom-buttons'>
