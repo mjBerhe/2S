@@ -42,6 +42,7 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
       }
    }
 
+   // checking who is currently ready
    const checkIfReady = (userID) => {
       for (let i = 0; i < readyUsersList.length; i++) {
          if (readyUsersList[i].id === userID) {
@@ -100,12 +101,12 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
 
       // a user is now ready
       socket.on('confirmReady', data => {
-         addNotification(data.msg, data.room);
+         // addNotification(data.msg, data.room);
       });
 
       // a user is now NOT ready
       socket.on('confirmUnready', data => {
-         addNotification(data.msg, data.room);
+         // addNotification(data.msg, data.room);
       });
 
       // recieving custom room info (whos ready/unready)
@@ -145,9 +146,9 @@ export default function CustomRoom({ socket, room, username, leaveRoom }) {
                   <input type="image" src='./Misc/purple-x.png' onClick={leaveRoom}/>
                </div>
                <div className='users-list-container'>
-                  <div className='customroom-capacity'>
+                  {/* <div className='customroom-capacity'>
                      <h4>{users.length}/{customRoom ? customRoom.maxCapacity : 0}</h4>
-                  </div>
+                  </div> */}
                   {users.map(user => 
                      checkIfReady(user.id) ? 
                      <div key={user.id} className='user-ready-container'>

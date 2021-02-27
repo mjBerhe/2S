@@ -63,6 +63,7 @@ export default function GameLobby() {
 		}
 	}
 
+	// setting id when socket changes
 	useEffect(() => {
 		if (gamelobbySocket.id) {
 			setUsername(prev => ({
@@ -76,10 +77,7 @@ export default function GameLobby() {
 		e.preventDefault();
 		gamelobbySocket.emit('joinRoom', {
 			room: e.target.value,
-			username: {
-				id: gamelobbySocket.id,
-				name: gamelobbySocket.tempName,
-			},
+			username: username,
 		});
 	}
 
@@ -240,7 +238,7 @@ export default function GameLobby() {
 						</div>
 						<div className='room-select-interface'>
 							<div className='username-container'>
-								<input type="text" onChange={handleUsername} value={username.name} placeholder='Nickname' autoFocus={true}/>
+								<input type="text" onChange={handleUsername} value={username.name} placeholder='Enter Your Nickname' autoFocus={true}/>
 							</div>
 							{!creatingRoom &&
 								<div className='available-rooms'>
