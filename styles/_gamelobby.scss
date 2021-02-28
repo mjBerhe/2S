@@ -19,6 +19,10 @@ $red-color: red;
 $main-color: rgb(86, 16, 143);
 // $main-color: rgb(49, 88, 216);
 
+/* =========================
+				LAYOUT
+   ========================= */
+
 .room-container {
 	grid-row: 2/3;
 	grid-column: 2/3;
@@ -56,7 +60,7 @@ $main-color: rgb(86, 16, 143);
 	height: 100%;
 	width: 100%;
 	display: grid;
-	grid-template-rows: 15% 85%;
+	grid-template-rows: 10% 90%;
 	grid-template-columns: 100%;
 }
 
@@ -65,8 +69,8 @@ $main-color: rgb(86, 16, 143);
 	@include centeredGridItem();
 	input[type=text] {
 		height: 2rem;
-		width: 13rem;
-		padding-left: .6rem;
+		width: 12rem;
+		padding-left: 1rem;
 		border: 1px solid $main-color;
 		border-radius: .4rem;
 		font-size: .9rem;
@@ -78,6 +82,10 @@ $main-color: rgb(86, 16, 143);
 			border: 2px solid $main-color;
 		}
 	}
+	// input[type=text]::placeholder {
+	// 	// text-align: center;
+	// 	// padding-right: 5rem;
+	// }
 }
 
 .available-rooms { 
@@ -85,18 +93,18 @@ $main-color: rgb(86, 16, 143);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	// border: 1px solid black;
 }
 
+/* =========================
+			BUTTONS & STUFF
+   ========================= */
+
 .lobby-room-button {
-	height: 2rem;
-	width: 11rem;
-	margin: 0.4rem;
-	border: 1px solid $main-color;
-	border-radius: .4rem;
+	width: 10rem;
 	background: white;
 	color: black;
 	position: relative;
-	font-size: .825rem;
 	z-index: 0;
 	&:focus {
 		outline: none;
@@ -105,14 +113,18 @@ $main-color: rgb(86, 16, 143);
 }
 
 .room-button {
+	width: 12rem;
 	display: grid;
 	grid-template-columns: 83% 17%;
 	grid-template-rows: 100%;
-	h4 {
-		@include centeredGridItem();
-		font-size: .85rem;
+	justify-items: start;
+	align-items: center;
+	:first-child {
+		margin-left: 1rem;
+	}
+	h5 {
+		// @include centeredGridItem();
 		max-width: 9rem;
-		// width: 50%;
 	}
 }
 
@@ -130,7 +142,7 @@ $main-color: rgb(86, 16, 143);
 
 	transform: scaleX(0);
 	transform-origin: right;
-	transition: transform 100ms ease-in;
+	transition: transform 200ms ease-in;
 }
 
 .lobby-room-button:hover::after {
@@ -145,11 +157,7 @@ $main-color: rgb(86, 16, 143);
 }
 
 .lobby-room-button2 {
-	height: 2rem;
-	width: 11rem;
-	margin: 0.4rem;
-	border: 1px solid $main-color;
-	border-radius: .4rem;
+	width: 10rem;
 	background: $main-color;
 	color: white;
 	position: relative;

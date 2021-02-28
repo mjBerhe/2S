@@ -49,7 +49,7 @@ export default function GameLobby() {
 	// to determine if showing available rooms to join or not
 	const [joiningRoom, setJoiningRoom] = useState({
 		actve: false,
-		class: 'lobby-room-button',
+		class: 'button-1 lobby-room-button',
 	});
 
 	const handleUsername = (e) => {
@@ -135,7 +135,7 @@ export default function GameLobby() {
 				setCustomRoom(true);
 
 				addRoomChat(data.room); // add room in the chat section
-				addNotification(data.msg, data.room); // send notification to the room
+				// addNotification(data.msg, data.room); // send notification to the room
 				addCustomRoom(data.room, data.hostName, data.hostID, data.maxCapacity); // add custom room
 			} else { // joining a premade room
 				setCustomRoom(false);
@@ -145,7 +145,7 @@ export default function GameLobby() {
 		// when someone leaves a room
 		gamelobbySocket.on('userLeftRoom', data => {
 			removeUser(data.room, data.id);
-			addNotification(data.msg, data.room);
+			// addNotification(data.msg, data.room);
 		});
 
 		// to update all users whenever someone joins/leaves a room
@@ -209,12 +209,12 @@ export default function GameLobby() {
 		if (joiningRoom.active) {
 			setJoiningRoom(prevState => ({
 				...prevState,
-				class: 'lobby-room-button2',
+				class: 'button-1 lobby-room-button2',
 			}));
 		} else {
 			setJoiningRoom(prevState => ({
 				...prevState,
-				class: 'lobby-room-button',
+				class: 'button-1 lobby-room-button',
 			}));
 		}
 	}, [joiningRoom.active]);
@@ -243,21 +243,21 @@ export default function GameLobby() {
 							{!creatingRoom &&
 								<div className='available-rooms'>
 									<button className={joiningRoom.class} onClick={toggleJoiningRoom}>
-										Join Room
+										<h5>Join Room</h5>
 									</button>
 									{!joiningRoom.active &&
-										<button className='lobby-room-button' onClick={toggleCreatingRoom}>
-											Create Room
+										<button className='button-1 lobby-room-button' onClick={toggleCreatingRoom}>
+											<h5>Create Room</h5>
 										</button>
 									}
 									{joiningRoom.active && listOfRooms.map(roomName => 
-										<button className='lobby-room-button room-button' onClick={handleJoinRoom} value={roomName} key={roomName}>
-											<h4>{roomName}</h4> 
-											<h4>{users[roomName] ?
+										<button className='button-1 lobby-room-button room-button' onClick={handleJoinRoom} value={roomName} key={roomName}>
+											<h5>{roomName}</h5> 
+											<h5>{users[roomName] ?
 											customRooms[roomName] ? `${users[roomName].length}/${customRooms[roomName].maxCapacity}`
 												: `${users[roomName].length}/2`
 												: null}
-											</h4>
+											</h5>
 										</button>
 									)}
 								</div>

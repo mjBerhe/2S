@@ -49,7 +49,7 @@ export default function ChatBox({ socket, room, username }) {
 				<div className='chatbox-inner'>
 					{chatBox &&
 						chatBox.map((message, index) => 
-							message.username ? <h3 key={index}>{message.username}: {message.message}</h3>
+							message.username ? <h3 key={index}><strong>{message.username}:</strong> {message.message}</h3>
 							: <h2 key={index}>{message.message}</h2> )
 					}
 					<div ref={divRef}></div>

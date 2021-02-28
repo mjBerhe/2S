@@ -24,6 +24,7 @@ $main-color2: rgb(109, 22, 180);
 
 h1 {
 	font-size: 3rem;
+	font-weight: bold;
 }
 
 h2 {
@@ -31,12 +32,17 @@ h2 {
 }
 
 h3 {
-	font-size: 1rem;
+	font-size: 1.2rem;
 	font-weight: normal;
 }
 
 h4 {
 	font-size: 1rem;
+	font-weight: normal;
+}
+
+h5 {
+	font-size: .85rem;
 	font-weight: normal;
 }
 
@@ -48,9 +54,9 @@ a {
    }
 }
 
-/* ======================
-			LAYOUT
-   ====================== */
+/* =========================
+				LAYOUT
+   ========================= */
 
 .landing-page-container {
    min-height: 100vh;
@@ -82,13 +88,15 @@ a {
 	}
 }
 
-/* ======================
+/* =========================
 			BUTTONS & STUFF
-   ======================  */
+   ========================= */
 
 .button-1 {
-	margin: 5px;
-	width: 140px;
+	height: 2rem;
+	margin: 0.4rem;
+	border: 1px solid $main-color;
+	border-radius: .4rem;
 }
 
 .select-1 {

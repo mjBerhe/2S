@@ -708,8 +708,7 @@
 
 .chatbox-inner h2, .chatbox-inner h3 {
   color: black;
-  padding: 3px 10px 3px 10px;
-  margin: 2px;
+  padding: .2rem .4rem;
 }
 
 .chatbox-inner h2 {
@@ -717,11 +716,6 @@
   font-size: 20px;
   border-radius: 5px;
   background: #c0bcbc;
-}
-
-.chatbox-inner h3 {
-  font-weight: normal;
-  font-size: 18px;
 }
 
 .chatbox-form {
@@ -1046,6 +1040,9 @@
           transform-origin: right;
 }
 
+/* =========================
+				LAYOUT
+   ========================= */
 .room-container {
   -ms-grid-row: 2;
   -ms-grid-row-span: 1;
@@ -1100,8 +1097,8 @@
   width: 100%;
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: 15% 85%;
-      grid-template-rows: 15% 85%;
+  -ms-grid-rows: 10% 90%;
+      grid-template-rows: 10% 90%;
   -ms-grid-columns: 100%;
       grid-template-columns: 100%;
 }
@@ -1119,8 +1116,8 @@
 
 .username-container input[type=text] {
   height: 2rem;
-  width: 13rem;
-  padding-left: .6rem;
+  width: 12rem;
+  padding-left: 1rem;
   border: 1px solid #56108f;
   border-radius: .4rem;
   font-size: .9rem;
@@ -1151,16 +1148,14 @@
           align-items: center;
 }
 
+/* =========================
+			BUTTONS & STUFF
+   ========================= */
 .lobby-room-button {
-  height: 2rem;
-  width: 11rem;
-  margin: 0.4rem;
-  border: 1px solid #56108f;
-  border-radius: .4rem;
+  width: 10rem;
   background: white;
   color: black;
   position: relative;
-  font-size: .825rem;
   z-index: 0;
 }
 
@@ -1170,21 +1165,24 @@
 }
 
 .room-button {
+  width: 12rem;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 83% 17%;
       grid-template-columns: 83% 17%;
   -ms-grid-rows: 100%;
       grid-template-rows: 100%;
+  justify-items: start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
-.room-button h4 {
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
-  -ms-grid-column-align: center;
-      justify-self: center;
-  font-size: .85rem;
+.room-button :first-child {
+  margin-left: 1rem;
+}
+
+.room-button h5 {
   max-width: 9rem;
 }
 
@@ -1202,10 +1200,10 @@
           transform: scaleX(0);
   -webkit-transform-origin: right;
           transform-origin: right;
-  -webkit-transition: -webkit-transform 100ms ease-in;
-  transition: -webkit-transform 100ms ease-in;
-  transition: transform 100ms ease-in;
-  transition: transform 100ms ease-in, -webkit-transform 100ms ease-in;
+  -webkit-transition: -webkit-transform 200ms ease-in;
+  transition: -webkit-transform 200ms ease-in;
+  transition: transform 200ms ease-in;
+  transition: transform 200ms ease-in, -webkit-transform 200ms ease-in;
 }
 
 .lobby-room-button:hover::after {
@@ -1222,11 +1220,7 @@
 }
 
 .lobby-room-button2 {
-  height: 2rem;
-  width: 11rem;
-  margin: 0.4rem;
-  border: 1px solid #56108f;
-  border-radius: .4rem;
+  width: 10rem;
   background: #56108f;
   color: white;
   position: relative;
@@ -1251,6 +1245,7 @@
    ====================== */
 h1 {
   font-size: 3rem;
+  font-weight: bold;
 }
 
 h2 {
@@ -1258,12 +1253,17 @@ h2 {
 }
 
 h3 {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: normal;
 }
 
 h4 {
   font-size: 1rem;
+  font-weight: normal;
+}
+
+h5 {
+  font-size: .85rem;
   font-weight: normal;
 }
 
@@ -1276,9 +1276,9 @@ a:hover:focus:active {
   text-decoration: underline;
 }
 
-/* ======================
-			LAYOUT
-   ====================== */
+/* =========================
+				LAYOUT
+   ========================= */
 .landing-page-container {
   min-height: 100vh;
   padding: 0 0.5rem;
@@ -1329,12 +1329,14 @@ a:hover:focus:active {
   color: white;
 }
 
-/* ======================
+/* =========================
 			BUTTONS & STUFF
-   ======================  */
+   ========================= */
 .button-1 {
-  margin: 5px;
-  width: 140px;
+  height: 2rem;
+  margin: 0.4rem;
+  border: 1px solid #56108f;
+  border-radius: .4rem;
 }
 
 .select-1 {
