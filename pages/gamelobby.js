@@ -14,9 +14,9 @@ import QuestionsList from '../components/QuestionsList/questionsList.js';
 import Header from '../components/Header/header.js';
 import Footer from '../components/Footer/footer.js';
 
-// const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
+const gamelobby_ENDPOINT = "https://tooslow.herokuapp.com/gamelobby";
 // const gamelobby_ENDPOINT = "https://2slow.vercel.app/gamelobby";
-const gamelobby_ENDPOINT = "http://localhost:3000/gamelobby";
+// const gamelobby_ENDPOINT = "http://localhost:3000/gamelobby";
 const gamelobbySocket = io(gamelobby_ENDPOINT);
 
 export default function GameLobby() {
