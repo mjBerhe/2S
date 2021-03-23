@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import io from 'socket.io-client';
 import { useUsers } from '../state/users.js';
-import ChatBox from '../components/chatbox.js';
+import ChatBox from '../components/CustomRoom/chatbox.js';
 
 const chatlobby_ENDPOINT = "http://localhost:3000/chatlobby";
 const chatlobby = io(chatlobby_ENDPOINT);
