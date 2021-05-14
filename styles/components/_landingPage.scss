@@ -1,0 +1,56 @@
+.landing-page-container {
+   min-height: 100vh;
+	width: 100%;
+   background: white;
+}
+
+.landing-page-content {
+	min-height: 100vh;
+	max-width: 70rem;
+	margin: 0 auto;
+
+	display: grid;
+	grid-template-rows: minmax(10%, 4rem) 90%;
+
+	// border: 1px solid black;
+}
+
+nav {
+   margin: 0 2rem;
+
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.quote-button {
+   grid-row: 2/3;
+   margin: 0 2rem;
+   
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: flex-start;
+}
+
+.quote {
+   max-width: 38rem;
+   h1 {
+      font-size: 5rem;
+   }
+}
+
+.button {
+   h2 {
+      font-size: 2rem;
+      font-weight: normal;
+   }
+   margin-top: 3rem;
+   height: 6rem;
+   width: 20rem;
+   border: none;
+   border-radius: 1.5rem;
+
+   background-color: $main-color2;
+   color: white;
+}

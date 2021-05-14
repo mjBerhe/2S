@@ -1,3 +1,8 @@
+@import './general/fonts';
+@import './general/colors';
+
+@import './components/landingPage';
+
 @import '../components/Header/_header.scss';
 @import '../components/Footer/_footer.scss';
 @import '../components/QuestionsList/_questionsList.scss';
@@ -6,11 +11,6 @@
 @import '../components/Deathmatch/_deathmatch.scss';
 @import './_gamelobby.scss';
 
-$green-color: rgb(54, 228, 68);
-$red-color: red;
-$main-color: rgb(86, 16, 143);
-$main-color2: rgb(109, 22, 180);
-
 * {
 	box-sizing: border-box;
 	padding: 0;
@@ -18,55 +18,9 @@ $main-color2: rgb(109, 22, 180);
 	font-family: 'Poppins', sans-serif;
 }
 
-/* ======================
-			TYPOGRAPHY
-   ====================== */
-
-h1 {
-	font-size: 3rem;
-	font-weight: bold;
-}
-
-h2 {
-	font-size: 1.5rem;
-}
-
-h3 {
-	font-size: 1.2rem;
-	font-weight: normal;
-}
-
-h4 {
-	font-size: 1rem;
-	font-weight: normal;
-}
-
-h5 {
-	font-size: .85rem;
-	font-weight: normal;
-}
-
-a {
-	color: #0070f3;
-   text-decoration: none;
-   &:hover:focus:active {
-      text-decoration: underline;
-   }
-}
-
 /* =========================
 				LAYOUT
    ========================= */
-
-.landing-page-container {
-   min-height: 100vh;
-   padding: 0 0.5rem;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   // background: black;
-}
 
 .gamelobby-page-container {
 	display: grid;
