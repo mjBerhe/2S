@@ -1,0 +1,31 @@
+.button {
+   padding: 0;
+   border: none;
+   background-color: $button-color;
+   font-family: inherit;
+   cursor: pointer;
+
+   display: inline-flex;
+   justify-content: center;
+   align-items: center;
+
+   padding: 0.25em 0.75em;
+   min-width: 10ch;
+   min-height: 44px;
+
+   text-align: center;
+   line-height: 1.1;
+
+   transition: 220ms all ease-in-out;
+
+   &:hover,
+   &:active {
+      background-color: scale-color($button-color, $lightness: -20%);
+   }
+
+   &:focus {
+      outline-style: solid;
+      outline-color: transparent;
+      box-shadow: 0 0 0 4px scale-color($button-color, $lightness: -40%);
+   }
+}

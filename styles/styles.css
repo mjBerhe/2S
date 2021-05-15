@@ -1,27 +1,28 @@
-/* ======================
-			TYPOGRAPHY
-   ====================== */
-h1 {
-  font-size: 3rem;
-  font-weight: bold;
-}
-
-h2 {
-  font-size: 1.5rem;
+h4 {
+  font-size: min(max(1rem, 8vw), 1.5rem);
 }
 
 h3 {
-  font-size: 1.2rem;
-  font-weight: normal;
+  font-size: min(max(1rem, 8vw), 2.25rem);
 }
 
-h4 {
-  font-size: 1rem;
-  font-weight: normal;
+h2 {
+  font-size: min(max(1rem, 8vw), 3.375rem);
 }
 
-h5 {
-  font-size: .85rem;
+h1 {
+  font-size: min(max(1rem, 8vw), 5.0625rem);
+}
+
+h1,
+h2 {
+  font-weight: bold;
+}
+
+h3,
+h4,
+a,
+li {
   font-weight: normal;
 }
 
@@ -32,6 +33,41 @@ a {
 
 a:hover:focus:active {
   text-decoration: underline;
+}
+
+.button {
+  padding: 0;
+  border: none;
+  background-color: #993ae7;
+  font-family: inherit;
+  cursor: pointer;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0.25em 0.75em;
+  min-width: 10ch;
+  min-height: 44px;
+  text-align: center;
+  line-height: 1.1;
+  -webkit-transition: 220ms all ease-in-out;
+  transition: 220ms all ease-in-out;
+}
+
+.button:hover, .button:active {
+  background-color: #7c19ce;
+}
+
+.button:focus {
+  outline-style: solid;
+  outline-color: transparent;
+  -webkit-box-shadow: 0 0 0 4px #5d139b;
+          box-shadow: 0 0 0 4px #5d139b;
 }
 
 .landing-page-container {
@@ -84,24 +120,27 @@ nav {
 }
 
 .quote {
-  max-width: 38rem;
+  width: 60%;
+  min-width: 60%;
 }
 
 .quote h1 {
-  font-size: 5rem;
+  margin-bottom: 0.65em;
 }
 
-.button {
-  margin-top: 3rem;
-  height: 6rem;
+.button-main {
+  max-height: 6rem;
   width: 20rem;
-  border: none;
+  height: 60vh;
+  max-width: 100%;
   border-radius: 1.5rem;
-  background-color: #6d16b4;
+  background-color: #993ae7;
   color: white;
+  -webkit-box-shadow: -2px 5px 8px rgba(0, 0, 0, 0.6);
+          box-shadow: -2px 5px 8px rgba(0, 0, 0, 0.6);
 }
 
-.button h2 {
+.button-main h2 {
   font-size: 2rem;
   font-weight: normal;
 }
@@ -1348,9 +1387,10 @@ nav {
   font-family: 'Poppins', sans-serif;
 }
 
-/* =========================
-				LAYOUT
-   ========================= */
+body {
+  font-size: 1rem;
+}
+
 .gamelobby-page-container {
   display: -ms-grid;
   display: grid;

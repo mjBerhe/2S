@@ -1,5 +1,6 @@
 @import './general/fonts';
 @import './general/colors';
+@import './general/items';
 
 @import './components/landingPage';
 
@@ -18,9 +19,10 @@
 	font-family: 'Poppins', sans-serif;
 }
 
-/* =========================
-				LAYOUT
-   ========================= */
+body {
+	font-size: 1rem;
+	// line-height: calc(2px + 4rem + 2px);
+}
 
 .gamelobby-page-container {
 	display: grid;

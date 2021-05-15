@@ -1,10 +1,9 @@
 import Head from 'next/head';
-import Link from 'next/link';
+
 
 export default function MyApp() {
 
-   const handleButton = (e) => {
-      e.preventDefault();
+   const handleButton = () => {
       location.href = "/gamelobby";
    }
 
@@ -17,15 +16,15 @@ export default function MyApp() {
 
          <div className='landing-page-content'>
             <nav>
-               <h3>2S</h3>
-               <h3>Create Account</h3>
+               <h4>2S</h4>
+               <h4>Create Account</h4>
             </nav>
             <div className='quote-button'>
                <div className='quote'>
                   <h1>Insert motivational yet provacative quote.</h1>
                </div>
-               <button className='button' onClick={handleButton}>
-                  <h2>Play Now</h2>
+               <button className='button button-main' onClick={handleButton}>
+                  <h4>Play Now</h4>
                </button>
             </div>
             
@@ -33,9 +32,3 @@ export default function MyApp() {
       </div>
    )
 }
-
-
-{/* <Link href="/gamelobby">
-<a className='link-text'>Play Now</a>
-</Link>
-</button> */}

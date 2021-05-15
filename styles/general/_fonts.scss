@@ -1,28 +1,54 @@
-/* ======================
-			TYPOGRAPHY
-   ====================== */
+$type-ratio: (
+   "minorSecond": 1.067,
+   "majorSecond": 1.125,
+   "minorThird": 1.2,
+   "majorThird": 1.25,
+   "perfectFourth": 1.333,
+   "augmentedFourth": 1.414,
+   "perfectFifth": 1.5,
+   "goldenRatio": 1.618,
+);
 
-h1 {
-   font-size: 3rem;
+// base size | ratio | h4 => h1 levels
+$type-base-size: 1rem;
+$type-size-ratio: 1.5;
+$type-levels: 4, 3, 2, 1;
+
+// initializing level-size as 1rem
+$level-size: $type-base-size;
+
+// creating unitless variable for our base size
+$level-unitless: $level-size / ($level-size * 0 + 1);
+
+// computing min size for font to shrink to
+// if > 4rem, shrink by factor of 0.5 else 0.33
+$fluid-reduction: if($level-size > 4, 0.5, 0.33);
+$fluid-min: $level-unitless - ($fluid-reduction * $level-unitless);
+
+// set min bound to 1
+$fluid-min: if($fluid-min > 1, $fluid-min, 1);
+
+$fluid-scaler: ($level-unitless - $fluid-min) + 8vw;
+
+@each $level in $type-levels {
+   $level-size: $level-size * $type-size-ratio;
+
+   h#{$level} {
+      font-size: unquote("min(max(#{$fluid-min}rem, #{$fluid-scaler}), #{$level-size})");
+   }
+}
+
+
+
+h1,
+h2 {
    font-weight: bold;
 }
 
-h2 {
-   font-size: 1.5rem;
-}
-
-h3 {
-   font-size: 1.2rem;
-   font-weight: normal;
-}
-
-h4 {
-   font-size: 1rem;
-   font-weight: normal;
-}
-
-h5 {
-   font-size: .85rem;
+h3,
+h4,
+a,
+li {
    font-weight: normal;
 }
 
