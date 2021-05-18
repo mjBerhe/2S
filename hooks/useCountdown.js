@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+// very scuffed and needs to be reworked
 export default function useCountdown(initialTime, onComplete) {
 
    const [countdown, setCountdown] = useState({

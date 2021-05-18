@@ -70,6 +70,30 @@ a:hover:focus:active {
           box-shadow: 0 0 0 4px #5d139b;
 }
 
+.button-xs {
+  height: 2rem;
+  width: 6.7rem;
+  border-radius: 0.5rem;
+}
+
+.button-sm {
+  height: 4rem;
+  width: 13.33rem;
+  border-radius: 1rem;
+}
+
+.button-lg {
+  height: 5rem;
+  width: 16.7rem;
+  border-radius: 1.25rem;
+}
+
+.button-xl {
+  height: 6rem;
+  width: 20rem;
+  border-radius: 1.5rem;
+}
+
 .landing-page-container {
   min-height: 100vh;
   width: 100%;
@@ -84,6 +108,8 @@ a:hover:focus:active {
   display: grid;
   -ms-grid-rows: minmax(10%, 4rem) 90%;
       grid-template-rows: minmax(10%, 4rem) 90%;
+  -ms-grid-columns: 100%;
+      grid-template-columns: 100%;
 }
 
 nav {
@@ -103,6 +129,10 @@ nav {
   -ms-grid-row: 2;
   -ms-grid-row-span: 1;
   grid-row: 2/3;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+  width: 100%;
   margin: 0 2rem;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -120,7 +150,7 @@ nav {
 }
 
 .quote {
-  width: 60%;
+  width: 63%;
   min-width: 60%;
 }
 
@@ -129,11 +159,6 @@ nav {
 }
 
 .button-main {
-  max-height: 6rem;
-  width: 20rem;
-  height: 60vh;
-  max-width: 100%;
-  border-radius: 1.5rem;
   background-color: #993ae7;
   color: white;
   -webkit-box-shadow: -2px 5px 8px rgba(0, 0, 0, 0.6);

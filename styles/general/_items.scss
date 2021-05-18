@@ -29,3 +29,27 @@
       box-shadow: 0 0 0 4px scale-color($button-color, $lightness: -40%);
    }
 }
+
+.button-xs {
+   height: 2rem;
+   width: 6.7rem;
+   border-radius: 0.5rem;
+}
+
+.button-sm {
+   height: 4rem;
+   width: 13.33rem;
+   border-radius: 1rem;
+}
+
+.button-lg {
+   height: 5rem;
+   width: 16.7rem;
+   border-radius: 1.25rem;
+}
+
+.button-xl {
+   height: 6rem;
+   width: 20rem;
+   border-radius: 1.5rem;
+}

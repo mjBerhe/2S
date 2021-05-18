@@ -11,6 +11,7 @@
 
 	display: grid;
 	grid-template-rows: minmax(10%, 4rem) 90%;
+   grid-template-columns: 100%;
 
 	// border: 1px solid black;
 }
@@ -25,16 +26,20 @@ nav {
 
 .quote-button {
    grid-row: 2/3;
+   grid-column: 1/2;
+   width: 100%;
    margin: 0 2rem;
    
    display: flex;
    flex-direction: column;
    justify-content: center;
    align-items: flex-start;
+
+   // border: 1px solid black;
 }
 
 .quote {
-   width: 60%;
+   width: 63%;
    min-width: 60%;
 
    // border: 1px solid red;
@@ -45,12 +50,6 @@ nav {
 }
 
 .button-main {
-   max-height: 6rem;
-   width: 20rem;
-   height: 60vh;
-   max-width: 100%;
-
-   border-radius: 1.5rem;
    background-color: $button-color;
    color: white;
    box-shadow: -2px 5px 8px rgba(0, 0, 0, 0.6);
